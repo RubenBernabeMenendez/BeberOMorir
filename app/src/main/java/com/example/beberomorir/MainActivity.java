@@ -14,9 +14,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        AdminSQLDataBase admin = new AdminSQLDataBase(this,
-                "admin", null, 1);
+        AdminSQLDataBase admin = new AdminSQLDataBase(this);
         this.bd = admin.getWritableDatabase();
+        System.out.println(this.bd.getPath());
     }
 
     /** Called when the user taps the Send button */
