@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
     SQLiteDatabase bd;
 
     @Override
@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     /** Called when the user taps the Send button */
     public void openMenu(View view) {
         // Do something in response to button
-        Intent i = new Intent(this, MenuActivity.class );
+        Intent i = new Intent(this, ConfigPartidaView.class );
         startActivity(i);
     }
 }

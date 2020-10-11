@@ -10,7 +10,7 @@ import androidx.annotation.Nullable;
 
 public class AdminSQLDataBase extends SQLiteOpenHelper {
     private static final String DB_NAME = "beberOmorirBD";
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 2;
     private static final String TIPO_PARTIDA_TABLE_CREATE = "CREATE TABLE TIPO_PARTIDA(tipoPartidaId INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, descripcion TEXT, numeroMundos INTEGER, numeroPruebasMundo INTEGER)";
     private static final String NIVEL_PARTIDA_TABLE_CREATE = "CREATE TABLE NIVEL_PARTIDA(nivelPartidaId INTEGER PRIMARY KEY AUTOINCREMENT, nivelPruebas INTEGER, nivelResultadosPruebas INTEGER)";
     private static final String CONFIG_PARTIDA_TABLE_CREATE = "CREATE TABLE CONFIG_PARTIDA(configPartidaId INTEGER PRIMARY KEY AUTOINCREMENT, nivelPruebas INTEGER, nivelResultadoPruebas INTEGER, tipoPartidaId INTEGER, rolesJugador TEXT, FOREIGN KEY (tipoPartidaId) REFERENCES TIPO_PARTIDA(tipoPartidaId))";
@@ -44,10 +44,31 @@ public class AdminSQLDataBase extends SQLiteOpenHelper {
         tipoPartida.insertar(sqLiteDatabase, "Mundos corta", "Experiencia corta", 3, 3);
         ConfigPartida configPartida = new ConfigPartida();
         configPartida.insertar(sqLiteDatabase, 2,2, 1, "N");
+        TipoResultadoPrueba tipoResultadoPrueba = new TipoResultadoPrueba();
+        tipoResultadoPrueba.insertar(sqLiteDatabase, "Beber", "Puedes repartir tragos");
+        tipoResultadoPrueba.insertar(sqLiteDatabase, "Reto", "Puedes repartir reto");
+        tipoResultadoPrueba.insertar(sqLiteDatabase, "Confesion", "Puedes repartir confesion");
+        tipoPrueba.insertar(sqLiteDatabase, "Yo nunca restrictivo", "En esta prueba hay que crear un yo nunca para que beban todos menos");
+        tipoPrueba.insertar(sqLiteDatabase, "Yo nunca", "En esta prueba hay que leer un yo nunca");
+        tipoPrueba.insertar(sqLiteDatabase, "Azar", "En esta prueba hay que girar una ruleta");
+        tipoPrueba.insertar(sqLiteDatabase, "Foto con", "En esta prueba hay que hacerse una foto con");
+        tipoPrueba.insertar(sqLiteDatabase, "Foto haciendo", "En esta prueba hay hacerse una foto haciendo");
+        tipoPrueba.insertar(sqLiteDatabase, "Reto", "En esta prueba hay que retar a X con algo");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+        TipoResultadoPrueba tipoResultadoPrueba = new TipoResultadoPrueba();
+        tipoResultadoPrueba.insertar(sqLiteDatabase, "Beber", "Puedes repartir tragos");
+        tipoResultadoPrueba.insertar(sqLiteDatabase, "Reto", "Puedes repartir reto");
+        tipoResultadoPrueba.insertar(sqLiteDatabase, "Confesion", "Puedes repartir confesion");
+        TipoPrueba tipoPrueba = new TipoPrueba();
+        tipoPrueba.insertar(sqLiteDatabase, "Yo nunca restrictivo", "En esta prueba hay que crear un yo nunca para que beban todos menos");
+        tipoPrueba.insertar(sqLiteDatabase, "Yo nunca", "En esta prueba hay que leer un yo nunca");
+        tipoPrueba.insertar(sqLiteDatabase, "Azar", "En esta prueba hay que girar una ruleta");
+        tipoPrueba.insertar(sqLiteDatabase, "Foto con", "En esta prueba hay que hacerse una foto con");
+        tipoPrueba.insertar(sqLiteDatabase, "Foto haciendo", "En esta prueba hay hacerse una foto haciendo");
+        tipoPrueba.insertar(sqLiteDatabase, "Reto", "En esta prueba hay que retar a X con algo");
 
     }
 }

@@ -1,7 +1,11 @@
 package com.example.beberomorir.Modelos;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TipoResultadoPrueba {
     private int tipoResultadoPruebaId;
@@ -37,5 +41,18 @@ public class TipoResultadoPrueba {
         cv.put("nombre", nombre);
         cv.put("descripcion", descripcion);
         bd.insert("TIPO_RESULTADO_PRUEBA", null, cv);
+    }
+
+    public List<TipoResultadoPrueba> getAll(SQLiteDatabase bd) {
+        Cursor fila = bd.rawQuery("SELECT tipoResultadoPruebaId, nombre, descripcion FROM TIPO_RESULTADO_PRUEBA",null);
+        List<TipoResultadoPrueba> tipoResultadoPruebas = new ArrayList<>();
+        for (fila.moveToFirst(); !fila.isAfterLast(); fila.moveToNext()) {
+            TipoResultadoPrueba tipoResultadoPrueba = new TipoResultadoPrueba();
+            tipoResultadoPrueba.setTipoResultadoPruebaId(Integer.parseInt(fila.getString(0)));
+            tipoResultadoPrueba.setNombre(fila.getString(1));
+            tipoResultadoPrueba.setDescripcion(fila.getString(2));
+            tipoResultadoPruebas.add(tipoResultadoPrueba);
+        }
+        return tipoResultadoPruebas;
     }
 }

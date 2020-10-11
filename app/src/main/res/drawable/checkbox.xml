@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- habilitado + marcado + sin focus -->
+    <item android:state_checked="true"
+        android:drawable="@mipmap/checkbox_checked" />
+
+    <!-- habilitado + no marcado + sin focus -->
+    <item android:state_checked="false"
+        android:drawable="@mipmap/checkbox_unchecked2" />
+</selector>

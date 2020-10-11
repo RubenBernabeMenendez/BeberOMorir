@@ -4,6 +4,9 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TipoPartida {
     int tipoPartidaId;
     String nombre;
@@ -73,5 +76,20 @@ public class TipoPartida {
         cv.put("numeroMundos", numeroMundos);
         cv.put("numeroPruebasMundo", numeroPruebasMundo);
         bd.insert("TIPO_PARTIDA", null, cv);
+    }
+
+    public List<TipoPartida> getAll(SQLiteDatabase bd) {
+        Cursor fila = bd.rawQuery("SELECT tipoPartidaId, nombre, descripcion, numeroMundos, numeroPruebasMundo FROM TIPO_PARTIDA",null);
+        List<TipoPartida> tipoPartidas = new ArrayList<>();
+        for (fila.moveToFirst(); !fila.isAfterLast(); fila.moveToNext()) {
+            TipoPartida tipoPartida = new TipoPartida();
+            tipoPartida.setTipoPartidaId(Integer.parseInt(fila.getString(0)));
+            tipoPartida.setNombre(fila.getString(1));
+            tipoPartida.setDescripcion(fila.getString(2));
+            tipoPartida.setNumeroMundos(Integer.parseInt(fila.getString(3)));
+            tipoPartida.setNumeroPruebasMundo(Integer.parseInt(fila.getString(4)));
+            tipoPartidas.add(tipoPartida);
+        }
+        return tipoPartidas;
     }
 }
