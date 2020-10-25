@@ -1,19 +1,21 @@
 package com.example.beberomorir;
 
+import androidx.annotation.ColorInt;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
+import androidx.core.content.res.ResourcesCompat;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.beberomorir.Modelos.TipoPartida;
 import com.example.beberomorir.Modelos.TipoPrueba;
@@ -25,7 +27,6 @@ public class ConfigPartidaView extends AppCompatActivity {
     List<TipoPrueba> tipoPruebas;
     List<TipoResultadoPrueba> tipoResultadoPruebas;
     List<TipoPartida> tipoPartidas;
-    Fragment jugadorFila;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,20 +38,24 @@ public class ConfigPartidaView extends AppCompatActivity {
 
         LinearLayout linearLayout1TP = findViewById(R.id.tipoPruebaLayout1);
         LinearLayout linearLayout2TP = findViewById(R.id.tipoPruebaLayout2);
-        /*jugadorFila = new JugadorFila();
-        getSupportFragmentManager().beginTransaction().add(R.id.tipoResultadoPruebaLayout, jugadorFila).commit();*/
         TipoPrueba tipoPrueba = new TipoPrueba();
         tipoPruebas = tipoPrueba.getAll(bd);
+        Typeface typeface = ResourcesCompat.getFont(this, R.font.architects_daughter);
         for (int i= 0; i < tipoPruebas.size(); i++) {
             TipoPrueba tP = tipoPruebas.get(i);
             CheckBox checkBox = new CheckBox(this);
             checkBox.setButtonDrawable(ContextCompat.getDrawable(this, R.drawable.checkbox));
-            checkBox.setText(tP.getNombre());
             checkBox.setId(tP.getTipoPruebaId());
-            checkBox.setHeight(70);
+            checkBox.setHeight(85);
             checkBox.setPadding(10,10,10,10);
-            checkBox.setWidth(150);
+            checkBox.setWidth(250);
             checkBox.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+            checkBox.setTextSize(14);
+            checkBox.setTextColor(getResources().getColor(R.color.black));
+            checkBox.setText(tP.getNombre());
+
+            checkBox.setTypeface(typeface);
             if (i % 2 == 0) {
                 linearLayout1TP.addView(checkBox);
             } else {
@@ -60,16 +65,32 @@ public class ConfigPartidaView extends AppCompatActivity {
 
         }
 
-        /*LinearLayout linearLayoutTRP = findViewById(R.id.tipoResultadoPruebaLayout);
+        LinearLayout linearLayoutTRP1 = findViewById(R.id.tipoResultadoLayout1);
+        LinearLayout linearLayoutTRP2 = findViewById(R.id.tipoResultadoLayout2);
         TipoResultadoPrueba tipoResultadoPrueba = new TipoResultadoPrueba();
         tipoResultadoPruebas = tipoResultadoPrueba.getAll(bd);
-        for (TipoResultadoPrueba tP : tipoResultadoPruebas) {
+        for (int i= 0; i < tipoResultadoPruebas.size(); i++) {
+            TipoResultadoPrueba tP = tipoResultadoPruebas.get(i);
             CheckBox checkBox = new CheckBox(this);
-            checkBox.setText(tP.getNombre());
+            checkBox.setButtonDrawable(ContextCompat.getDrawable(this, R.drawable.checkbox));
             checkBox.setId(tP.getTipoResultadoPruebaId());
+            checkBox.setHeight(85);
+            checkBox.setPadding(10,10,10,10);
+            checkBox.setWidth(250);
             checkBox.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            linearLayoutTRP.addView(checkBox);
-        }*/
+
+            checkBox.setTextSize(14);
+            checkBox.setTextColor(getResources().getColor(R.color.black));
+            checkBox.setText(tP.getNombre());
+
+            checkBox.setTypeface(typeface);
+            if (i % 2 == 0) {
+                linearLayoutTRP1.addView(checkBox);
+            }
+            else {
+                linearLayoutTRP2.addView(checkBox);
+            }
+        }
 
         Spinner comboTipoPartida;
         comboTipoPartida = (Spinner) findViewById(R.id.comboTipoPartida);

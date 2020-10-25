@@ -7,161 +7,245 @@
     android:background="@mipmap/beer_background"
     tools:context=".ConfigPartidaView">
 
-    <FrameLayout
-        android:id="@+id/tituloConfigPartiLayout"
-        android:layout_width="323dp"
-        android:layout_height="135dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.459"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.031">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="17dp"
+        tools:layout_editor_absoluteY="634dp">
 
-    </FrameLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="320dp"
-        android:layout_height="112dp"
-        android:layout_marginBottom="28dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <ScrollView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="126dp">
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/inputConfigPartidaLayout"
+                android:layout_width="match_parent"
+                android:layout_height="203dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="2dp">
+
+                <Spinner
+                    android:id="@+id/comboNivelPruebas"
+                    android:layout_width="100dp"
+                    android:layout_height="39dp"
+                    android:layout_marginStart="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.106"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.563" />
+
+                <Spinner
+                    android:id="@+id/comboNivelResultadosPruebas"
+                    android:layout_width="100dp"
+                    android:layout_height="39dp"
+                    android:layout_marginEnd="20dp"
+                    android:textAlignment="center"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.851"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.563" />
+
+                <Spinner
+                    android:id="@+id/comboTipoPartida"
+                    android:layout_width="218dp"
+                    android:layout_height="44dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.8"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.904" />
+
+                <Switch
+                    android:id="@+id/rolesJugador"
+                    android:layout_width="82dp"
+                    android:layout_height="40dp"
+                    android:layout_marginEnd="10dp"
+                    android:width="20dp"
+                    android:fontFamily="@font/architects_daughter"
+                    android:padding="5dp"
+                    android:textAlignment="center"
+                    android:textColor="#000000"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:thumb="@drawable/toggle"
+                    android:track="@drawable/toggle_barra"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.931"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.089" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="138dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="@font/architects_daughter"
+                    android:text="Nivel prueba"
+                    android:textColor="#000000"
+                    android:textColorLink="#2B2B2B"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/comboNivelPruebas"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.849" />
+
+                <TextView
+                    android:id="@+id/textView5"
+                    android:layout_width="138dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="2dp"
+                    android:fontFamily="@font/architects_daughter"
+                    android:text="Roles"
+                    android:textAlignment="textEnd"
+                    android:textColor="#000000"
+                    android:textColorLink="#2B2B2B"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/comboNivelPruebas"
+                    app:layout_constraintEnd_toStartOf="@+id/rolesJugador"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.219" />
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="106dp"
+                    android:layout_height="27dp"
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="@font/architects_daughter"
+                    android:text="Duración"
+                    android:textColor="#000000"
+                    android:textColorLink="#000000"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/comboTipoPartida"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/comboNivelPruebas"
+                    app:layout_constraintVertical_bias="0.479" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="163dp"
+                    android:layout_height="26dp"
+                    android:layout_marginEnd="36dp"
+                    android:fontFamily="@font/architects_daughter"
+                    android:text="Nivel resultado"
+                    android:textColor="#000000"
+                    android:textColorLink="#000000"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/comboNivelPruebas"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.873" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
-                android:id="@+id/tipoResultadoPruebaLayout"
+                android:id="@+id/tipoPruebaLinearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <CheckBox
-                    android:layout_width="wrap_content"
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:width="150dp"
-                    android:height="70dp"
-                    android:button="@drawable/checkbox"
-                    android:padding="10dp"
-                    android:text="new checkbox" />
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="@font/architects_daughter"
+                    android:text="Tipo pruebas"
+                    android:textColor="#000000"
+                    android:textColorLink="#000000"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/tipoPruebaLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/tipoPruebaLayout1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical" />
+
+                    <LinearLayout
+                        android:id="@+id/tipoPruebaLayout2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical" />
+                </LinearLayout>
+
             </LinearLayout>
-        </ScrollView>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/tipoPruebaLinearLayout"
-        android:layout_width="330dp"
-        android:layout_height="109dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.533"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputConfigPartidaLayout"
-        app:layout_constraintVertical_bias="0.594">
-
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="137dp">
 
             <LinearLayout
-                android:id="@+id/tipoPruebaLayout"
+                android:id="@+id/tipoResultadoLinearLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="@font/architects_daughter"
+                    android:text="Tipo resultados"
+                    android:textColor="#000000"
+                    android:textColorLink="#000000"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
 
                 <LinearLayout
-                    android:id="@+id/tipoPruebaLayout1"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical"></LinearLayout>
+                    android:id="@+id/tipoResultadoLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:orientation="horizontal">
 
-                <LinearLayout
-                    android:id="@+id/tipoPruebaLayout2"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical"></LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/tipoResultadoLayout1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"></LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/tipoResultadoLayout2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"></LinearLayout>
+                </LinearLayout>
+
             </LinearLayout>
 
-        </ScrollView>
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="79dp"
+                android:orientation="vertical">
 
-    </LinearLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/inputConfigPartidaLayout"
-        android:layout_width="329dp"
-        android:layout_height="156dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.566"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tituloConfigPartiLayout">
-
-        <Spinner
-            android:id="@+id/comboNivelPruebas"
-            android:layout_width="100dp"
-            android:layout_height="39dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.069"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.333" />
-
-        <Spinner
-            android:id="@+id/comboNivelResultadosPruebas"
-            android:layout_width="100dp"
-            android:layout_height="39dp"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.543"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.333" />
-
-        <Spinner
-            android:id="@+id/comboTipoPartida"
-            android:layout_width="218dp"
-            android:layout_height="44dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.142"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.835" />
-
-        <Switch
-            android:id="@+id/rolesJugador"
-            android:layout_width="133dp"
-            android:layout_height="28dp"
-            android:width="20dp"
-            android:fontFamily="@font/architects_daughter"
-            android:padding="5dp"
-            android:text="Roles"
-            android:textAlignment="center"
-            android:textColor="#000000"
-            android:textSize="22sp"
-            android:textStyle="normal|bold"
-            android:thumb="@drawable/toggle"
-            android:track="@drawable/toggle_barra"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.966"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.14" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

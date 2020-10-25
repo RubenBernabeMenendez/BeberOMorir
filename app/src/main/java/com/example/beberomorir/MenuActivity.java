@@ -1,5 +1,6 @@
 package com.example.beberomorir;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
@@ -20,6 +21,8 @@ import com.example.beberomorir.Modelos.TipoPartida;
 import java.util.List;
 
 public class MenuActivity extends AppCompatActivity {
+    private AlertDialog.Builder configPartidaBuilder;
+    private AlertDialog configPartidaView;
     private EditText et1;
     private TextView tv1;
 
@@ -27,20 +30,6 @@ public class MenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-        et1=(EditText)findViewById(R.id.nameFirst);
-        tv1=(TextView)findViewById(R.id.textView);
-        AdminSQLDataBase admin = new AdminSQLDataBase(this);
-        SQLiteDatabase bd = admin.getWritableDatabase();
-        LinearLayout linearLayout = findViewById(R.id.inputLayout);
-        TipoPartida tipoPartida = new TipoPartida();
-        List<TipoPartida> tipoPartidas = tipoPartida.getAll(bd);
-        for (TipoPartida tP : tipoPartidas) {
-            CheckBox checkBox = new CheckBox(this);
-            checkBox.setText(tP.getNombre());
-            checkBox.setBackground(ContextCompat.getDrawable(this, R.drawable.checkbox));
-            checkBox.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            linearLayout.addView(checkBox);
-        }
     }
 
     public void save(View view) {
@@ -74,4 +63,12 @@ public class MenuActivity extends AppCompatActivity {
         bd.close();
     }
 
+    public void openConfigPartida(View view) {
+        configPartidaBuilder = new AlertDialog.Builder(this);
+        View configPartidaViews = getLayoutInflater().inflate(R.layout.activity_config_partida_view, null);
+
+        configPartidaBuilder.setView(configPartidaViews);
+        configPartidaView = configPartidaBuilder.create();
+        configPartidaView.show();
+    }
 }
