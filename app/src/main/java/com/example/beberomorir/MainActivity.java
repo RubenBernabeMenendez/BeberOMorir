@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.beberomorir.Actividades.PartidaActivity;
 import com.example.beberomorir.Fragmentos.InicioFragment;
 import com.example.beberomorir.Interfaces.IComunicaFragmentos;
 
@@ -16,6 +17,7 @@ public class MainActivity extends AppCompatActivity implements IComunicaFragment
     SQLiteDatabase bd;
 
     Fragment fragmentInicio;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,15 +32,39 @@ public class MainActivity extends AppCompatActivity implements IComunicaFragment
         System.out.println(this.bd.getPath());
     }
 
-    /** Called when the user taps the Send button */
-    public void openMenu(View view) {
-        // Do something in response to button
-        Intent i = new Intent(this, ConfigPartidaView.class );
+    @Override
+    public void continuarPartida() {
+        Intent i = new Intent(this, PartidaActivity.class );
         startActivity(i);
     }
 
     @Override
-    public void continuarPartida() {
-        Toast.makeText(getApplicationContext(), "Iniciar juego", Toast.LENGTH_SHORT).show();
+    public void nuevaPartida() {
+
+    }
+
+    @Override
+    public void historial() {
+
+    }
+
+    @Override
+    public void acercaDe() {
+
+    }
+
+    @Override
+    public void anadirContenido() {
+
+    }
+
+    @Override
+    public void jugadores() {
+
+    }
+
+    @Override
+    public void ajustes() {
+
     }
 }

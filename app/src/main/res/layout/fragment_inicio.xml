@@ -50,7 +50,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="0dp"
         android:layout_marginBottom="5dp"
-        android:src="@mipmap/nombre_app" />
+        android:src="@mipmap/nombre_app_v2" />
     <GridLayout
         android:id="@+id/menuLayout"
         android:layout_width="match_parent"
@@ -100,7 +100,7 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/confPartidaCard"
+            android:id="@+id/nuevaPartidaCard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
@@ -137,7 +137,7 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/playersCard"
+            android:id="@+id/jugadoresCard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"

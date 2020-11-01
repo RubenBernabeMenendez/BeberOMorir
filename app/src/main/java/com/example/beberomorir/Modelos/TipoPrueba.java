@@ -52,6 +52,20 @@ public class TipoPrueba {
         bd.insert("TIPO_PRUEBA", null, cv);
     }
 
+    public TipoPrueba findById(SQLiteDatabase bd, int tipoPruebaId) {
+        Cursor fila = bd.rawQuery("SELECT tipoPruebaId, nombre, descripcion, tiempoEjecucion FROM TIPO_PRUEBA WHERE tipoPruebaId=" + tipoPruebaId,null);
+        if (fila.moveToFirst()) {
+            TipoPrueba tipoPrueba = new TipoPrueba();
+            tipoPrueba.setTipoPruebaId(Integer.parseInt(fila.getString(0)));
+            tipoPrueba.setNombre(fila.getString(1));
+            tipoPrueba.setDescripcion(fila.getString(2));
+            //tipoPrueba.setTiempoEjecucion(Integer.parseInt(fila.getString(3)));
+            return tipoPrueba;
+        } else {
+            return null;
+        }
+    }
+
     public List<TipoPrueba> getAll(SQLiteDatabase bd) {
         Cursor fila = bd.rawQuery("SELECT tipoPruebaId, nombre, descripcion, tiempoEjecucion FROM TIPO_PRUEBA",null);
         List<TipoPrueba> TipoPruebas = new ArrayList<>();

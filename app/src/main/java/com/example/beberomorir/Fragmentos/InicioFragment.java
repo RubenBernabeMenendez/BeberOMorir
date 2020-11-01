@@ -32,7 +32,7 @@ public class InicioFragment extends Fragment {
 
     View vista;
     Activity activity;
-    CardView cardContinuarPartida;
+    CardView cardContinuarPartida, cardNuevaPartida, cardJugadores, cardHistorial, cardAjustes, cardAcercaDe, cardAnadirContenido;
     IComunicaFragmentos iComunicaFragmentos;
 
     public InicioFragment() {
@@ -76,6 +76,46 @@ public class InicioFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 iComunicaFragmentos.continuarPartida();
+            }
+        });
+
+        cardNuevaPartida = vista.findViewById(R.id.nuevaPartidaCard);
+        cardNuevaPartida.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                iComunicaFragmentos.nuevaPartida();
+            }
+        });
+
+        cardJugadores = vista.findViewById(R.id.jugadoresCard);
+        cardJugadores.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                iComunicaFragmentos.jugadores();
+            }
+        });
+
+        cardAcercaDe = vista.findViewById(R.id.acercaDeCard);
+        cardAcercaDe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                iComunicaFragmentos.acercaDe();
+            }
+        });
+
+        cardAjustes = vista.findViewById(R.id.ajustesCard);
+        cardAjustes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                iComunicaFragmentos.ajustes();
+            }
+        });
+
+        cardAnadirContenido = vista.findViewById(R.id.adminCard);
+        cardAnadirContenido.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                iComunicaFragmentos.anadirContenido();
             }
         });
 

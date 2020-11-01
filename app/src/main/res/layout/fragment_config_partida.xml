@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@mipmap/beer_background"
-    tools:context=".ConfigPartidaView">
+    tools:context=".Fragmentos.ConfigPartidaFragment">
 
-    <ScrollView
+<!--    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout_editor_absoluteX="17dp"
-        tools:layout_editor_absoluteY="634dp">
+        tools:layout_editor_absoluteY="634dp">-->
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/inputConfigPartidaLayout"
@@ -83,7 +83,7 @@
                     app:layout_constraintVertical_bias="0.089" />
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/nombreJugador"
                     android:layout_width="138dp"
                     android:layout_height="24dp"
                     android:layout_marginStart="10dp"
@@ -237,15 +237,41 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/linearLayout"
+            <RelativeLayout
+                android:id="@+id/relativeLayout"
                 android:layout_width="match_parent"
                 android:layout_height="79dp"
                 android:orientation="vertical">
 
-            </LinearLayout>
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/empezarPartidaConfCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="5dp"
+                    android:backgroundTint="@color/transparentWhite"
+                    app:cardCornerRadius="8dp">
+
+                    <LinearLayout
+                        android:id="@+id/jugadoresCardLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal|center_vertical"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/jugadoresButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@mipmap/settings">
+
+                        </ImageView>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </RelativeLayout>
+
         </LinearLayout>
-    </ScrollView>
+    <!--</ScrollView>-->
 
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

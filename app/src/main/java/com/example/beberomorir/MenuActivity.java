@@ -62,13 +62,4 @@ public class MenuActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         bd.close();
     }
-
-    public void openConfigPartida(View view) {
-        configPartidaBuilder = new AlertDialog.Builder(this);
-        View configPartidaViews = getLayoutInflater().inflate(R.layout.activity_config_partida_view, null);
-
-        configPartidaBuilder.setView(configPartidaViews);
-        configPartidaView = configPartidaBuilder.create();
-        configPartidaView.show();
-    }
 }
