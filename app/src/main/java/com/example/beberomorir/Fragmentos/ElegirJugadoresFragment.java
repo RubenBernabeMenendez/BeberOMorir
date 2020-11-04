@@ -15,14 +15,18 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.ListView;
 
 import com.example.beberomorir.Adaptadores.AdaptadorJugador;
 import com.example.beberomorir.Interfaces.IComunicaPartida;
 import com.example.beberomorir.Modelos.Jugador;
+import com.example.beberomorir.Modelos.Partida;
 import com.example.beberomorir.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -97,33 +101,42 @@ public class ElegirJugadoresFragment extends Fragment {
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
-
-        configComenzarPartida = view.findViewById(R.id.empezarPartidaConfCard);
-        configComenzarPartida.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                iComunicaPartida.verTablero();
-            }
-        });
-        ArrayList<Jugador> listaJugadores=new ArrayList<Jugador>();
+        final ArrayList<Jugador> listaJugadores=new ArrayList<Jugador>();
         for (int i = 0; i < 4; i++) {
             Jugador j1= new Jugador();
             Jugador j2= new Jugador();
             Jugador j3= new Jugador();
             j1.setNombre("Nombre1");
-            j1.setJugadorId(R.mipmap.mundos1);
+            j1.setUrlImagen(Integer.toString(R.mipmap.mundos1));
+            j1.setJugadorId(i);
             listaJugadores.add(j1);
             j2.setNombre("Nombre2");
-            j2.setJugadorId(R.mipmap.mundos2);
+            j2.setUrlImagen(Integer.toString(R.mipmap.mundos2));
+            j2.setJugadorId(i+3);
             listaJugadores.add(j2);
             j3.setNombre("Nombre3");
-            j3.setJugadorId(R.mipmap.mundos3);
+            j3.setUrlImagen(Integer.toString(R.mipmap.mundos3));
+            j3.setJugadorId(i+6);
             listaJugadores.add(j3);
         }
 
-        AdaptadorJugador adaptador = new AdaptadorJugador(this.actividad, listaJugadores);
+        final AdaptadorJugador adaptador = new AdaptadorJugador(this.actividad, listaJugadores);
         ListView lv1 = (ListView)view.findViewById(R.id.listaJugadores);
         lv1.setAdapter(adaptador);
+
+
+        configComenzarPartida = view.findViewById(R.id.empezarPartidaConfCard);
+        configComenzarPartida.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                List<Jugador> jugadors = new ArrayList<>();
+                for (int i=0 ; i < adaptador.getCount(); i++) {
+                    jugadors.add(adaptador.getItem(i));
+                }
+                iComunicaPartida.verTablero(jugadors);
+            }
+        });
         return view;
     }
 }

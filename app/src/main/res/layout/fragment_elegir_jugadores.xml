@@ -1,63 +1,163 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragmentos.ElegirJugadoresFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:orientation="horizontal"
-            android:layout_height="100dp">
-
-        </LinearLayout>
-
-        <ListView
-            android:id="@+id/listaJugadores"
-            android:layout_width="match_parent"
-            android:layout_height="500dp">
-
-        </ListView>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="100dp"
+            android:background="@color/green"
             android:orientation="horizontal">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/empezarPartidaConfCard"
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_marginEnd="5dp"
-                android:backgroundTint="@color/transparentWhite"
-                app:cardCornerRadius="8dp">
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="10dp"
+                android:src="@mipmap/miniplay_white">
 
-                <LinearLayout
-                    android:id="@+id/empezarPartidaLayout"
+            </ImageView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="30dp"
+                android:text="Nueva partida"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="30sp"
+                android:textStyle="bold">
+
+            </TextView>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/transparentWhite"
+            android:orientation="vertical"
+            android:paddingTop="5dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp">
+
+            <LinearLayout
+                android:id="@+id/relativeLayoutAdd"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:padding="5dp"
+                android:orientation="vertical">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/addJugadoresConfCard"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal|center_vertical"
-                    android:orientation="vertical">
+                    android:backgroundTint="@color/white"
+                    app:cardCornerRadius="20dp">
 
-                    <ImageView
-                        android:id="@+id/empezarPartidaConfButton"
+                    <LinearLayout
+                        android:id="@+id/addJugadoresCardLayout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:src="@mipmap/settings">
+                        android:layout_gravity="center_horizontal|center_vertical"
+                        android:orientation="horizontal"
+                        android:textAlignment="center">
 
-                    </ImageView>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                        <ImageView
+                            android:id="@+id/addJugadoresButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginEnd="2dp"
+                            android:src="@mipmap/miniplus_black">
 
-        </RelativeLayout>
+                        </ImageView>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal|center_vertical"
+                            android:fontFamily="@font/architects_daughter"
+                            android:text="Añadir jugador"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:textSize="22sp"
+                            android:textStyle="bold">
+
+                        </TextView>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/listaJugadores"
+                android:layout_width="match_parent"
+                android:layout_height="475dp">
+
+            </ListView>
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="79dp"
+                android:paddingTop="10dp"
+                android:orientation="vertical">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/empezarPartidaConfCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:backgroundTint="@color/white"
+                    app:cardCornerRadius="20dp">
+
+                    <LinearLayout
+                        android:id="@+id/jugadoresCardLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:layout_gravity="center_horizontal|center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/jugadoresButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="2dp"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@mipmap/miniplay_black">
+
+                        </ImageView>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal|center_vertical"
+                            android:textAlignment="center"
+                            android:fontFamily="@font/architects_daughter"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"
+                            android:text="Empezar partida">
+
+                        </TextView>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </RelativeLayout>
+
+        </LinearLayout>
     </LinearLayout>
 
 </FrameLayout>

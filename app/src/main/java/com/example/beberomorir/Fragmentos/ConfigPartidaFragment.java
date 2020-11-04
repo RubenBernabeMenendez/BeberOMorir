@@ -198,7 +198,7 @@ public class ConfigPartidaFragment extends Fragment {
 
         switchRolesJugadores = v.findViewById(R.id.rolesJugador);
 
-        cardViewElegirJugadores = v.findViewById(R.id.empezarPartidaConfCard);
+        cardViewElegirJugadores = v.findViewById(R.id.anadirJugadoresConfCard);
         cardViewElegirJugadores.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

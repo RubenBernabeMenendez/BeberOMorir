@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@mipmap/beer_background"
     tools:context=".Fragmentos.ConfigPartidaFragment">
 
 <!--    <ScrollView
@@ -13,144 +12,181 @@
         tools:layout_editor_absoluteX="17dp"
         tools:layout_editor_absoluteY="634dp">-->
 
-        <LinearLayout
+    <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@color/green"
+            android:id="@+id/relativeLayoutRole"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="10dp"
+                android:src="@mipmap/miniplay_white">
+
+            </ImageView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="30dp"
+                android:text="Nueva partida"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="30sp"
+                android:textStyle="bold">
+
+            </TextView>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:background="@color/transparentWhite"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
                 android:id="@+id/inputConfigPartidaLayout"
                 android:layout_width="match_parent"
-                android:layout_height="203dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginEnd="2dp">
-
-                <Spinner
-                    android:id="@+id/comboNivelPruebas"
-                    android:layout_width="100dp"
-                    android:layout_height="39dp"
-                    android:layout_marginStart="10dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                android:orientation="vertical"
+                android:paddingTop="5dp"
+                android:layout_height="wrap_content">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.106"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.563" />
+                    app:layout_constraintTop_toTopOf="parent" >
 
-                <Spinner
-                    android:id="@+id/comboNivelResultadosPruebas"
-                    android:layout_width="100dp"
-                    android:layout_height="39dp"
-                    android:layout_marginEnd="20dp"
-                    android:textAlignment="center"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    <TextView
+                        android:id="@+id/textView5"
+                        android:layout_width="138dp"
+                        android:layout_height="24dp"
+                        android:layout_marginEnd="0dp"
+                        android:layout_toStartOf="@+id/rolesJugador"
+                        android:fontFamily="@font/architects_daughter"
+                        android:text="Roles"
+                        android:textAlignment="textEnd"
+                        android:textColor="#000000"
+                        android:textColorLink="#2B2B2B"
+                        android:textSize="22sp"
+                        android:textStyle="bold" />
+                    <Switch
+                        android:id="@+id/rolesJugador"
+                        android:layout_width="82dp"
+                        android:layout_height="24dp"
+                        android:width="20dp"
+                        android:fontFamily="@font/architects_daughter"
+                        android:textAlignment="textEnd"
+                        android:layout_alignParentEnd="true"
+                        android:textColor="#000000"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        android:thumb="@drawable/toggle"
+                        android:track="@drawable/toggle_barra" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.851"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.563" />
+                    app:layout_constraintTop_toTopOf="parent">
 
-                <Spinner
-                    android:id="@+id/comboTipoPartida"
-                    android:layout_width="218dp"
-                    android:layout_height="44dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    <LinearLayout
+                        android:id="@+id/linearNivelPruebaLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="0dp"
+
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/nivelPruebaLabel"
+                            android:layout_width="138dp"
+                            android:layout_height="24dp"
+                            android:fontFamily="@font/architects_daughter"
+                            android:text="Nivel prueba"
+                            android:textColor="#000000"
+                            android:textColorLink="#2B2B2B"
+                            android:textSize="22sp"
+                            android:textStyle="bold" />
+
+                        <Spinner
+                            android:id="@+id/comboNivelPruebas"
+                            android:layout_width="100dp"
+                            android:layout_height="39dp"
+                            android:layout_marginTop="2dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/linearNivelResultadoPruebaLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="0dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/textView3"
+                            android:layout_width="163dp"
+                            android:layout_height="26dp"
+                            android:fontFamily="@font/architects_daughter"
+                            android:text="Nivel resultado"
+                            android:textColor="#000000"
+                            android:textColorLink="#000000"
+                            android:textSize="22sp"
+                            android:textStyle="bold" />
+
+                        <Spinner
+                            android:id="@+id/comboNivelResultadosPruebas"
+                            android:layout_width="100dp"
+                            android:layout_height="39dp"
+                            android:textAlignment="center" />
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.8"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.904" />
+                    app:layout_constraintTop_toTopOf="parent">
 
-                <Switch
-                    android:id="@+id/rolesJugador"
-                    android:layout_width="82dp"
-                    android:layout_height="40dp"
-                    android:layout_marginEnd="10dp"
-                    android:width="20dp"
-                    android:fontFamily="@font/architects_daughter"
-                    android:padding="5dp"
-                    android:textAlignment="center"
-                    android:textColor="#000000"
-                    android:textSize="22sp"
-                    android:textStyle="bold"
-                    android:thumb="@drawable/toggle"
-                    android:track="@drawable/toggle_barra"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.931"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.089" />
+                    <TextView
+                        android:id="@+id/textView4"
+                        android:layout_width="106dp"
+                        android:layout_height="27dp"
+                        android:layout_marginStart="10dp"
+                        android:fontFamily="@font/architects_daughter"
+                        android:text="Duración"
+                        android:textColor="#000000"
+                        android:textColorLink="#000000"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        />
 
-                <TextView
-                    android:id="@+id/nombreJugador"
-                    android:layout_width="138dp"
-                    android:layout_height="24dp"
-                    android:layout_marginStart="10dp"
-                    android:fontFamily="@font/architects_daughter"
-                    android:text="Nivel prueba"
-                    android:textColor="#000000"
-                    android:textColorLink="#2B2B2B"
-                    android:textSize="22sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toTopOf="@+id/comboNivelPruebas"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.849" />
+                    <Spinner
+                        android:id="@+id/comboTipoPartida"
+                        android:layout_width="218dp"
+                        android:layout_height="44dp"
+                        />
 
-                <TextView
-                    android:id="@+id/textView5"
-                    android:layout_width="138dp"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="2dp"
-                    android:fontFamily="@font/architects_daughter"
-                    android:text="Roles"
-                    android:textAlignment="textEnd"
-                    android:textColor="#000000"
-                    android:textColorLink="#2B2B2B"
-                    android:textSize="22sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toTopOf="@+id/comboNivelPruebas"
-                    app:layout_constraintEnd_toStartOf="@+id/rolesJugador"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.219" />
-
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="106dp"
-                    android:layout_height="27dp"
-                    android:layout_marginStart="10dp"
-                    android:fontFamily="@font/architects_daughter"
-                    android:text="Duración"
-                    android:textColor="#000000"
-                    android:textColorLink="#000000"
-                    android:textSize="22sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/comboTipoPartida"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/comboNivelPruebas"
-                    app:layout_constraintVertical_bias="0.479" />
-
-                <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="163dp"
-                    android:layout_height="26dp"
-                    android:layout_marginEnd="36dp"
-                    android:fontFamily="@font/architects_daughter"
-                    android:text="Nivel resultado"
-                    android:textColor="#000000"
-                    android:textColorLink="#000000"
-                    android:textSize="22sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toTopOf="@+id/comboNivelPruebas"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.873" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/tipoPruebaLinearLayout"
@@ -240,36 +276,53 @@
             <RelativeLayout
                 android:id="@+id/relativeLayout"
                 android:layout_width="match_parent"
+                android:paddingTop="10dp"
                 android:layout_height="79dp"
                 android:orientation="vertical">
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/empezarPartidaConfCard"
+                    android:id="@+id/anadirJugadoresConfCard"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="5dp"
-                    android:backgroundTint="@color/transparentWhite"
-                    app:cardCornerRadius="8dp">
+                    android:backgroundTint="@color/white"
+                    app:cardCornerRadius="20dp">
 
                     <LinearLayout
                         android:id="@+id/jugadoresCardLayout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textAlignment="center"
                         android:layout_gravity="center_horizontal|center_vertical"
-                        android:orientation="vertical">
+                        android:orientation="horizontal">
 
                         <ImageView
                             android:id="@+id/jugadoresButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginEnd="2dp"
                             android:layout_gravity="center_horizontal"
-                            android:src="@mipmap/settings">
+                            android:src="@mipmap/miniplus_black">
 
                         </ImageView>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal|center_vertical"
+                            android:textAlignment="center"
+                            android:fontFamily="@font/architects_daughter"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"
+                            android:text="Añadir jugadores">
+
+                        </TextView>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
             </RelativeLayout>
+        </LinearLayout>
+
 
         </LinearLayout>
     <!--</ScrollView>-->

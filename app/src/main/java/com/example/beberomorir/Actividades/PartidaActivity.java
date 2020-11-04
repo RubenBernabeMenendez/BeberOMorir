@@ -15,8 +15,10 @@ import com.example.beberomorir.Fragmentos.ElegirJugadoresFragment;
 import com.example.beberomorir.Fragmentos.TableroFragment;
 import com.example.beberomorir.Interfaces.IComunicaPartida;
 import com.example.beberomorir.MainActivity;
+import com.example.beberomorir.Modelos.Jugador;
 import com.example.beberomorir.R;
 
+import java.util.List;
 import java.util.Objects;
 
 public class PartidaActivity extends AppCompatActivity implements IComunicaPartida {
@@ -57,7 +59,10 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
     }
 
     @Override
-    public void verTablero() {
+    public void verTablero(List<Jugador> jugadores) {
+        for (Jugador jugador : jugadores){
+            System.out.println(jugador.getNombre() + jugador.getSeleccionado());
+        }
         getSupportFragmentManager().beginTransaction().replace(R.id.contenedorPartida, fragmentTablero).commit();
     }
 }
