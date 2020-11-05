@@ -55,12 +55,15 @@ public class Jugador {
         this.seleccionado = seleccionado;
     }
 
-    public void insertar(SQLiteDatabase bd, String nombre, String apodo, String urlImagen){
+    public Jugador insertar(SQLiteDatabase bd, String nombre, String apodo, String urlImagen){
         ContentValues cv = new ContentValues();
         cv.put("nombre", nombre);
         cv.put("apodo", apodo);
         cv.put("urlImagen", urlImagen);
-        bd.insert("JUGADOR", null, cv);
+        Long id = bd.insert("JUGADOR", null, cv);
+
+        Jugador jugador = findById(bd, id.intValue());
+        return jugador;
     }
 
     public Jugador findById(SQLiteDatabase bd, int jugadorId) {
@@ -77,9 +80,9 @@ public class Jugador {
         }
     }
 
-    public List<Jugador> getAll(SQLiteDatabase bd) {
-        Cursor fila = bd.rawQuery("SELECT jugadorId, nombre, descripcion, urlImagen FROM JUGADOR",null);
-        List<Jugador> Jugadors = new ArrayList<>();
+    public ArrayList<Jugador> getAll(SQLiteDatabase bd) {
+        Cursor fila = bd.rawQuery("SELECT jugadorId, nombre, apodo, urlImagen FROM JUGADOR",null);
+        ArrayList<Jugador> Jugadors = new ArrayList<>();
         for (fila.moveToFirst(); !fila.isAfterLast(); fila.moveToNext()) {
             Jugador jugador = new Jugador();
             jugador.setJugadorId(Integer.parseInt(fila.getString(0)));

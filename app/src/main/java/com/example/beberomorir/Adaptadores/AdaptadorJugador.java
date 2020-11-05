@@ -44,7 +44,8 @@ public class AdaptadorJugador extends ArrayAdapter<Jugador> {
         textView1.setText(this.jugadors.get(position).getNombre());
 
         ImageView imageView1 = (ImageView)item.findViewById(R.id.imagenJugador);
-        imageView1.setImageResource(Integer.parseInt(this.jugadors.get(position).getUrlImagen()));
+
+        imageView1.setImageResource(Integer.parseInt(this.jugadors.get(position).getUrlImagen() != null ? Integer.toString(R.mipmap.mundos1) : this.jugadors.get(position).getUrlImagen()));
 
         CardView cardView = (CardView)item.findViewById(R.id.jugadorCard);
 

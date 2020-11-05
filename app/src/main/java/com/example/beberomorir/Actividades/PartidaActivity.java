@@ -1,15 +1,18 @@
 package com.example.beberomorir.Actividades;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+import com.example.beberomorir.AdminSQLDataBase;
 import com.example.beberomorir.Fragmentos.ConfigPartidaFragment;
 import com.example.beberomorir.Fragmentos.ElegirJugadoresFragment;
 import com.example.beberomorir.Fragmentos.TableroFragment;
@@ -62,6 +65,20 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
     public void verTablero(List<Jugador> jugadores) {
         for (Jugador jugador : jugadores){
             System.out.println(jugador.getNombre() + jugador.getSeleccionado());
+        }
+        AdminSQLDataBase admin = new AdminSQLDataBase(this);
+        SQLiteDatabase bd = admin.getWritableDatabase();
+        Jugador jugador = new Jugador();
+
+        Jugador j = jugador.insertar(bd, "Jugador 3", "Superpringao", "");
+        Toast.makeText(this, j.getNombre(),
+                Toast.LENGTH_SHORT).show();
+        System.out.println(j.getNombre());
+
+        List<Jugador> jugadors = jugador.getAll(bd);
+
+        for (Jugador jugador1: jugadors) {
+            System.out.println(jugador1.getNombre());
         }
         getSupportFragmentManager().beginTransaction().replace(R.id.contenedorPartida, fragmentTablero).commit();
     }

@@ -3,6 +3,7 @@ package com.example.beberomorir.Fragmentos;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -20,6 +21,7 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 
 import com.example.beberomorir.Adaptadores.AdaptadorJugador;
+import com.example.beberomorir.AdminSQLDataBase;
 import com.example.beberomorir.Interfaces.IComunicaPartida;
 import com.example.beberomorir.Modelos.Jugador;
 import com.example.beberomorir.Modelos.Partida;
@@ -42,6 +44,7 @@ public class ElegirJugadoresFragment extends Fragment {
     Activity actividad;
     IComunicaPartida iComunicaPartida;
     CardView configComenzarPartida;
+    ArrayList<Jugador> listaJugadores=new ArrayList<Jugador>();
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -101,8 +104,11 @@ public class ElegirJugadoresFragment extends Fragment {
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
-        final ArrayList<Jugador> listaJugadores=new ArrayList<Jugador>();
-        for (int i = 0; i < 4; i++) {
+        AdminSQLDataBase admin = new AdminSQLDataBase(this.actividad);
+        SQLiteDatabase bd = admin.getWritableDatabase();
+        Jugador jugador = new Jugador();
+        listaJugadores=jugador.getAll(bd);
+        /*for (int i = 0; i < 4; i++) {
             Jugador j1= new Jugador();
             Jugador j2= new Jugador();
             Jugador j3= new Jugador();
@@ -118,7 +124,7 @@ public class ElegirJugadoresFragment extends Fragment {
             j3.setUrlImagen(Integer.toString(R.mipmap.mundos3));
             j3.setJugadorId(i+6);
             listaJugadores.add(j3);
-        }
+        }*/
 
         final AdaptadorJugador adaptador = new AdaptadorJugador(this.actividad, listaJugadores);
         ListView lv1 = (ListView)view.findViewById(R.id.listaJugadores);
