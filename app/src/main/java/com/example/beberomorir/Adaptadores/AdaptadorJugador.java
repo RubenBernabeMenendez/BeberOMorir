@@ -1,7 +1,8 @@
 package com.example.beberomorir.Adaptadores;
 
 import android.app.Activity;
-import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,6 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.beberomorir.Constantes;
@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 public class AdaptadorJugador extends ArrayAdapter<Jugador> {
@@ -39,15 +38,20 @@ public class AdaptadorJugador extends ArrayAdapter<Jugador> {
         LayoutInflater inflater = appCompatActivity.getLayoutInflater();
         View item = inflater.inflate(R.layout.layout_jugador, null);
 
-        TextView textView1 = (TextView)item.findViewById(R.id.nombreJugador);
+        TextView textView1 = (TextView) item.findViewById(R.id.nombreJugador);
 
         textView1.setText(this.jugadors.get(position).getNombre());
 
-        ImageView imageView1 = (ImageView)item.findViewById(R.id.imagenJugador);
+        ImageView imageView1 = (ImageView) item.findViewById(R.id.imagenJugador);
 
-        imageView1.setImageResource(Integer.parseInt(this.jugadors.get(position).getUrlImagen() != null ? Integer.toString(R.mipmap.mundos1) : this.jugadors.get(position).getUrlImagen()));
+        if (this.jugadors.get(position).getUrlImagen() == null) {
+            imageView1.setImageResource(Integer.parseInt(Integer.toString(R.mipmap.mundos1)));
+        } else {
+            Bitmap bitmap = BitmapFactory.decodeByteArray(this.jugadors.get(position).getUrlImagen(), 0, this.jugadors.get(position).getUrlImagen().length);
+            imageView1.setImageBitmap(bitmap);
+        }
 
-        CardView cardView = (CardView)item.findViewById(R.id.jugadorCard);
+        CardView cardView = (CardView) item.findViewById(R.id.jugadorCard);
 
         CheckBox checkBox = (CheckBox) item.findViewById(R.id.checkboxJugador);
         checkBox.setChecked(Constantes.booleanToString(jugadors.get(position).getSeleccionado()));
@@ -67,6 +71,6 @@ public class AdaptadorJugador extends ArrayAdapter<Jugador> {
                 jugadors.get(position).setSeleccionado(b ? "Y" : "N");
             }
         });
-        return(item);
+        return (item);
     }
 }

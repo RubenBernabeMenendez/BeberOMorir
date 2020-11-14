@@ -6,6 +6,8 @@ public class Constantes {
     public static final int LISTA_NIVELES_PRUEBA = 4;
     public static final int LISTA_NIVELES_RESULTADOS_PRUEBA = 4;
 
+    public static final int REQUEST_CODE_TAKE_PHOTO = 1;
+
     public static final int TIPO_RESULTADO_PRUEBA_CHECK_ID = 1000;
 
     public static boolean booleanToString(String activo) {

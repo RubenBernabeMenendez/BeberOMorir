@@ -12,7 +12,7 @@ public class Jugador {
     int jugadorId;
     String nombre;
     String apodo;
-    String urlImagen;
+    byte[] urlImagen;
     String seleccionado;
 
     public int getJugadorId() {
@@ -39,11 +39,11 @@ public class Jugador {
         this.apodo = apodo;
     }
 
-    public String getUrlImagen() {
+    public byte[] getUrlImagen() {
         return urlImagen;
     }
 
-    public void setUrlImagen(String urlImagen) {
+    public void setUrlImagen(byte[] urlImagen) {
         this.urlImagen = urlImagen;
     }
 
@@ -55,7 +55,7 @@ public class Jugador {
         this.seleccionado = seleccionado;
     }
 
-    public Jugador insertar(SQLiteDatabase bd, String nombre, String apodo, String urlImagen){
+    public Jugador insertar(SQLiteDatabase bd, String nombre, String apodo, byte[] urlImagen){
         ContentValues cv = new ContentValues();
         cv.put("nombre", nombre);
         cv.put("apodo", apodo);
@@ -73,7 +73,7 @@ public class Jugador {
             jugador.setJugadorId(Integer.parseInt(fila.getString(0)));
             jugador.setNombre(fila.getString(1));
             jugador.setApodo(fila.getString(2));
-            jugador.setUrlImagen(fila.getString(3));
+            jugador.setUrlImagen(fila.getBlob(3));
             return jugador;
         } else {
             return null;
@@ -88,7 +88,7 @@ public class Jugador {
             jugador.setJugadorId(Integer.parseInt(fila.getString(0)));
             jugador.setNombre(fila.getString(1));
             jugador.setApodo(fila.getString(2));
-            jugador.setUrlImagen(fila.getString(3));
+            jugador.setUrlImagen(fila.getBlob(3));
             Jugadors.add(jugador);
         }
         return Jugadors;

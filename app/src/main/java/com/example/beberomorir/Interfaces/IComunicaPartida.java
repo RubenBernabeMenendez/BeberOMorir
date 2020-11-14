@@ -13,4 +13,10 @@ public interface IComunicaPartida {
     void verElegirJugadores();
 
     void verTablero(List<Jugador> jugadores);
+
+    void addJugador();
+
+    void nuevaImagen();
+
+    void anadirJugadorToBD(String nombre, String apodo, byte[] urlAnadirJugador);
 }
