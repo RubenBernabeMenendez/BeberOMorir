@@ -60,10 +60,9 @@ public class Jugador {
         cv.put("nombre", nombre);
         cv.put("apodo", apodo);
         cv.put("urlImagen", urlImagen);
-        Long id = bd.insert("JUGADOR", null, cv);
+        long id = bd.insert("JUGADOR", null, cv);
 
-        Jugador jugador = findById(bd, id.intValue());
-        return jugador;
+        return  findById(bd, (int) id);
     }
 
     public Jugador findById(SQLiteDatabase bd, int jugadorId) {
@@ -74,8 +73,10 @@ public class Jugador {
             jugador.setNombre(fila.getString(1));
             jugador.setApodo(fila.getString(2));
             jugador.setUrlImagen(fila.getBlob(3));
+            fila.close();
             return jugador;
         } else {
+            fila.close();
             return null;
         }
     }
@@ -91,6 +92,7 @@ public class Jugador {
             jugador.setUrlImagen(fila.getBlob(3));
             Jugadors.add(jugador);
         }
+        fila.close();
         return Jugadors;
     }
 }

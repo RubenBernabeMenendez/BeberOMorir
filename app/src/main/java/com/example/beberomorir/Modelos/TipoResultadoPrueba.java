@@ -50,9 +50,10 @@ public class TipoResultadoPrueba {
             tipoResultadoPrueba.setTipoResultadoPruebaId(Integer.parseInt(fila.getString(0)));
             tipoResultadoPrueba.setNombre(fila.getString(1));
             tipoResultadoPrueba.setDescripcion(fila.getString(2));
-            //tipoResultadoPrueba.setTiempoEjecucion(Integer.parseInt(fila.getString(3)));
+            fila.close();
             return tipoResultadoPrueba;
         } else {
+            fila.close();
             return null;
         }
     }
@@ -67,6 +68,7 @@ public class TipoResultadoPrueba {
             tipoResultadoPrueba.setDescripcion(fila.getString(2));
             tipoResultadoPruebas.add(tipoResultadoPrueba);
         }
+        fila.close();
         return tipoResultadoPruebas;
     }
 }

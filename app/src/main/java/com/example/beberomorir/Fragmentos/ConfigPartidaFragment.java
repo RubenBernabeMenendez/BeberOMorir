@@ -25,6 +25,7 @@ import android.widget.Switch;
 import com.example.beberomorir.AdminSQLDataBase;
 import com.example.beberomorir.Constantes;
 import com.example.beberomorir.Interfaces.IComunicaPartida;
+import com.example.beberomorir.Modelos.ConfigPartida;
 import com.example.beberomorir.Modelos.TipoPartida;
 import com.example.beberomorir.Modelos.TipoPrueba;
 import com.example.beberomorir.Modelos.TipoResultadoPrueba;
@@ -88,27 +89,9 @@ public class ConfigPartidaFragment extends Fragment {
         return fragment;
     }
 
-    /*@NonNull
-    @Override
-    public AlertDialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        return crearDialogoConfigPartida();
-    }*/
-
-    private AlertDialog crearDialogoConfigPartida() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.fragment_config_partida, null);
-        builder.setView(view);
-        construirPantalla(view);
-
-        return builder.create();
-    }
-
     public void construirPantalla(View v) {
         AdminSQLDataBase admin = new AdminSQLDataBase(this.actividad);
         final SQLiteDatabase bd = admin.getWritableDatabase();
-        LinearLayout linearLayoutTP = v.findViewById(R.id.tipoPruebaLayout);
 
         LinearLayout linearLayout1TP = v.findViewById(R.id.tipoPruebaLayout1);
         LinearLayout linearLayout2TP = v.findViewById(R.id.tipoPruebaLayout2);
@@ -170,7 +153,7 @@ public class ConfigPartidaFragment extends Fragment {
         }
 
         comboTipoPartida = (Spinner) v.findViewById(R.id.comboTipoPartida);
-        TipoPartida tipoPartida = new TipoPartida();
+        final TipoPartida tipoPartida = new TipoPartida();
         tipoPartidas = tipoPartida.getAll(bd);
         String []opcionesTipoPartida = new String[tipoPartidas.size()];
         for (int i= 0; i<tipoPartidas.size(); i++) {
@@ -181,7 +164,7 @@ public class ConfigPartidaFragment extends Fragment {
 
 
         comboNivelPruebas = (Spinner) v.findViewById(R.id.comboNivelPruebas);
-        String []nivelPruebas = new String[Constantes.LISTA_NIVELES_PRUEBA];
+        final String []nivelPruebas = new String[Constantes.LISTA_NIVELES_PRUEBA];
         for (int i=0; i< Constantes.LISTA_NIVELES_PRUEBA; i++) {
             nivelPruebas[i] = String.valueOf(i);
         }
@@ -209,18 +192,19 @@ public class ConfigPartidaFragment extends Fragment {
                 for (CheckBox c : tipoPruebasChecks) {
                     if (c.isChecked()) {
                         t = t.findById(bd, c.getId());
-                        System.out.println(t.getNombre());
                         tipoPruebas.add(t);
                     }
                 }
                 for (CheckBox c : tipoResultadoPruebasChecks) {
                     if (c.isChecked()) {
                         trp = trp.findById(bd, c.getId() - Constantes.TIPO_RESULTADO_PRUEBA_CHECK_ID);
-                        System.out.println(trp.getNombre());
                         tipoResultadoPruebas.add(trp);
                     }
                 }
-                iComunicaPartida.verElegirJugadores();
+                TipoPartida tP = tipoPartida.findById(bd, Integer.parseInt(comboTipoPartida.getSelectedItem().toString()));
+
+                iComunicaPartida.verElegirJugadores(Integer.parseInt(comboNivelPruebas.getSelectedItem().toString()), Integer.parseInt(comboNivelResultadosPruebas.getSelectedItem().toString()), Constantes.stringToBoolean(switchRolesJugadores.isChecked()),
+                        tipoPruebas, tipoResultadoPruebas, tP);
             }
         });
     }
@@ -240,14 +224,6 @@ public class ConfigPartidaFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_config_partida, container, false);
         construirPantalla(view);
-        /*OnBackPressedCallback callback = new OnBackPressedCallback(true *//* enabled by default *//*) {
-            @Override
-            public void handleOnBackPressed() {
-                iComunicaPartida.verTablero();
-                // Handle the back button event
-            }
-        };
-        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);*/
         return view;
     }
 }

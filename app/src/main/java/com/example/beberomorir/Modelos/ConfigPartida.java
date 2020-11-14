@@ -71,7 +71,7 @@ public class ConfigPartida {
         this.configTipoResultadoPruebas = configTipoResultadoPruebas;
     }
 
-    public ConfigPartida findById(SQLiteDatabase bd, int configPartidaId) {
+    public ConfigPartida findConfigById(SQLiteDatabase bd, int configPartidaId) {
         Cursor fila = bd.rawQuery("SELECT configPartidaId, nivelPruebas, nivelResultadoPruebas, tipoPartidaId, rolesJugador FROM CONFIG_PARTIDA WHERE tipoPartidaId=" + configPartidaId,null);
         if (fila.moveToFirst()) {
             ConfigPartida configPartida = new ConfigPartida();
@@ -85,18 +85,37 @@ public class ConfigPartida {
             configPartida.setConfigTipoPruebas(configTipoPrueba.findById(bd, Integer.parseInt(fila.getString(0))));
             ConfigTipoResultadoPrueba configTipoResultadoPrueba = new ConfigTipoResultadoPrueba();
             configPartida.setConfigTipoResultadoPruebas(configTipoResultadoPrueba.findById(bd, Integer.parseInt(fila.getString(0))));
+            fila.close();
             return configPartida;
         } else {
+            fila.close();
             return null;
         }
     }
 
-    public void insertar(SQLiteDatabase bd, int nivelPruebas, int nivelResultadoPruebas, int tipoPartidaId, String rolesJugador){
+    public ConfigPartida findById(SQLiteDatabase bd, int configPartidaId) {
+        Cursor fila = bd.rawQuery("SELECT configPartidaId, nivelPruebas, nivelResultadoPruebas, tipoPartidaId, rolesJugador FROM CONFIG_PARTIDA WHERE tipoPartidaId=" + configPartidaId,null);
+        if (fila.moveToFirst()) {
+            ConfigPartida configPartida = new ConfigPartida();
+            configPartida.setConfigPartidaId(Integer.parseInt(fila.getString(0)));
+            configPartida.setNivelPruebas(Integer.parseInt(fila.getString(1)));
+            configPartida.setNivelResultadoPruebas(Integer.parseInt(fila.getString(2)));
+            configPartida.setRolesJugador(fila.getString(4));
+            fila.close();
+            return configPartida;
+        } else {
+            fila.close();
+            return null;
+        }
+    }
+
+    public ConfigPartida insertar(SQLiteDatabase bd, int nivelPruebas, int nivelResultadoPruebas, int tipoPartidaId, String rolesJugador){
         ContentValues cv = new ContentValues();
         cv.put("nivelPruebas", nivelPruebas);
         cv.put("nivelResultadoPruebas", nivelResultadoPruebas);
         cv.put("tipoPartidaId", tipoPartidaId);
         cv.put("rolesJugador", rolesJugador);
-        bd.insert("CONFIG_PARTIDA", null, cv);
+        long id = bd.insert("CONFIG_PARTIDA", null, cv);
+        return findById(bd, (int) id);
     }
 }

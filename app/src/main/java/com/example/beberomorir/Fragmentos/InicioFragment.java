@@ -119,6 +119,14 @@ public class InicioFragment extends Fragment {
             }
         });
 
+        cardHistorial = vista.findViewById(R.id.historyCard);
+        cardHistorial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                iComunicaFragmentos.historial();
+            }
+        });
+
         return vista;
     }
 

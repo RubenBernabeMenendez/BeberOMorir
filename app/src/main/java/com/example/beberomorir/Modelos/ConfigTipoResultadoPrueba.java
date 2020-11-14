@@ -36,6 +36,7 @@ public class ConfigTipoResultadoPrueba {
             configTipoResultadoPrueba.setTipoResultadoPruebaId(Integer.parseInt(fila.getString(1)));
             configTipoResultadoPruebas.add(configTipoResultadoPrueba);
         }
+        fila.close();
         return configTipoResultadoPruebas;
     }
 

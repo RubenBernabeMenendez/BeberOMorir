@@ -11,7 +11,6 @@ public class TipoPrueba {
     private int TipoPruebaId;
     private String nombre;
     private String descripcion;
-    private int tiempoEjecucion;
 
     public int getTipoPruebaId() {
         return TipoPruebaId;
@@ -37,14 +36,6 @@ public class TipoPrueba {
         this.descripcion = descripcion;
     }
 
-    public int getTiempoEjecucion() {
-        return tiempoEjecucion;
-    }
-
-    public void setTiempoEjecucion(int tiempoEjecucion) {
-        this.tiempoEjecucion = tiempoEjecucion;
-    }
-
     public void insertar(SQLiteDatabase bd, String nombre, String descripcion){
         ContentValues cv = new ContentValues();
         cv.put("nombre", nombre);
@@ -53,15 +44,17 @@ public class TipoPrueba {
     }
 
     public TipoPrueba findById(SQLiteDatabase bd, int tipoPruebaId) {
-        Cursor fila = bd.rawQuery("SELECT tipoPruebaId, nombre, descripcion, tiempoEjecucion FROM TIPO_PRUEBA WHERE tipoPruebaId=" + tipoPruebaId,null);
+        Cursor fila = bd.rawQuery("SELECT tipoPruebaId, nombre, descripcion FROM TIPO_PRUEBA WHERE tipoPruebaId=" + tipoPruebaId,null);
         if (fila.moveToFirst()) {
             TipoPrueba tipoPrueba = new TipoPrueba();
             tipoPrueba.setTipoPruebaId(Integer.parseInt(fila.getString(0)));
             tipoPrueba.setNombre(fila.getString(1));
             tipoPrueba.setDescripcion(fila.getString(2));
-            //tipoPrueba.setTiempoEjecucion(Integer.parseInt(fila.getString(3)));
+
+            fila.close();
             return tipoPrueba;
         } else {
+            fila.close();
             return null;
         }
     }
@@ -77,6 +70,7 @@ public class TipoPrueba {
             //tipoPrueba.setTiempoEjecucion(Integer.parseInt(fila.getString(3)));
             TipoPruebas.add(tipoPrueba);
         }
+        fila.close();
         return TipoPruebas;
     }
 }

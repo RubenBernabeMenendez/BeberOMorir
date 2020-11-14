@@ -34,6 +34,9 @@ import com.example.beberomorir.Fragmentos.TableroFragment;
 import com.example.beberomorir.Interfaces.IComunicaPartida;
 import com.example.beberomorir.MainActivity;
 import com.example.beberomorir.Modelos.Jugador;
+import com.example.beberomorir.Modelos.TipoPartida;
+import com.example.beberomorir.Modelos.TipoPrueba;
+import com.example.beberomorir.Modelos.TipoResultadoPrueba;
 import com.example.beberomorir.R;
 
 import java.io.ByteArrayOutputStream;
@@ -51,7 +54,7 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
     private TextView mTextView;
     Fragment fragmentTablero;
     Fragment fragmentConfigPartida;
-    Fragment fragmentElegirJugadores;
+    ElegirJugadoresFragment fragmentElegirJugadores;
     NuevoJugadorFragment addJugador;
     private Uri photoURI;
 
@@ -72,7 +75,7 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
     }
 
     @Override
-    public void verElegirJugadores() {
+    public void verElegirJugadores(int nivelPruebas, int nivelResultados, String roles, List<TipoPrueba> tipoPruebas, List<TipoResultadoPrueba> tipoResultadoPruebas, TipoPartida tipoPartida) {
 
         getSupportFragmentManager().beginTransaction().replace(R.id.contenedorPartida, fragmentElegirJugadores).commit();
     }
@@ -165,6 +168,7 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
 
         Jugador j = jugador.insertar(bd, nombre, apodo, imagen);
         addJugador.dismiss();
+        fragmentElegirJugadores.recargarJugadores();
         System.out.println(j.getNombre() + j.getApodo() );
     }
 

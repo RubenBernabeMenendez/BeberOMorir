@@ -63,8 +63,10 @@ public class TipoPartida {
             tipoPartida.setDescripcion(fila.getString(2));
             tipoPartida.setNumeroMundos(Integer.parseInt(fila.getString(3)));
             tipoPartida.setNumeroPruebasMundo(Integer.parseInt(fila.getString(4)));
+            fila.close();
             return tipoPartida;
         } else {
+            fila.close();
             return null;
         }
     }
@@ -90,6 +92,7 @@ public class TipoPartida {
             tipoPartida.setNumeroPruebasMundo(Integer.parseInt(fila.getString(4)));
             tipoPartidas.add(tipoPartida);
         }
+        fila.close();
         return tipoPartidas;
     }
 }

@@ -13,6 +13,7 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -112,8 +113,10 @@ public class NuevoJugadorFragment extends AppCompatDialogFragment {
         confirmarAnadirJugadorCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Hacer foto
-                iComunicaPartida.anadirJugadorToBD(nombreForm.getText().toString(), apodoForm.getText().toString(), urlImage);
+                // Guardar jugador
+                if (!vacio(nombreForm)) {
+                    iComunicaPartida.anadirJugadorToBD(nombreForm.getText().toString(), apodoForm.getText().toString(), urlImage);
+                }
             }
         });
 
@@ -126,5 +129,17 @@ public class NuevoJugadorFragment extends AppCompatDialogFragment {
 
     public void setUrlImage (byte[] urlImage){
         this.urlImage = urlImage;
+    }
+
+    public  boolean vacio(EditText campo){
+        String dato = campo.getText().toString().trim();
+        if(TextUtils.isEmpty(dato)){
+            campo.setError("Campo obligatorio");
+            campo.requestFocus();
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 }
