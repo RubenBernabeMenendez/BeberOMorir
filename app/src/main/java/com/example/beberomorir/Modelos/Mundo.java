@@ -12,11 +12,11 @@ public class Mundo {
     private String nombre;
     private String descripcion;
 
-    public int getTipoResultadoPruebaId() {
+    public int getMundoId() {
         return mundoId;
     }
 
-    public void setTipoResultadoPruebaId(int mundoId) {
+    public void setMundoId(int mundoId) {
         this.mundoId = mundoId;
     }
 
@@ -47,7 +47,7 @@ public class Mundo {
         Cursor fila = bd.rawQuery("SELECT mundoId, nombre, descripcion FROM MUNDO WHERE mundoId=" + mundoId,null);
         if (fila.moveToFirst()) {
             Mundo mundo = new Mundo();
-            mundo.setTipoResultadoPruebaId(Integer.parseInt(fila.getString(0)));
+            mundo.setMundoId(Integer.parseInt(fila.getString(0)));
             mundo.setNombre(fila.getString(1));
             mundo.setDescripcion(fila.getString(2));
             fila.close();
@@ -63,7 +63,7 @@ public class Mundo {
         List<Mundo> mundos = new ArrayList<>();
         for (fila.moveToFirst(); !fila.isAfterLast(); fila.moveToNext()) {
             Mundo mundo = new Mundo();
-            mundo.setTipoResultadoPruebaId(Integer.parseInt(fila.getString(0)));
+            mundo.setMundoId(Integer.parseInt(fila.getString(0)));
             mundo.setNombre(fila.getString(1));
             mundo.setDescripcion(fila.getString(2));
             mundos.add(mundo);

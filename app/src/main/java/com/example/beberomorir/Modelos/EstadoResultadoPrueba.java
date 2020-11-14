@@ -12,11 +12,11 @@ public class EstadoResultadoPrueba {
     private String nombre;
     private String descripcion;
 
-    public int getTipoResultadoPruebaId() {
+    public int getEstadoResultadoPruebaId() {
         return estadoResultadoPruebaId;
     }
 
-    public void setTipoResultadoPruebaId(int estadoResultadoPruebaId) {
+    public void setEstadoResultadoPruebaId(int estadoResultadoPruebaId) {
         this.estadoResultadoPruebaId = estadoResultadoPruebaId;
     }
 
@@ -47,7 +47,7 @@ public class EstadoResultadoPrueba {
         Cursor fila = bd.rawQuery("SELECT estadoResultadoPruebaId, nombre, descripcion FROM ESTADO_RESULTADO_PRUEBA WHERE estadoResultadoPruebaId=" + estadoResultadoPruebaId,null);
         if (fila.moveToFirst()) {
             EstadoResultadoPrueba estadoResultadoPrueba = new EstadoResultadoPrueba();
-            estadoResultadoPrueba.setTipoResultadoPruebaId(Integer.parseInt(fila.getString(0)));
+            estadoResultadoPrueba.setEstadoResultadoPruebaId(Integer.parseInt(fila.getString(0)));
             estadoResultadoPrueba.setNombre(fila.getString(1));
             estadoResultadoPrueba.setDescripcion(fila.getString(2));
             fila.close();
@@ -63,7 +63,7 @@ public class EstadoResultadoPrueba {
         List<EstadoResultadoPrueba> estadoResultadoPruebas = new ArrayList<>();
         for (fila.moveToFirst(); !fila.isAfterLast(); fila.moveToNext()) {
             EstadoResultadoPrueba estadoResultadoPrueba = new EstadoResultadoPrueba();
-            estadoResultadoPrueba.setTipoResultadoPruebaId(Integer.parseInt(fila.getString(0)));
+            estadoResultadoPrueba.setEstadoResultadoPruebaId(Integer.parseInt(fila.getString(0)));
             estadoResultadoPrueba.setNombre(fila.getString(1));
             estadoResultadoPrueba.setDescripcion(fila.getString(2));
             estadoResultadoPruebas.add(estadoResultadoPrueba);
