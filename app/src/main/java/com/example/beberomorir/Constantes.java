@@ -8,6 +8,9 @@ public class Constantes {
     public static final int NUMERO_MUNDOS_NIVEL = 4;
     public static final int ROL_ID = 4;
 
+    public static final int NUM_OPCIONES_RULETA = 6;
+    public static final double GRADOS = 360;
+
     public static final int REQUEST_CODE_TAKE_PHOTO = 1;
 
     public static final int TIPO_RESULTADO_PRUEBA_CHECK_ID = 1000;

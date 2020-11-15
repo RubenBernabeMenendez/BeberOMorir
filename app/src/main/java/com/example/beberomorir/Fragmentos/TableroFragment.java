@@ -1,13 +1,18 @@
 package com.example.beberomorir.Fragmentos;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.beberomorir.Interfaces.IComunicaPartida;
 import com.example.beberomorir.R;
 
 /**
@@ -25,6 +30,8 @@ public class TableroFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    Activity actividad;
+    IComunicaPartida iComunicaPartida;
 
     public TableroFragment() {
         // Required empty public constructor
@@ -60,7 +67,22 @@ public class TableroFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                iComunicaPartida.verPruebaAzar();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
         return inflater.inflate(R.layout.fragment_tablero, container, false);
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof Activity) {
+            this.actividad = (Activity) context;
+            iComunicaPartida = (IComunicaPartida) this.actividad;
+        }
     }
 }

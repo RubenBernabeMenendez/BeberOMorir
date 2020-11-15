@@ -25,4 +25,6 @@ public interface IComunicaPartida {
     void nuevaImagen();
 
     void anadirJugadorToBD(String nombre, String apodo, byte[] urlAnadirJugador);
+
+    void verPruebaAzar();
 }

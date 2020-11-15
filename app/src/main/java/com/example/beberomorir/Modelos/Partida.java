@@ -79,8 +79,8 @@ public class Partida {
         return  findById(bd, (int) id);
     }
 
-    public Partida findById(SQLiteDatabase bd, int jugadorPartidaId) {
-        Cursor fila = bd.rawQuery("SELECT partidaId, configPartidaId, fecha, finalizada, mundoPartidaActual FROM JUGADOR_PARTIDA WHERE jugadorPartidaId=" + jugadorPartidaId,null);
+    public Partida findById(SQLiteDatabase bd, int partidaId) {
+        Cursor fila = bd.rawQuery("SELECT partidaId, configPartidaId, fecha, finalizada, mundoPartidaActualId FROM PARTIDA WHERE partidaId=" + partidaId,null);
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         if (fila.moveToFirst()) {
             Partida partida = new Partida();
@@ -103,7 +103,7 @@ public class Partida {
     }
 
     public ArrayList<Partida> getAll(SQLiteDatabase bd) throws ParseException {
-        Cursor fila = bd.rawQuery("SELECT jugadorPartidaId, jugadorId, partidaId, rolId FROM JUGADOR_PARTIDA",null);
+        Cursor fila = bd.rawQuery("SELECT partidaId, configPartidaId, fecha, finalizada, mundoPartidaActual FROM PARTIDA",null);
         ArrayList<Partida> partidas = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         for (fila.moveToFirst(); !fila.isAfterLast(); fila.moveToNext()) {

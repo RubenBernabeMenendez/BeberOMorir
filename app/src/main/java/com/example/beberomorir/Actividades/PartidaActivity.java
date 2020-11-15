@@ -30,6 +30,7 @@ import com.example.beberomorir.Constantes;
 import com.example.beberomorir.Fragmentos.ConfigPartidaFragment;
 import com.example.beberomorir.Fragmentos.ElegirJugadoresFragment;
 import com.example.beberomorir.Fragmentos.NuevoJugadorFragment;
+import com.example.beberomorir.Fragmentos.PruebaAzarFragment;
 import com.example.beberomorir.Fragmentos.TableroFragment;
 import com.example.beberomorir.Interfaces.IComunicaPartida;
 import com.example.beberomorir.MainActivity;
@@ -60,10 +61,12 @@ import java.util.Objects;
 public class PartidaActivity extends AppCompatActivity implements IComunicaPartida {
 
 
-    Fragment fragmentTablero;
+    TableroFragment fragmentTablero;
     Fragment fragmentConfigPartida;
     ElegirJugadoresFragment fragmentElegirJugadores;
     NuevoJugadorFragment addJugador;
+    PruebaAzarFragment fragmentPruebaAzar;
+
 
     //Datos
     private Uri photoURI;
@@ -80,6 +83,7 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
         fragmentConfigPartida = new ConfigPartidaFragment();
         fragmentElegirJugadores = new ElegirJugadoresFragment();
         fragmentTablero = new TableroFragment();
+        fragmentPruebaAzar = new PruebaAzarFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.contenedorPartida, fragmentConfigPartida).commit();
     }
 
@@ -106,6 +110,11 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
     }
 
     @Override
+    public void verPruebaAzar() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.contenedorPartida, fragmentPruebaAzar).commit();
+    }
+
+    @Override
     public void empezarPartida(List<Jugador> jugadores){
         AdminSQLDataBase admin = new AdminSQLDataBase(this);
         SQLiteDatabase bd = admin.getWritableDatabase();
@@ -115,8 +124,8 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
         }
 
         this.configPartida = crearConfigPartida(bd);
-        this.jugadoresPartida = crearJugadoresPartida(bd, jugadores, this.partida.getPartidaId());
         this.partida = crearPartida(bd, this.configPartida.getConfigPartidaId(), "Prueba");
+        this.jugadoresPartida = crearJugadoresPartida(bd, jugadores, this.partida.getPartidaId());
 
         getSupportFragmentManager().beginTransaction().replace(R.id.contenedorPartida, fragmentTablero).commit();
     }
@@ -204,11 +213,11 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
     public ConfigPartida crearConfigPartida(SQLiteDatabase bd) {
 
         ConfigPartida cp = this.configPartida;
-        cp = cp.insertar(bd, cp.getNivelPruebas(), cp.getNivelResultadoPruebas(), cp.getTipoPartida().getTipoPartidaId(), cp.getRolesJugador());
+        this.configPartida = cp.insertar(bd, cp.getNivelPruebas(), cp.getNivelResultadoPruebas(), cp.getTipoPartida().getTipoPartidaId(), cp.getRolesJugador());
 
         ConfigTipoPrueba configTipoPrueba = new ConfigTipoPrueba();
         List<ConfigTipoPrueba> configTipoPruebas = new ArrayList<>();
-        configTipoPrueba.setConfigPartidaId(cp.getConfigPartidaId());
+        configTipoPrueba.setConfigPartidaId(this.configPartida.getConfigPartidaId());
         for (TipoPrueba tipoPrueba : this.tipoPruebasPartida) {
             configTipoPrueba.setTipoPruebaId(tipoPrueba.getTipoPruebaId());
             configTipoPruebas.add(configTipoPrueba);

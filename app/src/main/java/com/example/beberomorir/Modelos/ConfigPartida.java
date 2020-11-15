@@ -94,7 +94,7 @@ public class ConfigPartida {
     }
 
     public ConfigPartida findById(SQLiteDatabase bd, int configPartidaId) {
-        Cursor fila = bd.rawQuery("SELECT configPartidaId, nivelPruebas, nivelResultadoPruebas, tipoPartidaId, rolesJugador FROM CONFIG_PARTIDA WHERE tipoPartidaId=" + configPartidaId,null);
+        Cursor fila = bd.rawQuery("SELECT configPartidaId, nivelPruebas, nivelResultadoPruebas, tipoPartidaId, rolesJugador FROM CONFIG_PARTIDA WHERE configPartidaId=" + configPartidaId,null);
         if (fila.moveToFirst()) {
             ConfigPartida configPartida = new ConfigPartida();
             configPartida.setConfigPartidaId(Integer.parseInt(fila.getString(0)));
@@ -116,6 +116,7 @@ public class ConfigPartida {
         cv.put("tipoPartidaId", tipoPartidaId);
         cv.put("rolesJugador", rolesJugador);
         long id = bd.insert("CONFIG_PARTIDA", null, cv);
+        System.out.println(id);
         return findById(bd, (int) id);
     }
 }

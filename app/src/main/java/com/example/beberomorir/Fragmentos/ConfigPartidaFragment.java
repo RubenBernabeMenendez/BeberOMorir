@@ -201,8 +201,8 @@ public class ConfigPartidaFragment extends Fragment {
                         tipoResultadoPruebas.add(trp);
                     }
                 }
-                TipoPartida tP = tipoPartida.findById(bd, Integer.parseInt(comboTipoPartida.getSelectedItem().toString()));
-
+                //TipoPartida tP = tipoPartida.findById(bd, Integer.parseInt(comboTipoPartida.getSelectedItem().toString()));
+                TipoPartida tP = new TipoPartida();
                 iComunicaPartida.verElegirJugadores(Integer.parseInt(comboNivelPruebas.getSelectedItem().toString()), Integer.parseInt(comboNivelResultadosPruebas.getSelectedItem().toString()), Constantes.stringToBoolean(switchRolesJugadores.isChecked()),
                         tipoPruebas, tipoResultadoPruebas, tP);
             }
