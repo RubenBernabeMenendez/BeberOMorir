@@ -33,7 +33,13 @@ import com.example.beberomorir.Fragmentos.NuevoJugadorFragment;
 import com.example.beberomorir.Fragmentos.TableroFragment;
 import com.example.beberomorir.Interfaces.IComunicaPartida;
 import com.example.beberomorir.MainActivity;
+import com.example.beberomorir.Modelos.ConfigPartida;
+import com.example.beberomorir.Modelos.ConfigTipoPrueba;
+import com.example.beberomorir.Modelos.ConfigTipoResultadoPrueba;
 import com.example.beberomorir.Modelos.Jugador;
+import com.example.beberomorir.Modelos.JugadorPartida;
+import com.example.beberomorir.Modelos.MundoPartida;
+import com.example.beberomorir.Modelos.Partida;
 import com.example.beberomorir.Modelos.TipoPartida;
 import com.example.beberomorir.Modelos.TipoPrueba;
 import com.example.beberomorir.Modelos.TipoResultadoPrueba;
@@ -44,25 +50,33 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
 public class PartidaActivity extends AppCompatActivity implements IComunicaPartida {
 
-    private TextView mTextView;
+
     Fragment fragmentTablero;
     Fragment fragmentConfigPartida;
     ElegirJugadoresFragment fragmentElegirJugadores;
     NuevoJugadorFragment addJugador;
+
+    //Datos
     private Uri photoURI;
+    private List<TipoPrueba> tipoPruebasPartida;
+    private List<TipoResultadoPrueba> tipoResultadosPruebasPartida;
+    private ConfigPartida configPartida;
+    private List<JugadorPartida> jugadoresPartida;
+    private Partida partida;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_partida);
-        mTextView = (TextView) findViewById(R.id.text);
         fragmentConfigPartida = new ConfigPartidaFragment();
         fragmentElegirJugadores = new ElegirJugadoresFragment();
         fragmentTablero = new TableroFragment();
@@ -76,24 +90,34 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
 
     @Override
     public void verElegirJugadores(int nivelPruebas, int nivelResultados, String roles, List<TipoPrueba> tipoPruebas, List<TipoResultadoPrueba> tipoResultadoPruebas, TipoPartida tipoPartida) {
-
+        configPartida = new ConfigPartida();
+        configPartida.setTipoPartida(tipoPartida);
+        configPartida.setRolesJugador(roles);
+        configPartida.setNivelResultadoPruebas(nivelResultados);
+        configPartida.setNivelPruebas(nivelPruebas);
+        tipoPruebasPartida = tipoPruebas;
+        tipoResultadosPruebasPartida = tipoResultadoPruebas;
         getSupportFragmentManager().beginTransaction().replace(R.id.contenedorPartida, fragmentElegirJugadores).commit();
     }
 
     @Override
-    public void verTablero(List<Jugador> jugadores) {
+    public void verTablero(List<MundoPartida> mundoPartidas) {
+        getSupportFragmentManager().beginTransaction().replace(R.id.contenedorPartida, fragmentTablero).commit();
+    }
+
+    @Override
+    public void empezarPartida(List<Jugador> jugadores){
+        AdminSQLDataBase admin = new AdminSQLDataBase(this);
+        SQLiteDatabase bd = admin.getWritableDatabase();
+
         for (Jugador jugador : jugadores) {
             System.out.println(jugador.getNombre() + jugador.getSeleccionado());
         }
-        AdminSQLDataBase admin = new AdminSQLDataBase(this);
-        SQLiteDatabase bd = admin.getWritableDatabase();
-        Jugador jugador = new Jugador();
 
-        List<Jugador> jugadors = jugador.getAll(bd);
+        this.configPartida = crearConfigPartida(bd);
+        this.jugadoresPartida = crearJugadoresPartida(bd, jugadores, this.partida.getPartidaId());
+        this.partida = crearPartida(bd, this.configPartida.getConfigPartidaId(), "Prueba");
 
-        for (Jugador jugador1 : jugadors) {
-            System.out.println(jugador1.getNombre());
-        }
         getSupportFragmentManager().beginTransaction().replace(R.id.contenedorPartida, fragmentTablero).commit();
     }
 
@@ -115,29 +139,22 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
                 != PackageManager.PERMISSION_GRANTED) {
 
 
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-
-            } else {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         225);
             }
 
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.READ_EXTERNAL_STORAGE)) {
-
-            } else {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                         227);
             }
 
-
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.CAMERA)) {
-
-            } else {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.CAMERA},
                         226);
@@ -169,7 +186,6 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
         Jugador j = jugador.insertar(bd, nombre, apodo, imagen);
         addJugador.dismiss();
         fragmentElegirJugadores.recargarJugadores();
-        System.out.println(j.getNombre() + j.getApodo() );
     }
 
     @Override
@@ -184,15 +200,73 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
 
         }
     }
+
+    public ConfigPartida crearConfigPartida(SQLiteDatabase bd) {
+
+        ConfigPartida cp = this.configPartida;
+        cp = cp.insertar(bd, cp.getNivelPruebas(), cp.getNivelResultadoPruebas(), cp.getTipoPartida().getTipoPartidaId(), cp.getRolesJugador());
+
+        ConfigTipoPrueba configTipoPrueba = new ConfigTipoPrueba();
+        List<ConfigTipoPrueba> configTipoPruebas = new ArrayList<>();
+        configTipoPrueba.setConfigPartidaId(cp.getConfigPartidaId());
+        for (TipoPrueba tipoPrueba : this.tipoPruebasPartida) {
+            configTipoPrueba.setTipoPruebaId(tipoPrueba.getTipoPruebaId());
+            configTipoPruebas.add(configTipoPrueba);
+            configTipoPrueba.insertar(bd, configTipoPrueba.getConfigPartidaId(), configTipoPrueba.getTipoPruebaId());
+        }
+
+        ConfigTipoResultadoPrueba configTipoResultadoPrueba = new ConfigTipoResultadoPrueba();
+        List<ConfigTipoResultadoPrueba> configTipoResultadoPruebas = new ArrayList<>();
+        configTipoResultadoPrueba.setConfigPartidaId(cp.getConfigPartidaId());
+        for (TipoResultadoPrueba tipoResultadoPrueba : this.tipoResultadosPruebasPartida) {
+            configTipoResultadoPrueba.setTipoResultadoPruebaId(tipoResultadoPrueba.getTipoResultadoPruebaId());
+            configTipoResultadoPruebas.add(configTipoResultadoPrueba);
+            configTipoResultadoPrueba.insertar(bd, configTipoResultadoPrueba.getConfigPartidaId(), configTipoResultadoPrueba.getTipoResultadoPruebaId());
+        }
+        cp.setConfigTipoPruebas(configTipoPruebas);
+        cp.setConfigTipoResultadoPruebas(configTipoResultadoPruebas);
+
+        return cp;
+    }
+
+    public List<JugadorPartida> crearJugadoresPartida(SQLiteDatabase bd, List<Jugador> jugadores, int partidaId) {
+
+        List<JugadorPartida> jugadorPartidas = new ArrayList<>();
+        JugadorPartida jp = new JugadorPartida();
+        jp.setPartidaId(partidaId);
+
+        for (Jugador jugador : jugadores) {
+            if (Constantes.YES.equals(jugador.getSeleccionado())) {
+                jp.setJugador(jugador);
+                jugadorPartidas.add(jp);
+                jp = jp.insertar(bd, jp.getPartidaId(), jp.getJugador().getJugadorId(), Constantes.ROL_ID);
+            }
+        }
+
+        return jugadorPartidas;
+    }
+
+    public Partida crearPartida(SQLiteDatabase bd, int configPartidaId, String nombre) {
+
+        Partida p = new Partida();
+        p = p.insertar(bd, configPartidaId, nombre);
+
+        return p;
+
+    }
     
     private String getRealPathFromURI(Context context, Uri contentUri) {
         Cursor cursor = null;
         try {
             String[] proj = { MediaStore.Images.Media.DATA };
             cursor = context.getContentResolver().query(contentUri,  proj, null, null, null);
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            return cursor.getString(column_index);
+            if (cursor != null) {
+                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                cursor.moveToFirst();
+                return cursor.getString(column_index);
+            } else {
+                return null;
+            }
         } catch (Exception e) {
             Log.e("TAG", "getRealPathFromURI Exception : " + e.toString());
             return "";
@@ -203,8 +277,7 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
         }
     }
 
-    private byte[] convertUriToByteArray(Uri uri)
-    {
+    private byte[] convertUriToByteArray(Uri uri) {
         byte[] result = new byte[0];
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();

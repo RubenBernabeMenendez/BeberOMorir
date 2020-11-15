@@ -125,7 +125,7 @@ public class ElegirJugadoresFragment extends Fragment {
                 for (int i=0 ; i < adaptador.getCount(); i++) {
                     jugadors.add(adaptador.getItem(i));
                 }
-                iComunicaPartida.verTablero(jugadors);
+                iComunicaPartida.empezarPartida(jugadors);
             }
         });
 

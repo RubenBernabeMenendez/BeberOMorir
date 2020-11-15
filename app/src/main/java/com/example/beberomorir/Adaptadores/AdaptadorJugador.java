@@ -68,7 +68,7 @@ public class AdaptadorJugador extends ArrayAdapter<Jugador> {
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                jugadors.get(position).setSeleccionado(b ? "Y" : "N");
+                jugadors.get(position).setSeleccionado(b ? Constantes.YES : Constantes.NO);
             }
         });
         return (item);

@@ -6,6 +6,7 @@ public class Constantes {
     public static final int LISTA_NIVELES_PRUEBA = 4;
     public static final int LISTA_NIVELES_RESULTADOS_PRUEBA = 4;
     public static final int NUMERO_MUNDOS_NIVEL = 4;
+    public static final int ROL_ID = 4;
 
     public static final int REQUEST_CODE_TAKE_PHOTO = 1;
 

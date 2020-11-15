@@ -21,9 +21,12 @@ public class AdminSQLDataBase extends SQLiteOpenHelper {
     private static final String CONFIG_TIPO_RESULTADO_PRUEBA_TABLE_CREATE = "CREATE TABLE CONFIG_TIPO_RESULTADO_PRUEBA(configPartidaId INTEGER, tipoResultadoPruebaId INTEGER, PRIMARY KEY (configPartidaId, tipoResultadoPruebaId), FOREIGN KEY (configPartidaId) REFERENCES CONFIG_PARTIDA(configPartidaId), FOREIGN KEY (tipoResultadoPruebaId) REFERENCES TIPO_RESULTADO_PRUEBA(tipoResultadoPruebaId))";
     private static final String CONFIG_TIPO_PRUEBA_TABLE_CREATE = "CREATE TABLE CONFIG_TIPO_PRUEBA(configPartidaId INTEGER, tipoPruebaId INTEGER, PRIMARY KEY (configPartidaId, tipoPruebaId), FOREIGN KEY (configPartidaId) REFERENCES CONFIG_PARTIDA(configPartidaId), FOREIGN KEY (tipoPruebaId) REFERENCES TIPO_PRUEBA(tipoPruebaId))";
     private static final String JUGADOR_TABLE_CREATE = "CREATE TABLE JUGADOR(jugadorId INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, apodo TEXT, urlImagen BLOB)";
+    private static final String JUGADOR_PARTIDA_TABLE_CREATE = "CREATE TABLE JUGADOR_PARTIDA(jugadorPartidaId INTEGER PRIMARY KEY AUTOINCREMENT, partidaId INTEGER, jugadorId INTEGER, rolId INTEGER)";
     private static final String MUNDO_TABLE_CREATE = "CREATE TABLE MUNDO(mundoId INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, descripcion TEXT)";
     private static final String PRUEBA_TABLE_CREATE = "CREATE TABLE PRUEBA(pruebaId INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, descripcion TEXT, nivelPrueba INTEGER, tiempoEjecicion INTEGER, tipoPruebaId INTEGER, FOREIGN KEY (tipoPruebaId) REFERENCES TIPO_PRUEBA(tipoPruebaId))";
     private static final String RESULTADO_PRUEBA_TABLE_CREATE = "CREATE TABLE RESULTADO_PRUEBA(resultadoPruebaId INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, descripcion TEXT, nivelResultadoPrueba INTEGER, tipoResultadoPruebaId INTEGER, estadoResultadoPruebaId INTEGER, FOREIGN KEY (tipoResultadoPruebaId) REFERENCES TIPO_RESULTADO_PRUEBA(tipoResultadoPruebaId), FOREIGN KEY (estadoResultadoPruebaId) REFERENCES ESTADO_RESULTADO_PRUEBA(estadoResultadoPruebaId))";
+    private static final String MUNDO_PARTIDA_TABLE_CREATE = "CREATE TABLE MUNDO_PARTIDA(mundoPartidaId INTEGER PRIMARY KEY AUTOINCREMENT, mundoId INTEGER, partidaId INTEGER, orden INTEGER, nivelMundo INTEGER, urlImagen INTEGER, finalizado TEXT, FOREIGN KEY (mundoId) REFERENCES MUNDO(mundoId), FOREIGN KEY (partidaId) REFERENCES PARTIDA(partidaId))";
+
 
     private static final String TIPO_PARTIDA_TABLE_DROP = "DROP TABLE IF EXISTS TIPO_PARTIDA";
     //private static final String NIVEL_PARTIDA_TABLE_DROP = "DROP TABLE IF EXISTS NIVEL_PARTIDA";
@@ -35,9 +38,11 @@ public class AdminSQLDataBase extends SQLiteOpenHelper {
     private static final String CONFIG_TIPO_RESULTADO_PRUEBA_TABLE_DROP = "DROP TABLE IF EXISTS CONFIG_TIPO_RESULTADO_PRUEBA";
     private static final String CONFIG_TIPO_PRUEBA_TABLE_DROP = "DROP TABLE IF EXISTS CONFIG_TIPO_PRUEBA";
     private static final String JUGADOR_TABLE_DROP = "DROP TABLE IF EXISTS JUGADOR";
+    private static final String JUGADOR_PARTIDA_TABLE_DROP = "DROP TABLE IF EXISTS JUGADOR_PARTIDA";
     private static final String MUNDO_TABLE_DROP = "DROP TABLE IF EXISTS MUNDO";
     private static final String PRUEBA_TABLE_DROP = "DROP TABLE IF EXISTS PRUEBA";
     private static final String RESULTADO_PRUEBA_TABLE_DROP = "DROP TABLE IF EXISTS RESULTADO_PRUEBA";
+    private static final String MUNDO_PARTIDA_TABLE_DROP = "DROP TABLE IF EXISTS MUNDO_PARTIDA";
 
     public AdminSQLDataBase(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
@@ -59,9 +64,11 @@ public class AdminSQLDataBase extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(CONFIG_TIPO_PRUEBA_TABLE_DROP);
         sqLiteDatabase.execSQL(CONFIG_TIPO_RESULTADO_PRUEBA_TABLE_DROP);
         sqLiteDatabase.execSQL(JUGADOR_TABLE_DROP);
+        sqLiteDatabase.execSQL(JUGADOR_PARTIDA_TABLE_DROP);
         sqLiteDatabase.execSQL(MUNDO_TABLE_DROP);
         sqLiteDatabase.execSQL(PRUEBA_TABLE_DROP);
         sqLiteDatabase.execSQL(RESULTADO_PRUEBA_TABLE_DROP);
+        sqLiteDatabase.execSQL(MUNDO_PARTIDA_TABLE_DROP);
 
         sqLiteDatabase.execSQL(TIPO_PARTIDA_TABLE_CREATE);
         //sqLiteDatabase.execSQL(NIVEL_PARTIDA_TABLE_CREATE);
@@ -73,9 +80,11 @@ public class AdminSQLDataBase extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(CONFIG_TIPO_PRUEBA_TABLE_CREATE);
         sqLiteDatabase.execSQL(CONFIG_TIPO_RESULTADO_PRUEBA_TABLE_CREATE);
         sqLiteDatabase.execSQL(JUGADOR_TABLE_CREATE);
+        sqLiteDatabase.execSQL(JUGADOR_PARTIDA_TABLE_CREATE);
         sqLiteDatabase.execSQL(MUNDO_TABLE_CREATE);
         sqLiteDatabase.execSQL(PRUEBA_TABLE_CREATE);
         sqLiteDatabase.execSQL(RESULTADO_PRUEBA_TABLE_CREATE);
+        sqLiteDatabase.execSQL(MUNDO_PARTIDA_TABLE_CREATE);
 
 
         TipoPrueba tipoPrueba = new TipoPrueba();
