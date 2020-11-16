@@ -61,7 +61,7 @@
             </ImageView>
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/flecha"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/flecha"
@@ -79,7 +79,7 @@
                 android:orientation="vertical"
                 android:padding="5dp"
                 app:layout_constraintBottom_toBottomOf="@+id/ruletaImagen"
-                app:layout_constraintTop_toBottomOf="@+id/imageView2"
+                app:layout_constraintTop_toBottomOf="@+id/flecha"
                 app:layout_constraintVertical_bias="0.238"
                 tools:layout_editor_absoluteX="0dp">
 

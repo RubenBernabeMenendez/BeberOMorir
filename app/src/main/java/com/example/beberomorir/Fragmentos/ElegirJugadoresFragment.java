@@ -22,6 +22,7 @@ import android.widget.ListView;
 
 import com.example.beberomorir.Adaptadores.AdaptadorJugador;
 import com.example.beberomorir.AdminSQLDataBase;
+import com.example.beberomorir.Constantes;
 import com.example.beberomorir.Interfaces.IComunicaPartida;
 import com.example.beberomorir.Modelos.Jugador;
 import com.example.beberomorir.Modelos.Partida;
@@ -123,7 +124,9 @@ public class ElegirJugadoresFragment extends Fragment {
 
                 List<Jugador> jugadors = new ArrayList<>();
                 for (int i=0 ; i < adaptador.getCount(); i++) {
-                    jugadors.add(adaptador.getItem(i));
+                    if (Constantes.YES.equals(adaptador.getItem(i).getSeleccionado())) {
+                        jugadors.add(adaptador.getItem(i));
+                    }
                 }
                 iComunicaPartida.empezarPartida(jugadors);
             }

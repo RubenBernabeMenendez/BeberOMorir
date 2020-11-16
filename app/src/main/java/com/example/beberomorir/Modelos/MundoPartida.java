@@ -92,9 +92,10 @@ public class MundoPartida {
             mundoPartida.setMundoPartidaId(Integer.parseInt(fila.getString(0)));
             mundoPartida.setMundo(mundo.findById(bd, fila.getInt(1)));
             mundoPartida.setPartidaId(fila.getInt(2));
-            mundoPartida.setOrden(fila.getInt(3));
-            mundoPartida.setNivelMundo(fila.getInt(4));
-            mundoPartida.setFinalizado(fila.getString(5));
+            mundoPartida.setUrlImagen(fila.getInt(3));
+            mundoPartida.setOrden(fila.getInt(4));
+            mundoPartida.setNivelMundo(fila.getInt(5));
+            mundoPartida.setFinalizado(fila.getString(6));
             fila.close();
             return mundoPartida;
         } else {
@@ -112,9 +113,10 @@ public class MundoPartida {
             mundoPartida.setMundoPartidaId(Integer.parseInt(fila.getString(0)));
             mundoPartida.setMundo(mundo.findById(bd, fila.getInt(1)));
             mundoPartida.setPartidaId(fila.getInt(2));
-            mundoPartida.setOrden(fila.getInt(3));
-            mundoPartida.setNivelMundo(fila.getInt(4));
-            mundoPartida.setFinalizado(fila.getString(5));
+            mundoPartida.setUrlImagen(fila.getInt(3));
+            mundoPartida.setOrden(fila.getInt(4));
+            mundoPartida.setNivelMundo(fila.getInt(5));
+            mundoPartida.setFinalizado(fila.getString(6));
             mundoPartidas.add(mundoPartida);
         }
         fila.close();

@@ -71,6 +71,23 @@ public class TipoPartida {
         }
     }
 
+    public TipoPartida findByNombre(SQLiteDatabase bd, String nombre) {
+        Cursor fila = bd.rawQuery("SELECT tipoPartidaId, nombre, descripcion, numeroMundos, numeroPruebasMundo FROM TIPO_PARTIDA WHERE nombre= \'" + nombre + "\'",null);
+        if (fila.moveToFirst()) {
+            TipoPartida tipoPartida = new TipoPartida();
+            tipoPartida.setTipoPartidaId(Integer.parseInt(fila.getString(0)));
+            tipoPartida.setNombre(fila.getString(1));
+            tipoPartida.setDescripcion(fila.getString(2));
+            tipoPartida.setNumeroMundos(Integer.parseInt(fila.getString(3)));
+            tipoPartida.setNumeroPruebasMundo(Integer.parseInt(fila.getString(4)));
+            fila.close();
+            return tipoPartida;
+        } else {
+            fila.close();
+            return null;
+        }
+    }
+
     public void insertar(SQLiteDatabase bd, String nombre, String descripcion, int numeroMundos, int numeroPruebasMundo){
         ContentValues cv = new ContentValues();
         cv.put("nombre", nombre);

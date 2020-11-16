@@ -107,6 +107,19 @@ public class AdminSQLDataBase extends SQLiteOpenHelper {
         tipoPrueba.insertar(sqLiteDatabase, "Reto tiempo 1vs1","En esta prueba hay que conseguir calcular un número de segundos","N","N");
         tipoPrueba.insertar(sqLiteDatabase, "Qué preferirías","En esta prueba el jugador del turno debe responer a una pregunta, después todos los demás jugadores responderán también, depende de la prueba beberán los que coinciden o los que no","N","Y");
 
+        Mundo mundo = new Mundo();
+        mundo.insertar(sqLiteDatabase, "Mundo 1", "");
+        mundo.insertar(sqLiteDatabase, "Mundo 2", "");
+        mundo.insertar(sqLiteDatabase, "Mundo 3", "");
+        mundo.insertar(sqLiteDatabase, "Mundo 4", "");
+        mundo.insertar(sqLiteDatabase, "Mundo 5", "");
+        mundo.insertar(sqLiteDatabase, "Mundo 6", "");
+        mundo.insertar(sqLiteDatabase, "Mundo 7", "");
+        mundo.insertar(sqLiteDatabase, "Mundo 8", "");
+        mundo.insertar(sqLiteDatabase, "Mundo 9", "");
+        mundo.insertar(sqLiteDatabase, "Mundo 10", "");
+        mundo.insertar(sqLiteDatabase, "Mundo 11", "");
+        mundo.insertar(sqLiteDatabase, "Mundo 12", "");
 
     }
 

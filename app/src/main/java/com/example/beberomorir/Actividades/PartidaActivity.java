@@ -39,6 +39,7 @@ import com.example.beberomorir.Modelos.ConfigTipoPrueba;
 import com.example.beberomorir.Modelos.ConfigTipoResultadoPrueba;
 import com.example.beberomorir.Modelos.Jugador;
 import com.example.beberomorir.Modelos.JugadorPartida;
+import com.example.beberomorir.Modelos.Mundo;
 import com.example.beberomorir.Modelos.MundoPartida;
 import com.example.beberomorir.Modelos.Partida;
 import com.example.beberomorir.Modelos.TipoPartida;
@@ -54,6 +55,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -75,6 +77,7 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
     private ConfigPartida configPartida;
     private List<JugadorPartida> jugadoresPartida;
     private Partida partida;
+    private List<MundoPartida> mundosPartida;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,9 +128,11 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
 
         this.configPartida = crearConfigPartida(bd);
         this.partida = crearPartida(bd, this.configPartida.getConfigPartidaId(), "Prueba");
-        this.jugadoresPartida = crearJugadoresPartida(bd, jugadores, this.partida.getPartidaId());
+        this.jugadoresPartida = crearJugadoresPartida(bd, jugadores);
+        this.mundosPartida = crearMundosPartida(bd);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.contenedorPartida, fragmentTablero).commit();
+        fragmentTablero.setMundoPartidas(this.mundosPartida);
     }
 
     @Override
@@ -235,14 +240,14 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
         cp.setConfigTipoPruebas(configTipoPruebas);
         cp.setConfigTipoResultadoPruebas(configTipoResultadoPruebas);
 
-        return cp;
+        return cp.findConfigById(bd, this.configPartida.getConfigPartidaId());
     }
 
-    public List<JugadorPartida> crearJugadoresPartida(SQLiteDatabase bd, List<Jugador> jugadores, int partidaId) {
+    public List<JugadorPartida> crearJugadoresPartida(SQLiteDatabase bd, List<Jugador> jugadores) {
 
         List<JugadorPartida> jugadorPartidas = new ArrayList<>();
         JugadorPartida jp = new JugadorPartida();
-        jp.setPartidaId(partidaId);
+        jp.setPartidaId(this.partida.getPartidaId());
 
         for (Jugador jugador : jugadores) {
             if (Constantes.YES.equals(jugador.getSeleccionado())) {
@@ -262,6 +267,68 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
 
         return p;
 
+    }
+
+    private List<MundoPartida> crearMundosPartida(SQLiteDatabase bd) {
+        Mundo mundo = new Mundo();
+        List<Mundo> mundos = mundo.getAll(bd);
+        Collections.shuffle(mundos);
+        List<MundoPartida> mundoPartidas = new ArrayList<>();
+
+        for (int i = 0; i < Constantes.NUMERO_NIVELES_MUNDO_PANTALLA; i++) {
+            for (int j = 0; j < Constantes.NUMERO_MUNDOS_NIVEL; j++) {
+                MundoPartida mundoPartida = new MundoPartida();
+                mundoPartida.setPartidaId(this.partida.getPartidaId());
+                mundoPartida.setFinalizado(Constantes.NO);
+                mundoPartida.setMundo(mundos.get(mundoPartidas.size()));
+                mundoPartida.setNivelMundo(i);
+                mundoPartida.setOrden(j);
+                if (mundoPartida.getNivelMundo() == (this.configPartida.getTipoPartida().getNumeroMundos() - 1)) {
+                    mundoPartida.setUrlImagen(Integer.parseInt(Integer.toString(R.mipmap.plantilla_mundos)));
+                } else {
+                    mundoPartida.setUrlImagen(Integer.parseInt(Integer.toString(R.mipmap.plantilla_mundos_caminos)));
+                }
+                mundoPartida = mundoPartida.insertar(bd, mundoPartida.getMundo().getMundoId(), mundoPartida.getPartidaId(), mundoPartida.getUrlImagen(), mundoPartida.getOrden(), mundoPartida.getNivelMundo(), mundoPartida.getFinalizado());
+                mundoPartidas.add(mundoPartida);
+            }
+
+        }
+        return mundoPartidas;
+    }
+
+    private void añadirNivelMundosPartida(SQLiteDatabase bd, int ultimoNivel) throws Exception {
+        if (this.configPartida.getTipoPartida().getNumeroMundos() < ultimoNivel) {
+            Mundo mundo = new Mundo();
+            List<Mundo> mundos = mundo.getAll(bd);
+            MundoPartida mundoPartida = new MundoPartida();
+            mundoPartida.setPartidaId(this.partida.getPartidaId());
+            mundoPartida.setFinalizado(Constantes.NO);
+            // Filtramos los mundos que ya se han hecho
+            for (MundoPartida mp : this.mundosPartida) {
+                if ((mp.getNivelMundo() == (ultimoNivel -1)) || (mp.getNivelMundo() == ultimoNivel)) {
+                    mundos.remove(mp.getMundo());
+                }
+                if (Constantes.YES.equals(mp.getFinalizado())) {
+                    mundos.remove(mp.getMundo());
+                }
+            }
+            for (int j = 0; j < Constantes.NUMERO_MUNDOS_NIVEL; j++) {
+                if (!mundos.isEmpty()) {
+                    mundoPartida.setMundo(mundos.iterator().next());
+                    mundoPartida.setNivelMundo(ultimoNivel + 1);
+                    mundoPartida.setOrden(j);
+                    if (mundoPartida.getNivelMundo() == (this.configPartida.getTipoPartida().getNumeroMundos() - 1)) {
+                        mundoPartida.setMundoPartidaId(Integer.parseInt(Integer.toString(R.mipmap.plantilla_mundos)));
+                    } else {
+                        mundoPartida.setMundoPartidaId(Integer.parseInt(Integer.toString(R.mipmap.plantilla_mundos_caminos)));
+                    }
+                    mundoPartida = mundoPartida.insertar(bd, mundoPartida.getMundo().getMundoId(), mundoPartida.getPartidaId(), mundoPartida.getUrlImagen(), mundoPartida.getOrden(), mundoPartida.getNivelMundo(), mundoPartida.getFinalizado());
+                    this.mundosPartida.add(mundoPartida);
+                } else {
+                    throw new Exception();
+                }
+            }
+        }
     }
     
     private String getRealPathFromURI(Context context, Uri contentUri) {
