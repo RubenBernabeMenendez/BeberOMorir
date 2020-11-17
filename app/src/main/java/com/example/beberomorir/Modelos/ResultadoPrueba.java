@@ -14,6 +14,7 @@ public class ResultadoPrueba {
     private int nivelResultadoPrueba;
     private TipoResultadoPrueba tipoResultadoPrueba;
     private EstadoResultadoPrueba estadoResultadoPrueba;
+    private EntidadResultadoPrueba entidadResultadoPrueba;
 
     public int getResultadoPruebaId() {
         return resultadoPruebaId;
@@ -63,18 +64,28 @@ public class ResultadoPrueba {
         this.estadoResultadoPrueba = estadoResultadoPrueba;
     }
 
-    public void insertar(SQLiteDatabase bd, String nombre, String descripcion, int nivelResultadoPrueba, int tipoResultadoPruebaId, int estadoResultadoPruebaId){
+    public EntidadResultadoPrueba getEntidadResultadoPrueba() {
+        return entidadResultadoPrueba;
+    }
+
+    public void setEntidadResultadoPrueba(EntidadResultadoPrueba entidadResultadoPrueba) {
+        this.entidadResultadoPrueba = entidadResultadoPrueba;
+    }
+
+    public void insertar(SQLiteDatabase bd, String nombre, String descripcion, int nivelResultadoPrueba, int tipoResultadoPruebaId, int estadoResultadoPruebaId, int entidadResultadoPruebaId){
         ContentValues cv = new ContentValues();
         cv.put("nombre", nombre);
         cv.put("descripcion", descripcion);
         cv.put("nivelResultadoPrueba", nivelResultadoPrueba);
         cv.put("tipoResultadoPruebaId", tipoResultadoPruebaId);
         cv.put("estadoResultadoPruebaId", estadoResultadoPruebaId);
+        cv.put("entidadResultadoPruebaId", entidadResultadoPruebaId);
+
         bd.insert("RESULTADO_PRUEBA", null, cv);
     }
 
     public ResultadoPrueba findById(SQLiteDatabase bd, int resultadoPruebaId) {
-        Cursor fila = bd.rawQuery("SELECT resultadoPruebaId, nombre, descripcion, nivelResultadoPrueba, tipoResultadoPruebaId, estadoResultadoPruebaId FROM RESULTADO_PRUEBA WHERE resultadoPruebaId=" + resultadoPruebaId,null);
+        Cursor fila = bd.rawQuery("SELECT resultadoPruebaId, nombre, descripcion, nivelResultadoPrueba, tipoResultadoPruebaId, estadoResultadoPruebaId, entidadResultadoPruebaId FROM RESULTADO_PRUEBA WHERE resultadoPruebaId=" + resultadoPruebaId,null);
         if (fila.moveToFirst()) {
             ResultadoPrueba resultadoPrueba = new ResultadoPrueba();
             resultadoPrueba.setResultadoPruebaId(Integer.parseInt(fila.getString(0)));
@@ -85,6 +96,8 @@ public class ResultadoPrueba {
             resultadoPrueba.setTipoResultadoPrueba(tipoResultadoPrueba.findById(bd, fila.getInt(4)));
             EstadoResultadoPrueba estadoResultadoPrueba = new EstadoResultadoPrueba();
             resultadoPrueba.setEstadoResultadoPrueba(estadoResultadoPrueba.findById(bd, fila.getInt(5)));
+            EntidadResultadoPrueba entidadResultadoPrueba = new EntidadResultadoPrueba();
+            resultadoPrueba.setEntidadResultadoPrueba(entidadResultadoPrueba.findById(bd, fila.getInt(6)));
             fila.close();
             return resultadoPrueba;
         } else {
@@ -94,7 +107,7 @@ public class ResultadoPrueba {
     }
 
     public List<ResultadoPrueba> getAll(SQLiteDatabase bd) {
-        Cursor fila = bd.rawQuery("SELECT resultadoPruebaId, nombre, descripcion, nivelResultadoPrueba, tiempoEjecicion, tipoPruebaId FROM RESULTADO_PRUEBA",null);
+        Cursor fila = bd.rawQuery("SELECT resultadoPruebaId, nombre, descripcion, nivelResultadoPrueba,tipoResultadoPruebaId, estadoResultadoPruebaId, entidadResultadoPruebaId FROM RESULTADO_PRUEBA",null);
         List<ResultadoPrueba> resultadoPruebas = new ArrayList<>();
         for (fila.moveToFirst(); !fila.isAfterLast(); fila.moveToNext()) {
             ResultadoPrueba resultadoPrueba = new ResultadoPrueba();
@@ -106,6 +119,8 @@ public class ResultadoPrueba {
             resultadoPrueba.setTipoResultadoPrueba(tipoResultadoPrueba.findById(bd, fila.getInt(4)));
             EstadoResultadoPrueba estadoResultadoPrueba = new EstadoResultadoPrueba();
             resultadoPrueba.setEstadoResultadoPrueba(estadoResultadoPrueba.findById(bd, fila.getInt(5)));
+            EntidadResultadoPrueba entidadResultadoPrueba = new EntidadResultadoPrueba();
+            resultadoPrueba.setEntidadResultadoPrueba(entidadResultadoPrueba.findById(bd, fila.getInt(6)));
             resultadoPruebas.add(resultadoPrueba);
         }
         fila.close();
