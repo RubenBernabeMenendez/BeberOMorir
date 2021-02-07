@@ -92,6 +92,24 @@ public class Prueba {
         }
     }
 
+    public List<Prueba> findByTipoPruebaId(SQLiteDatabase bd, int tipoPruebaId) {
+        Cursor fila = bd.rawQuery("SELECT pruebaId, nombre, descripcion, nivelPrueba, tiempoEjecicion, tipoPruebaId FROM PRUEBA WHERE tipoPruebaId=" + tipoPruebaId,null);
+        List<Prueba> pruebas = new ArrayList<>();
+        for (fila.moveToFirst(); !fila.isAfterLast(); fila.moveToNext()) {
+            Prueba prueba = new Prueba();
+            prueba.setPruebaId(Integer.parseInt(fila.getString(0)));
+            prueba.setNombre(fila.getString(1));
+            prueba.setDescripcion(fila.getString(2));
+            prueba.setNivelPrueba(fila.getInt(3));
+            prueba.setTiempoEjecucion(fila.getInt(4));
+            TipoPrueba tipoPrueba = new TipoPrueba();
+            prueba.setTipoPrueba(tipoPrueba.findById(bd, fila.getInt(5)));
+            pruebas.add(prueba);
+        }
+        fila.close();
+        return pruebas;
+    }
+
     public List<Prueba> getAll(SQLiteDatabase bd) {
         Cursor fila = bd.rawQuery("SELECT pruebaId, nombre, descripcion, nivelPrueba, tiempoEjecicion, tipoPruebaId FROM PRUEBA",null);
         List<Prueba> pruebas = new ArrayList<>();

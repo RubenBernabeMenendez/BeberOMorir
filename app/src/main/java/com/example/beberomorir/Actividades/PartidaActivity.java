@@ -122,17 +122,26 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
         AdminSQLDataBase admin = new AdminSQLDataBase(this);
         SQLiteDatabase bd = admin.getWritableDatabase();
 
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
         for (Jugador jugador : jugadores) {
             System.out.println(jugador.getNombre() + jugador.getSeleccionado());
         }
 
         this.configPartida = crearConfigPartida(bd);
-        this.partida = crearPartida(bd, this.configPartida.getConfigPartidaId(), "Prueba");
+        this.partida = crearPartida(bd, this.configPartida.getConfigPartidaId(), sdf.format(new Date()));
         this.jugadoresPartida = crearJugadoresPartida(bd, jugadores);
         this.mundosPartida = crearMundosPartida(bd);
 
+        // crearemos la configuración de cuántas tipos de pruebas tiene que hacer jugador por mundo (MundoPartidaTipoPrueba)
+        // según el tipoPartida de ConfiguracionPartida
+        // Crear las PruebaPartida y ResultadoPruebaPartida del nivel seleccionado o menor en configuracionPartida
+        // a partir de los jugadoresPartida y los mundoPartida editaremos las pruebas y los resultados
+
+
         getSupportFragmentManager().beginTransaction().replace(R.id.contenedorPartida, fragmentTablero).commit();
         fragmentTablero.setMundoPartidas(this.mundosPartida);
+        fragmentTablero.setJugadoresPartida(this.jugadoresPartida);
     }
 
     @Override
@@ -246,15 +255,13 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
     public List<JugadorPartida> crearJugadoresPartida(SQLiteDatabase bd, List<Jugador> jugadores) {
 
         List<JugadorPartida> jugadorPartidas = new ArrayList<>();
-        JugadorPartida jp = new JugadorPartida();
-        jp.setPartidaId(this.partida.getPartidaId());
 
         for (Jugador jugador : jugadores) {
-            if (Constantes.YES.equals(jugador.getSeleccionado())) {
-                jp.setJugador(jugador);
-                jugadorPartidas.add(jp);
-                jp = jp.insertar(bd, jp.getPartidaId(), jp.getJugador().getJugadorId(), Constantes.ROL_ID);
-            }
+            JugadorPartida jp = new JugadorPartida();
+            jp.setPartidaId(this.partida.getPartidaId());
+            jp.setJugador(jugador);
+            jp = jp.insertar(bd, jp.getJugador().getJugadorId(), jp.getPartidaId(), Constantes.ROL_ID);
+            jugadorPartidas.add(jp);
         }
 
         return jugadorPartidas;
@@ -359,7 +366,7 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
             FileInputStream fis = new FileInputStream(new File(String.valueOf(getRealPathFromURI(this, uri))));
-            byte[] buf = new byte[1024];
+            byte[] buf = new byte[512];
             int n;
             while (-1 != (n = fis.read(buf)))
                 baos.write(buf, 0, n);

@@ -47,6 +47,7 @@ public class ElegirJugadoresFragment extends Fragment {
     CardView configComenzarPartida, addJugadoresConfCard;
     ArrayList<Jugador> listaJugadores=new ArrayList<Jugador>();
     View elegirJugadoreView;
+    AdaptadorJugador adaptadorJugador;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -112,20 +113,21 @@ public class ElegirJugadoresFragment extends Fragment {
         Jugador jugador = new Jugador();
         listaJugadores=jugador.getAll(bd);
 
-        final AdaptadorJugador adaptador = new AdaptadorJugador(this.actividad, listaJugadores);
+        this.adaptadorJugador = new AdaptadorJugador(this.actividad, listaJugadores);
         ListView lv1 = (ListView)view.findViewById(R.id.listaJugadores);
-        lv1.setAdapter(adaptador);
+        lv1.setAdapter(this.adaptadorJugador);
 
 
         configComenzarPartida = view.findViewById(R.id.empezarPartidaConfCard);
         configComenzarPartida.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
 
                 List<Jugador> jugadors = new ArrayList<>();
-                for (int i=0 ; i < adaptador.getCount(); i++) {
-                    if (Constantes.YES.equals(adaptador.getItem(i).getSeleccionado())) {
-                        jugadors.add(adaptador.getItem(i));
+                for (int i=0 ; i < adaptadorJugador.getCount(); i++) {
+                    if (Constantes.YES.equals(adaptadorJugador.getItem(i).getSeleccionado())) {
+                        jugadors.add(adaptadorJugador.getItem(i));
                     }
                 }
                 iComunicaPartida.empezarPartida(jugadors);
@@ -150,8 +152,8 @@ public class ElegirJugadoresFragment extends Fragment {
         Jugador jugador = new Jugador();
         listaJugadores=jugador.getAll(bd);
 
-        final AdaptadorJugador adaptador = new AdaptadorJugador(this.actividad, listaJugadores);
+        this.adaptadorJugador = new AdaptadorJugador(this.actividad, listaJugadores);
         ListView lv1 = (ListView)elegirJugadoreView.findViewById(R.id.listaJugadores);
-        lv1.setAdapter(adaptador);
+        lv1.setAdapter(this.adaptadorJugador);
     }
 }

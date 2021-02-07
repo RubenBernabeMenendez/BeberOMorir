@@ -24,10 +24,12 @@ public class AdminSQLDataBase extends SQLiteOpenHelper {
     private static final String CONFIG_TIPO_PRUEBA_TABLE_CREATE = "CREATE TABLE CONFIG_TIPO_PRUEBA(configPartidaId INTEGER, tipoPruebaId INTEGER, PRIMARY KEY (configPartidaId, tipoPruebaId), FOREIGN KEY (configPartidaId) REFERENCES CONFIG_PARTIDA(configPartidaId), FOREIGN KEY (tipoPruebaId) REFERENCES TIPO_PRUEBA(tipoPruebaId))";
     private static final String JUGADOR_TABLE_CREATE = "CREATE TABLE JUGADOR(jugadorId INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, apodo TEXT, urlImagen BLOB)";
     private static final String JUGADOR_PARTIDA_TABLE_CREATE = "CREATE TABLE JUGADOR_PARTIDA(jugadorPartidaId INTEGER PRIMARY KEY AUTOINCREMENT, partidaId INTEGER, jugadorId INTEGER, rolId INTEGER)";
-    private static final String MUNDO_TABLE_CREATE = "CREATE TABLE MUNDO(mundoId INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, descripcion TEXT)";
+    private static final String MUNDO_TABLE_CREATE = "CREATE TABLE MUNDO(mundoId INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, descripcion TEXT, urlImagen INTEGER)";
     private static final String PRUEBA_TABLE_CREATE = "CREATE TABLE PRUEBA(pruebaId INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, descripcion TEXT, nivelPrueba INTEGER, tiempoEjecicion INTEGER, tipoPruebaId INTEGER, FOREIGN KEY (tipoPruebaId) REFERENCES TIPO_PRUEBA(tipoPruebaId))";
     private static final String RESULTADO_PRUEBA_TABLE_CREATE = "CREATE TABLE RESULTADO_PRUEBA(resultadoPruebaId INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, descripcion TEXT, nivelResultadoPrueba INTEGER, tipoResultadoPruebaId INTEGER, estadoResultadoPruebaId INTEGER, FOREIGN KEY (tipoResultadoPruebaId) REFERENCES TIPO_RESULTADO_PRUEBA(tipoResultadoPruebaId), FOREIGN KEY (estadoResultadoPruebaId) REFERENCES ESTADO_RESULTADO_PRUEBA(estadoResultadoPruebaId))";
     private static final String MUNDO_PARTIDA_TABLE_CREATE = "CREATE TABLE MUNDO_PARTIDA(mundoPartidaId INTEGER PRIMARY KEY AUTOINCREMENT, mundoId INTEGER, partidaId INTEGER, orden INTEGER, nivelMundo INTEGER, urlImagen INTEGER, finalizado TEXT, FOREIGN KEY (mundoId) REFERENCES MUNDO(mundoId), FOREIGN KEY (partidaId) REFERENCES PARTIDA(partidaId))";
+    private static final String PRUEBA_PARTIDA_TABLE_CREATE = "CREATE TABLE PRUEBA_PARTIDA(pruebaPartidaId INTEGER PRIMARY KEY AUTOINCREMENT, mundoPartidaId INTEGER, pruebaId INTEGER, nombre TEXT, descripcion TEXT, finalizado TEXT, FOREIGN KEY (mundoPartidaId) REFERENCES MUNDO_PARTIDA(mundoPartidaId), FOREIGN KEY (pruebaId) REFERENCES PRUEBA(pruebaId))";
+    private static final String MUNDO_PARTIDA_TIPO_PRUEBA_TABLE_CREATE = "CREATE TABLE MUNDO_PARTIDA_TIPO_PRUEBA(mundoPartidaId INTEGER, tipoPruebaId INTEGER, numeroTiposPrueba INTEGER, PRIMARY KEY (mundoPartidaId, tipoPruebaId), FOREIGN KEY (mundoPartidaId) REFERENCES MUNDO_PARTIDA(mundoPartidaId), FOREIGN KEY (tipoPruebaId) REFERENCES TIPO_PRUEBA(tipoPruebaId))";
 
 
     private static final String TIPO_PARTIDA_TABLE_DROP = "DROP TABLE IF EXISTS TIPO_PARTIDA";
@@ -47,6 +49,8 @@ public class AdminSQLDataBase extends SQLiteOpenHelper {
     private static final String PRUEBA_TABLE_DROP = "DROP TABLE IF EXISTS PRUEBA";
     private static final String RESULTADO_PRUEBA_TABLE_DROP = "DROP TABLE IF EXISTS RESULTADO_PRUEBA";
     private static final String MUNDO_PARTIDA_TABLE_DROP = "DROP TABLE IF EXISTS MUNDO_PARTIDA";
+    private static final String PRUEBA_PARTIDA_TABLE_DROP = "DROP TABLE IF EXISTS PRUEBA_PARTIDA";
+    private static final String MUNDO_PARTIDA_TIPO_PRUEBA_TABLE_DROP = "DROP TABLE IF EXISTS MUNDO_PARTIDA_TIPO_PRUEBA";
 
     public AdminSQLDataBase(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
@@ -75,6 +79,8 @@ public class AdminSQLDataBase extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(PRUEBA_TABLE_DROP);
         sqLiteDatabase.execSQL(RESULTADO_PRUEBA_TABLE_DROP);
         sqLiteDatabase.execSQL(MUNDO_PARTIDA_TABLE_DROP);
+        sqLiteDatabase.execSQL(PRUEBA_PARTIDA_TABLE_DROP);
+        sqLiteDatabase.execSQL(MUNDO_PARTIDA_TIPO_PRUEBA_TABLE_DROP);
 
         sqLiteDatabase.execSQL(TIPO_PARTIDA_TABLE_CREATE);
         //sqLiteDatabase.execSQL(NIVEL_PARTIDA_TABLE_CREATE);
@@ -93,6 +99,8 @@ public class AdminSQLDataBase extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(PRUEBA_TABLE_CREATE);
         sqLiteDatabase.execSQL(RESULTADO_PRUEBA_TABLE_CREATE);
         sqLiteDatabase.execSQL(MUNDO_PARTIDA_TABLE_CREATE);
+        sqLiteDatabase.execSQL(PRUEBA_PARTIDA_TABLE_CREATE);
+        sqLiteDatabase.execSQL(MUNDO_PARTIDA_TIPO_PRUEBA_TABLE_CREATE);
 
 
         TipoPrueba tipoPrueba = new TipoPrueba();
@@ -146,18 +154,18 @@ public class AdminSQLDataBase extends SQLiteOpenHelper {
 
 
         Mundo mundo = new Mundo();
-        mundo.insertar(sqLiteDatabase, "Mundo 1", "");
-        mundo.insertar(sqLiteDatabase, "Mundo 2", "");
-        mundo.insertar(sqLiteDatabase, "Mundo 3", "");
-        mundo.insertar(sqLiteDatabase, "Mundo 4", "");
-        mundo.insertar(sqLiteDatabase, "Mundo 5", "");
-        mundo.insertar(sqLiteDatabase, "Mundo 6", "");
-        mundo.insertar(sqLiteDatabase, "Mundo 7", "");
-        mundo.insertar(sqLiteDatabase, "Mundo 8", "");
-        mundo.insertar(sqLiteDatabase, "Mundo 9", "");
-        mundo.insertar(sqLiteDatabase, "Mundo 10", "");
-        mundo.insertar(sqLiteDatabase, "Mundo 11", "");
-        mundo.insertar(sqLiteDatabase, "Mundo 12", "");
+        mundo.insertar(sqLiteDatabase, "Mundo 1", "", Integer.parseInt(Integer.toString(R.mipmap.plantilla_mundos_caminos)));
+        mundo.insertar(sqLiteDatabase, "Mundo 2", "", Integer.parseInt(Integer.toString(R.mipmap.plantilla_mundos_caminos)));
+        mundo.insertar(sqLiteDatabase, "Mundo 3", "", Integer.parseInt(Integer.toString(R.mipmap.plantilla_mundos_caminos)));
+        mundo.insertar(sqLiteDatabase, "Mundo 4", "", Integer.parseInt(Integer.toString(R.mipmap.plantilla_mundos_caminos)));
+        mundo.insertar(sqLiteDatabase, "Mundo 5", "", Integer.parseInt(Integer.toString(R.mipmap.plantilla_mundos_caminos)));
+        mundo.insertar(sqLiteDatabase, "Mundo 6", "", Integer.parseInt(Integer.toString(R.mipmap.plantilla_mundos_caminos)));
+        mundo.insertar(sqLiteDatabase, "Mundo 7", "", Integer.parseInt(Integer.toString(R.mipmap.plantilla_mundos_caminos)));
+        mundo.insertar(sqLiteDatabase, "Mundo 8", "", Integer.parseInt(Integer.toString(R.mipmap.plantilla_mundos_caminos)));
+        mundo.insertar(sqLiteDatabase, "Mundo 9", "", Integer.parseInt(Integer.toString(R.mipmap.plantilla_mundos_caminos)));
+        mundo.insertar(sqLiteDatabase, "Mundo 10", "", Integer.parseInt(Integer.toString(R.mipmap.plantilla_mundos_caminos)));
+        mundo.insertar(sqLiteDatabase, "Mundo 11", "", Integer.parseInt(Integer.toString(R.mipmap.plantilla_mundos_caminos)));
+        mundo.insertar(sqLiteDatabase, "Mundo 12", "", Integer.parseInt(Integer.toString(R.mipmap.plantilla_mundos_caminos)));
 
     }
 

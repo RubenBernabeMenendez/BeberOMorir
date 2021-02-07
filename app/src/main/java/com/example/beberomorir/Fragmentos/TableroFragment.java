@@ -2,6 +2,8 @@ package com.example.beberomorir.Fragmentos;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -11,11 +13,17 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.beberomorir.Adaptadores.AdaptadorJugador;
+import com.example.beberomorir.Adaptadores.AdaptadorJugadorTablero;
 import com.example.beberomorir.Constantes;
 import com.example.beberomorir.Interfaces.IComunicaPartida;
+import com.example.beberomorir.Modelos.JugadorPartida;
 import com.example.beberomorir.Modelos.MundoPartida;
 import com.example.beberomorir.R;
 
@@ -40,10 +48,16 @@ public class TableroFragment extends Fragment {
     private String mParam2;
     Activity actividad;
     IComunicaPartida iComunicaPartida;
+
+    // Data
     List<MundoPartida> mundoPartidas;
     MundoPartida mundoPartidaActual;
+    List<JugadorPartida> jugadorPartidas;
+
+    // View
     ImageView nivel0, nivel1_1, nivel1_2, nivel2_1, nivel2_2, nivel2_3, nivel2_4;
     TextView tNivel0, tNivel1_1, tNivel1_2, tNivel2_1, tNivel2_2, tNivel2_3, tNivel2_4;
+    LinearLayout layoutJugadoresPrincipal;
 
     public TableroFragment() {
         // Required empty public constructor
@@ -79,7 +93,7 @@ public class TableroFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_tablero, container, false);
+        final View view = inflater.inflate(R.layout.fragment_tablero, container, false);
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -102,8 +116,23 @@ public class TableroFragment extends Fragment {
         tNivel2_3 = view.findViewById(R.id.textoNivel2_3);
         tNivel2_4 = view.findViewById(R.id.textoNivel2_4);
 
+        layoutJugadoresPrincipal = view.findViewById(R.id.linearLayoutJugadores);
+        final ListView lv1 = (ListView)view.findViewById(R.id.jugadoresPartidaPrincipal);
+        final List<JugadorPartida> jugadoresAux = this.jugadorPartidas;
+        final Activity actividadAux = this.actividad;
+
         if (this.mundoPartidaActual == null) {
             crearTablero();
+            view.post(new Runnable() {
+                @Override
+                public void run() {
+                    // for instance
+                    int height = layoutJugadoresPrincipal.getMeasuredHeight();
+                    System.out.println(layoutJugadoresPrincipal.getHeight());
+                    final AdaptadorJugadorTablero adaptador = new AdaptadorJugadorTablero(actividadAux, jugadoresAux, Math.min(layoutJugadoresPrincipal.getHeight()/jugadoresAux.size(), 100));
+                    lv1.setAdapter(adaptador);
+                }
+            });
         } else {
             actualizarTablero();
         }
@@ -201,8 +230,35 @@ public class TableroFragment extends Fragment {
         }
     }
 
+    public void iniciarJugadores() {
+        int height = this.layoutJugadoresPrincipal.getHeight();
+        int maxHeightJugador = height / this.jugadorPartidas.size();
+        for (JugadorPartida jugadorPartida : this.jugadorPartidas) {
+            LinearLayout linearLayoutJug = new LinearLayout(this.actividad);
+            linearLayoutJug.setOrientation(LinearLayout.HORIZONTAL);
+            linearLayoutJug.setBackgroundColor(getResources().getColor(R.color.yellow));
+            linearLayoutJug.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, (float) 1.0));
+            linearLayoutJug.getLayoutParams().height = LinearLayout.LayoutParams.WRAP_CONTENT;
+            linearLayoutJug.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
+            ImageView imageView = new ImageView(this.actividad);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(jugadorPartida.getJugador().getUrlImagen(), 0, jugadorPartida.getJugador().getUrlImagen().length);
+            imageView.setImageBitmap(bitmap);
+            imageView.setScaleType(ImageView.ScaleType.CENTER);
+            imageView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, (float) 1.0));
+            imageView.getLayoutParams().height = Math.min(maxHeightJugador, 50);
+            imageView.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
+            linearLayoutJug.addView(imageView);
+            this.layoutJugadoresPrincipal.addView(linearLayoutJug);
+        }
+
+    }
+
     public void setMundoPartidas(List<MundoPartida> mundoPartidas) {
         this.mundoPartidas = mundoPartidas;
+    }
+
+    public void setJugadoresPartida(List<JugadorPartida> jugadoresPartida) {
+        this.jugadorPartidas = jugadoresPartida;
     }
 
     public void setMundoPartidasAndMundoActual(List<MundoPartida> mundoPartidas, MundoPartida mundoPartida) {
