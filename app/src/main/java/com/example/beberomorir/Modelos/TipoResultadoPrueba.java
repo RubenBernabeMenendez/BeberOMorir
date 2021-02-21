@@ -8,17 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TipoResultadoPrueba {
-    private int tipoResultadoPruebaId;
+    private Integer tipoResultadoPruebaId;
     private String nombre;
     private String descripcion;
     private String activo;
     private String visible;
 
-    public int getTipoResultadoPruebaId() {
+    public Integer getTipoResultadoPruebaId() {
         return tipoResultadoPruebaId;
     }
 
-    public void setTipoResultadoPruebaId(int tipoResultadoPruebaId) {
+    public void setTipoResultadoPruebaId(Integer tipoResultadoPruebaId) {
         this.tipoResultadoPruebaId = tipoResultadoPruebaId;
     }
 
@@ -63,7 +63,7 @@ public class TipoResultadoPrueba {
         bd.insert("TIPO_RESULTADO_PRUEBA", null, cv);
     }
 
-    public TipoResultadoPrueba findById(SQLiteDatabase bd, int tipoResultadoPruebaId) {
+    public TipoResultadoPrueba findById(SQLiteDatabase bd, Integer tipoResultadoPruebaId) {
         Cursor fila = bd.rawQuery("SELECT tipoResultadoPruebaId, nombre, descripcion, activo, visible FROM TIPO_RESULTADO_PRUEBA WHERE tipoResultadoPruebaId=" + tipoResultadoPruebaId,null);
         if (fila.moveToFirst()) {
             TipoResultadoPrueba tipoResultadoPrueba = new TipoResultadoPrueba();

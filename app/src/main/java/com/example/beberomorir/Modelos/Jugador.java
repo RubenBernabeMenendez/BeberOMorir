@@ -9,17 +9,17 @@ import java.util.Date;
 import java.util.List;
 
 public class Jugador {
-    int jugadorId;
+    Integer jugadorId;
     String nombre;
     String apodo;
     byte[] urlImagen;
     String seleccionado;
 
-    public int getJugadorId() {
+    public Integer getJugadorId() {
         return jugadorId;
     }
 
-    public void setJugadorId(int jugadorId) {
+    public void setJugadorId(Integer jugadorId) {
         this.jugadorId = jugadorId;
     }
 
@@ -65,7 +65,7 @@ public class Jugador {
         return  findById(bd, (int) id);
     }
 
-    public Jugador findById(SQLiteDatabase bd, int jugadorId) {
+    public Jugador findById(SQLiteDatabase bd, Integer jugadorId) {
         Cursor fila = bd.rawQuery("SELECT jugadorId, nombre, apodo, urlImagen FROM JUGADOR WHERE jugadorId=" + jugadorId,null);
         if (fila.moveToFirst()) {
             Jugador jugador = new Jugador();

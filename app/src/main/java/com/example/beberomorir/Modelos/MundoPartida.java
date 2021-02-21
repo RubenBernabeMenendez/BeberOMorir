@@ -7,27 +7,27 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 
 public class MundoPartida {
-    private int mundoPartidaId;
+    private Integer mundoPartidaId;
     private Mundo mundo;
-    private int partidaId;
-    private int urlImagen;
-    private int orden;
-    private int nivelMundo;
+    private Integer partidaId;
+    private Integer urlImagen;
+    private Integer orden;
+    private Integer nivelMundo;
     private String finalizado;
 
-    public int getMundoPartidaId() {
+    public Integer getMundoPartidaId() {
         return mundoPartidaId;
     }
 
-    public void setMundoPartidaId(int mundoPartidaId) {
+    public void setMundoPartidaId(Integer mundoPartidaId) {
         this.mundoPartidaId = mundoPartidaId;
     }
 
-    public int getUrlImagen() {
+    public Integer getUrlImagen() {
         return urlImagen;
     }
 
-    public void setUrlImagen(int urlImagen) {
+    public void setUrlImagen(Integer urlImagen) {
         this.urlImagen = urlImagen;
     }
 
@@ -39,27 +39,27 @@ public class MundoPartida {
         this.mundo = mundo;
     }
 
-    public int getPartidaId() {
+    public Integer getPartidaId() {
         return partidaId;
     }
 
-    public void setPartidaId(int partidaId) {
+    public void setPartidaId(Integer partidaId) {
         this.partidaId = partidaId;
     }
 
-    public int getOrden() {
+    public Integer getOrden() {
         return orden;
     }
 
-    public void setOrden(int orden) {
+    public void setOrden(Integer orden) {
         this.orden = orden;
     }
 
-    public int getNivelMundo() {
+    public Integer getNivelMundo() {
         return nivelMundo;
     }
 
-    public void setNivelMundo(int nivelMundo) {
+    public void setNivelMundo(Integer nivelMundo) {
         this.nivelMundo = nivelMundo;
     }
 
@@ -71,7 +71,7 @@ public class MundoPartida {
         this.finalizado = finalizado;
     }
 
-    public MundoPartida insertar(SQLiteDatabase bd, int mundoId, int partidaId, int urlImagen, int orden, int nivelMundo, String finalizado){
+    public MundoPartida insertar(SQLiteDatabase bd, Integer mundoId, Integer partidaId, Integer urlImagen, Integer orden, Integer nivelMundo, String finalizado){
         ContentValues cv = new ContentValues();
         cv.put("mundoId", mundoId);
         cv.put("partidaId", partidaId);
@@ -84,7 +84,7 @@ public class MundoPartida {
         return  findById(bd, (int) id);
     }
 
-    public MundoPartida findById(SQLiteDatabase bd, int mundoPartidaId) {
+    public MundoPartida findById(SQLiteDatabase bd, Integer mundoPartidaId) {
         Cursor fila = bd.rawQuery("SELECT mundoPartidaId, mundoId, partidaId, urlImagen, orden, nivelMundo, finalizado FROM MUNDO_PARTIDA WHERE mundoPartidaId=" + mundoPartidaId,null);
         if (fila.moveToFirst()) {
             MundoPartida mundoPartida = new MundoPartida();

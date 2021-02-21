@@ -36,7 +36,7 @@ public class MundoPartidaTipoPrueba {
         this.numeroTiposPrueba = numeroTiposPrueba;
     }
 
-    public List<MundoPartidaTipoPrueba> findById(SQLiteDatabase bd, int mundoPartidaId) {
+    public List<MundoPartidaTipoPrueba> findById(SQLiteDatabase bd, Integer mundoPartidaId) {
         List<MundoPartidaTipoPrueba> mundoPartidaTipoPruebas = new ArrayList<>();
         Cursor fila = bd.rawQuery("SELECT mundoPartidaId, tipoPruebaId, numeroTiposPrueba FROM MUNDO_PARTIDA_TIPO_PRUEBA WHERE mundoPartidaId=" + mundoPartidaId,null);
         for (fila.moveToFirst(); !fila.isAfterLast(); fila.moveToNext()) {
@@ -50,7 +50,7 @@ public class MundoPartidaTipoPrueba {
         return mundoPartidaTipoPruebas;
     }
 
-    public void insertar(SQLiteDatabase bd, int mundoPartidaId, int tipoPruebaId, int numeroTiposPrueba){
+    public void insertar(SQLiteDatabase bd, Integer mundoPartidaId, Integer tipoPruebaId, Integer numeroTiposPrueba){
         ContentValues cv = new ContentValues();
         cv.put("mundoPartidaId", mundoPartidaId);
         cv.put("tipoPruebaId", tipoPruebaId);

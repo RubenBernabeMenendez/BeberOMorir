@@ -7,16 +7,16 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 
 public class JugadorPartida {
-    private int jugadorPartidaId;
+    private Integer jugadorPartidaId;
     private Jugador jugador;
-    private int partidaId;
-    private int rolId;
+    private Integer partidaId;
+    private Integer rolId;
 
-    public int getJugadorPartidaId() {
+    public Integer getJugadorPartidaId() {
         return jugadorPartidaId;
     }
 
-    public void setJugadorPartidaId(int jugadorPartidaId) {
+    public void setJugadorPartidaId(Integer jugadorPartidaId) {
         this.jugadorPartidaId = jugadorPartidaId;
     }
 
@@ -28,23 +28,23 @@ public class JugadorPartida {
         this.jugador = jugador;
     }
 
-    public int getPartidaId() {
+    public Integer getPartidaId() {
         return partidaId;
     }
 
-    public void setPartidaId(int partidaId) {
+    public void setPartidaId(Integer partidaId) {
         this.partidaId = partidaId;
     }
 
-    public int getRolId() {
+    public Integer getRolId() {
         return rolId;
     }
 
-    public void setRolId(int rolId) {
+    public void setRolId(Integer rolId) {
         this.rolId = rolId;
     }
 
-    public JugadorPartida insertar(SQLiteDatabase bd, int jugadorId, int partidaId, int rolId){
+    public JugadorPartida insertar(SQLiteDatabase bd, Integer jugadorId, Integer partidaId, Integer rolId){
         ContentValues cv = new ContentValues();
         cv.put("jugadorId", jugadorId);
         cv.put("partidaId", partidaId);
@@ -54,7 +54,7 @@ public class JugadorPartida {
         return  findById(bd, (int) id);
     }
 
-    public JugadorPartida findById(SQLiteDatabase bd, int jugadorPartidaId) {
+    public JugadorPartida findById(SQLiteDatabase bd, Integer jugadorPartidaId) {
         Cursor fila = bd.rawQuery("SELECT jugadorPartidaId, jugadorId, partidaId, rolId FROM JUGADOR_PARTIDA WHERE jugadorPartidaId=" + jugadorPartidaId,null);
         if (fila.moveToFirst()) {
             JugadorPartida jugadorPartida = new JugadorPartida();

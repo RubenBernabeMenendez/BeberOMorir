@@ -8,17 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TipoPartida {
-    int tipoPartidaId;
+    Integer tipoPartidaId;
     String nombre;
     String descripcion;
-    int numeroMundos;
-    int numeroPruebasMundo;
+    Integer numeroMundos;
+    Integer numeroPruebasMundo;
 
-    public int getTipoPartidaId() {
+    public Integer getTipoPartidaId() {
         return tipoPartidaId;
     }
 
-    public void setTipoPartidaId(int tipoPartidaId) {
+    public void setTipoPartidaId(Integer tipoPartidaId) {
         this.tipoPartidaId = tipoPartidaId;
     }
 
@@ -38,23 +38,23 @@ public class TipoPartida {
         this.descripcion = descripcion;
     }
 
-    public int getNumeroMundos() {
+    public Integer getNumeroMundos() {
         return numeroMundos;
     }
 
-    public void setNumeroMundos(int numeroMundos) {
+    public void setNumeroMundos(Integer numeroMundos) {
         this.numeroMundos = numeroMundos;
     }
 
-    public int getNumeroPruebasMundo() {
+    public Integer getNumeroPruebasMundo() {
         return numeroPruebasMundo;
     }
 
-    public void setNumeroPruebasMundo(int numeroPruebasMundo) {
+    public void setNumeroPruebasMundo(Integer numeroPruebasMundo) {
         this.numeroPruebasMundo = numeroPruebasMundo;
     }
 
-    public TipoPartida findById(SQLiteDatabase bd, int tipoPartidaId) {
+    public TipoPartida findById(SQLiteDatabase bd, Integer tipoPartidaId) {
         Cursor fila = bd.rawQuery("SELECT tipoPartidaId, nombre, descripcion, numeroMundos, numeroPruebasMundo FROM TIPO_PARTIDA WHERE tipoPartidaId=" + tipoPartidaId,null);
         if (fila.moveToFirst()) {
             TipoPartida tipoPartida = new TipoPartida();
@@ -88,7 +88,7 @@ public class TipoPartida {
         }
     }
 
-    public void insertar(SQLiteDatabase bd, String nombre, String descripcion, int numeroMundos, int numeroPruebasMundo){
+    public void insertar(SQLiteDatabase bd, String nombre, String descripcion, Integer numeroMundos, Integer numeroPruebasMundo){
         ContentValues cv = new ContentValues();
         cv.put("nombre", nombre);
         cv.put("descripcion", descripcion);

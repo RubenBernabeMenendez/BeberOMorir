@@ -2,6 +2,7 @@ package com.example.beberomorir.Fragmentos;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -19,6 +20,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.beberomorir.Actividades.PartidaActivity;
+import com.example.beberomorir.Actividades.RondaPartidaActivity;
 import com.example.beberomorir.Adaptadores.AdaptadorJugador;
 import com.example.beberomorir.Adaptadores.AdaptadorJugadorTablero;
 import com.example.beberomorir.Constantes;
@@ -131,6 +134,7 @@ public class TableroFragment extends Fragment {
                     System.out.println(layoutJugadoresPrincipal.getHeight());
                     final AdaptadorJugadorTablero adaptador = new AdaptadorJugadorTablero(actividadAux, jugadoresAux, Math.min(layoutJugadoresPrincipal.getHeight()/jugadoresAux.size(), 100));
                     lv1.setAdapter(adaptador);
+                    iComunicaPartida.menuRondaJugador(jugadoresAux.get(0), mundoPartidaActual);
                 }
             });
         } else {

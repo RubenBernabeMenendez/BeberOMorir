@@ -8,19 +8,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ResultadoPrueba {
-    private int resultadoPruebaId;
+    private Integer resultadoPruebaId;
     private String nombre;
     private String descripcion;
-    private int nivelResultadoPrueba;
+    private Integer nivelResultadoPrueba;
     private TipoResultadoPrueba tipoResultadoPrueba;
     private EstadoResultadoPrueba estadoResultadoPrueba;
     private EntidadResultadoPrueba entidadResultadoPrueba;
 
-    public int getResultadoPruebaId() {
+    public Integer getResultadoPruebaId() {
         return resultadoPruebaId;
     }
 
-    public void setResultadoPruebaId(int resultadoPruebaId) {
+    public void setResultadoPruebaId(Integer resultadoPruebaId) {
         this.resultadoPruebaId = resultadoPruebaId;
     }
 
@@ -40,11 +40,11 @@ public class ResultadoPrueba {
         this.descripcion = descripcion;
     }
 
-    public int getNivelResultadoPrueba() {
+    public Integer getNivelResultadoPrueba() {
         return nivelResultadoPrueba;
     }
 
-    public void setNivelResultadoPrueba(int nivelResultadoPrueba) {
+    public void setNivelResultadoPrueba(Integer nivelResultadoPrueba) {
         this.nivelResultadoPrueba = nivelResultadoPrueba;
     }
 
@@ -72,7 +72,7 @@ public class ResultadoPrueba {
         this.entidadResultadoPrueba = entidadResultadoPrueba;
     }
 
-    public void insertar(SQLiteDatabase bd, String nombre, String descripcion, int nivelResultadoPrueba, int tipoResultadoPruebaId, int estadoResultadoPruebaId, int entidadResultadoPruebaId){
+    public void insertar(SQLiteDatabase bd, String nombre, String descripcion, Integer nivelResultadoPrueba, Integer tipoResultadoPruebaId, Integer estadoResultadoPruebaId, Integer entidadResultadoPruebaId){
         ContentValues cv = new ContentValues();
         cv.put("nombre", nombre);
         cv.put("descripcion", descripcion);
@@ -84,7 +84,7 @@ public class ResultadoPrueba {
         bd.insert("RESULTADO_PRUEBA", null, cv);
     }
 
-    public ResultadoPrueba findById(SQLiteDatabase bd, int resultadoPruebaId) {
+    public ResultadoPrueba findById(SQLiteDatabase bd, Integer resultadoPruebaId) {
         Cursor fila = bd.rawQuery("SELECT resultadoPruebaId, nombre, descripcion, nivelResultadoPrueba, tipoResultadoPruebaId, estadoResultadoPruebaId, entidadResultadoPruebaId FROM RESULTADO_PRUEBA WHERE resultadoPruebaId=" + resultadoPruebaId,null);
         if (fila.moveToFirst()) {
             ResultadoPrueba resultadoPrueba = new ResultadoPrueba();
@@ -108,6 +108,48 @@ public class ResultadoPrueba {
 
     public List<ResultadoPrueba> getAll(SQLiteDatabase bd) {
         Cursor fila = bd.rawQuery("SELECT resultadoPruebaId, nombre, descripcion, nivelResultadoPrueba,tipoResultadoPruebaId, estadoResultadoPruebaId, entidadResultadoPruebaId FROM RESULTADO_PRUEBA",null);
+        List<ResultadoPrueba> resultadoPruebas = new ArrayList<>();
+        for (fila.moveToFirst(); !fila.isAfterLast(); fila.moveToNext()) {
+            ResultadoPrueba resultadoPrueba = new ResultadoPrueba();
+            resultadoPrueba.setResultadoPruebaId(Integer.parseInt(fila.getString(0)));
+            resultadoPrueba.setNombre(fila.getString(1));
+            resultadoPrueba.setDescripcion(fila.getString(2));
+            resultadoPrueba.setNivelResultadoPrueba(fila.getInt(3));
+            TipoResultadoPrueba tipoResultadoPrueba = new TipoResultadoPrueba();
+            resultadoPrueba.setTipoResultadoPrueba(tipoResultadoPrueba.findById(bd, fila.getInt(4)));
+            EstadoResultadoPrueba estadoResultadoPrueba = new EstadoResultadoPrueba();
+            resultadoPrueba.setEstadoResultadoPrueba(estadoResultadoPrueba.findById(bd, fila.getInt(5)));
+            EntidadResultadoPrueba entidadResultadoPrueba = new EntidadResultadoPrueba();
+            resultadoPrueba.setEntidadResultadoPrueba(entidadResultadoPrueba.findById(bd, fila.getInt(6)));
+            resultadoPruebas.add(resultadoPrueba);
+        }
+        fila.close();
+        return resultadoPruebas;
+    }
+
+    public List<ResultadoPrueba> findByEntidadResultadoPruebaId(SQLiteDatabase bd, Integer entidadResultadoPruebaId) {
+        Cursor fila = bd.rawQuery("SELECT resultadoPruebaId, nombre, descripcion, nivelResultadoPrueba,tipoResultadoPruebaId, estadoResultadoPruebaId, entidadResultadoPruebaId FROM RESULTADO_PRUEBA WHERE entidadResultadoPruebaId=" + entidadResultadoPruebaId,null);
+        List<ResultadoPrueba> resultadoPruebas = new ArrayList<>();
+        for (fila.moveToFirst(); !fila.isAfterLast(); fila.moveToNext()) {
+            ResultadoPrueba resultadoPrueba = new ResultadoPrueba();
+            resultadoPrueba.setResultadoPruebaId(Integer.parseInt(fila.getString(0)));
+            resultadoPrueba.setNombre(fila.getString(1));
+            resultadoPrueba.setDescripcion(fila.getString(2));
+            resultadoPrueba.setNivelResultadoPrueba(fila.getInt(3));
+            TipoResultadoPrueba tipoResultadoPrueba = new TipoResultadoPrueba();
+            resultadoPrueba.setTipoResultadoPrueba(tipoResultadoPrueba.findById(bd, fila.getInt(4)));
+            EstadoResultadoPrueba estadoResultadoPrueba = new EstadoResultadoPrueba();
+            resultadoPrueba.setEstadoResultadoPrueba(estadoResultadoPrueba.findById(bd, fila.getInt(5)));
+            EntidadResultadoPrueba entidadResultadoPrueba = new EntidadResultadoPrueba();
+            resultadoPrueba.setEntidadResultadoPrueba(entidadResultadoPrueba.findById(bd, fila.getInt(6)));
+            resultadoPruebas.add(resultadoPrueba);
+        }
+        fila.close();
+        return resultadoPruebas;
+    }
+
+    public List<ResultadoPrueba> findByEntidadResultadoPruebaIdAndNivelMenor(SQLiteDatabase bd, Integer entidadResultadoPruebaId, Integer nivelResultadoPrueba) {
+        Cursor fila = bd.rawQuery("SELECT resultadoPruebaId, nombre, descripcion, nivelResultadoPrueba,tipoResultadoPruebaId, estadoResultadoPruebaId, entidadResultadoPruebaId FROM RESULTADO_PRUEBA WHERE entidadResultadoPruebaId=" + entidadResultadoPruebaId + "AND (nivelResultadoPrueba <" + nivelResultadoPrueba + "OR nivelResultadoPrueba =" + nivelResultadoPrueba + ")",null);
         List<ResultadoPrueba> resultadoPruebas = new ArrayList<>();
         for (fila.moveToFirst(); !fila.isAfterLast(); fila.moveToNext()) {
             ResultadoPrueba resultadoPrueba = new ResultadoPrueba();

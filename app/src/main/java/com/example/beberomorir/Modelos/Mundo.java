@@ -8,16 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Mundo {
-    private int mundoId;
+    private Integer mundoId;
     private String nombre;
     private String descripcion;
-    private int urlImagen;
+    private Integer urlImagen;
 
-    public int getMundoId() {
+    public Integer getMundoId() {
         return mundoId;
     }
 
-    public void setMundoId(int mundoId) {
+    public void setMundoId(Integer mundoId) {
         this.mundoId = mundoId;
     }
 
@@ -37,15 +37,15 @@ public class Mundo {
         this.descripcion = descripcion;
     }
 
-    public int getUrlImagen() {
+    public Integer getUrlImagen() {
         return urlImagen;
     }
 
-    public void setUrlImagen(int urlImagen) {
+    public void setUrlImagen(Integer urlImagen) {
         this.urlImagen = urlImagen;
     }
 
-    public void insertar(SQLiteDatabase bd, String nombre, String descripcion, int urlImagen){
+    public void insertar(SQLiteDatabase bd, String nombre, String descripcion, Integer urlImagen){
         ContentValues cv = new ContentValues();
         cv.put("nombre", nombre);
         cv.put("descripcion", descripcion);
@@ -53,7 +53,7 @@ public class Mundo {
         bd.insert("MUNDO", null, cv);
     }
 
-    public Mundo findById(SQLiteDatabase bd, int mundoId) {
+    public Mundo findById(SQLiteDatabase bd, Integer mundoId) {
         Cursor fila = bd.rawQuery("SELECT mundoId, nombre, descripcion, urlImagen FROM MUNDO WHERE mundoId=" + mundoId,null);
         if (fila.moveToFirst()) {
             Mundo mundo = new Mundo();

@@ -3,6 +3,7 @@ package com.example.beberomorir.Interfaces;
 import android.widget.LinearLayout;
 
 import com.example.beberomorir.Modelos.Jugador;
+import com.example.beberomorir.Modelos.JugadorPartida;
 import com.example.beberomorir.Modelos.MundoPartida;
 import com.example.beberomorir.Modelos.TipoPartida;
 import com.example.beberomorir.Modelos.TipoPrueba;
@@ -27,4 +28,6 @@ public interface IComunicaPartida {
     void anadirJugadorToBD(String nombre, String apodo, byte[] urlAnadirJugador);
 
     void verPruebaAzar();
+
+    void menuRondaJugador(JugadorPartida jugadorPartida, MundoPartida mundoPartida);
 }

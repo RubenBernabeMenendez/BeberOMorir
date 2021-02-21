@@ -10,16 +10,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TipoPrueba {
-    private int tipoPruebaId;
+    private Integer tipoPruebaId;
     private String nombre;
     private String descripcion;
     private String activo;
 
-    public int getTipoPruebaId() {
+    public Integer getTipoPruebaId() {
         return tipoPruebaId;
     }
 
-    public void setTipoPruebaId(int TipoPruebaId) {
+    public void setTipoPruebaId(Integer TipoPruebaId) {
         this.tipoPruebaId = TipoPruebaId;
     }
 
@@ -47,7 +47,7 @@ public class TipoPrueba {
         this.activo = activo;
     }
 
-    public int insertar(SQLiteDatabase bd, String nombre, String descripcion){
+    public Integer insertar(SQLiteDatabase bd, String nombre, String descripcion){
         ContentValues cv = new ContentValues();
         cv.put("nombre", nombre);
         cv.put("descripcion", descripcion);
@@ -56,7 +56,7 @@ public class TipoPrueba {
         return (int) id;
     }
 
-    public TipoPrueba findById(SQLiteDatabase bd, int tipoPruebaId) {
+    public TipoPrueba findById(SQLiteDatabase bd, Integer tipoPruebaId) {
         Cursor fila = bd.rawQuery("SELECT tipoPruebaId, nombre, descripcion, activo FROM TIPO_PRUEBA WHERE tipoPruebaId=" + tipoPruebaId,null);
         if (fila.moveToFirst()) {
             TipoPrueba tipoPrueba = new TipoPrueba();

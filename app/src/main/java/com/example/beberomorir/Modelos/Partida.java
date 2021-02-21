@@ -12,18 +12,18 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Partida {
-    int partidaId;
+    Integer partidaId;
     ConfigPartida configPartida;
     Date fecha;
     String nombre;
     String finalizada;
-    int mundoPartidaActualId;
+    Integer mundoPartidaActualId;
 
-    public int getPartidaId() {
+    public Integer getPartidaId() {
         return partidaId;
     }
 
-    public void setPartidaId(int partidaId) {
+    public void setPartidaId(Integer partidaId) {
         this.partidaId = partidaId;
     }
 
@@ -59,14 +59,14 @@ public class Partida {
         this.finalizada = finalizada;
     }
 
-    public int getMundoPartidaActualId() {
+    public Integer getMundoPartidaActualId() {
         return mundoPartidaActualId;
     }
 
-    public void setMundoPartidaActualId(int mundoPartidaActualId) {
+    public void setMundoPartidaActualId(Integer mundoPartidaActualId) {
         this.mundoPartidaActualId = mundoPartidaActualId;
     }
-    public Partida insertar(SQLiteDatabase bd, int configPartidaId, String nombre) {
+    public Partida insertar(SQLiteDatabase bd, Integer configPartidaId, String nombre) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         String date = sdf.format(new Date());
         ContentValues cv = new ContentValues();
@@ -79,7 +79,7 @@ public class Partida {
         return  findById(bd, (int) id);
     }
 
-    public Partida findById(SQLiteDatabase bd, int partidaId) {
+    public Partida findById(SQLiteDatabase bd, Integer partidaId) {
         Cursor fila = bd.rawQuery("SELECT partidaId, configPartidaId, fecha, finalizada, mundoPartidaActualId FROM PARTIDA WHERE partidaId=" + partidaId,null);
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         if (fila.moveToFirst()) {

@@ -8,26 +8,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConfigTipoResultadoPrueba {
-    private int configPartidaId;
-    private int tipoResultadoPruebaId;
+    private Integer configPartidaId;
+    private Integer tipoResultadoPruebaId;
 
-    public int getConfigPartidaId() {
+    public Integer getConfigPartidaId() {
         return configPartidaId;
     }
 
-    public void setConfigPartidaId(int configPartidaId) {
+    public void setConfigPartidaId(Integer configPartidaId) {
         this.configPartidaId = configPartidaId;
     }
 
-    public int getTipoResultadoPruebaId() {
+    public Integer getTipoResultadoPruebaId() {
         return tipoResultadoPruebaId;
     }
 
-    public void setTipoResultadoPruebaId(int tipoResultadoPruebaId) {
+    public void setTipoResultadoPruebaId(Integer tipoResultadoPruebaId) {
         this.tipoResultadoPruebaId = tipoResultadoPruebaId;
     }
 
-    public List<ConfigTipoResultadoPrueba> findById(SQLiteDatabase bd, int configPartidaId) {
+    public List<ConfigTipoResultadoPrueba> findById(SQLiteDatabase bd, Integer configPartidaId) {
         List<ConfigTipoResultadoPrueba> configTipoResultadoPruebas = new ArrayList<>();
         Cursor fila = bd.rawQuery("SELECT configPartidaId, tipoResultadoPruebaId FROM CONFIG_TIPO_RESULTADO_PRUEBA WHERE configPartidaId=" + configPartidaId,null);
         for (fila.moveToFirst(); !fila.isAfterLast(); fila.moveToNext()) {
@@ -40,7 +40,7 @@ public class ConfigTipoResultadoPrueba {
         return configTipoResultadoPruebas;
     }
 
-    public void insertar(SQLiteDatabase bd, int configPartidaId, int tipoResultadoPruebaId){
+    public void insertar(SQLiteDatabase bd, Integer configPartidaId, Integer tipoResultadoPruebaId){
         ContentValues cv = new ContentValues();
         cv.put("configPartidaId", configPartidaId);
         cv.put("tipoResultadoPruebaId", tipoResultadoPruebaId);

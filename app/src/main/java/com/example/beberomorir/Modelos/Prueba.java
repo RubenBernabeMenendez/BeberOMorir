@@ -8,18 +8,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Prueba {
-    private int pruebaId;
+    private Integer pruebaId;
     private String nombre;
     private String descripcion;
-    private int nivelPrueba;
-    private int tiempoEjecucion;
+    private Integer nivelPrueba;
+    private Integer tiempoEjecucion;
     private TipoPrueba tipoPrueba;
 
-    public int getPruebaId() {
+    public Integer getPruebaId() {
         return pruebaId;
     }
 
-    public void setPruebaId(int pruebaId) {
+    public void setPruebaId(Integer pruebaId) {
         this.pruebaId = pruebaId;
     }
 
@@ -39,19 +39,19 @@ public class Prueba {
         this.descripcion = descripcion;
     }
 
-    public int getNivelPrueba() {
+    public Integer getNivelPrueba() {
         return nivelPrueba;
     }
 
-    public void setNivelPrueba(int nivelPrueba) {
+    public void setNivelPrueba(Integer nivelPrueba) {
         this.nivelPrueba = nivelPrueba;
     }
 
-    public int getTiempoEjecucion() {
+    public Integer getTiempoEjecucion() {
         return tiempoEjecucion;
     }
 
-    public void setTiempoEjecucion(int tiempoEjecucion) {
+    public void setTiempoEjecucion(Integer tiempoEjecucion) {
         this.tiempoEjecucion = tiempoEjecucion;
     }
 
@@ -63,7 +63,7 @@ public class Prueba {
         this.tipoPrueba = tipoPrueba;
     }
 
-    public void insertar(SQLiteDatabase bd, String nombre, String descripcion, int nivelPrueba, int tiempoEjecucion, int tipoPruebaId){
+    public void insertar(SQLiteDatabase bd, String nombre, String descripcion, Integer nivelPrueba, Integer tiempoEjecucion, Integer tipoPruebaId){
         ContentValues cv = new ContentValues();
         cv.put("nombre", nombre);
         cv.put("descripcion", descripcion);
@@ -73,8 +73,8 @@ public class Prueba {
         bd.insert("PRUEBA", null, cv);
     }
 
-    public Prueba findById(SQLiteDatabase bd, int pruebaId) {
-        Cursor fila = bd.rawQuery("SELECT pruebaId, nombre, descripcion, nivelPrueba, tiempoEjecicion, tipoPruebaId FROM PRUEBA WHERE pruebaId=" + pruebaId,null);
+    public Prueba findById(SQLiteDatabase bd, Integer pruebaId) {
+        Cursor fila = bd.rawQuery("SELECT pruebaId, nombre, descripcion, nivelPrueba, tiempoEjecucion, tipoPruebaId FROM PRUEBA WHERE pruebaId=" + pruebaId,null);
         if (fila.moveToFirst()) {
             Prueba prueba = new Prueba();
             prueba.setPruebaId(Integer.parseInt(fila.getString(0)));
@@ -92,8 +92,8 @@ public class Prueba {
         }
     }
 
-    public List<Prueba> findByTipoPruebaId(SQLiteDatabase bd, int tipoPruebaId) {
-        Cursor fila = bd.rawQuery("SELECT pruebaId, nombre, descripcion, nivelPrueba, tiempoEjecicion, tipoPruebaId FROM PRUEBA WHERE tipoPruebaId=" + tipoPruebaId,null);
+    public List<Prueba> findByTipoPruebaId(SQLiteDatabase bd, Integer tipoPruebaId) {
+        Cursor fila = bd.rawQuery("SELECT pruebaId, nombre, descripcion, nivelPrueba, tiempoEjecucion, tipoPruebaId FROM PRUEBA WHERE tipoPruebaId=" + tipoPruebaId,null);
         List<Prueba> pruebas = new ArrayList<>();
         for (fila.moveToFirst(); !fila.isAfterLast(); fila.moveToNext()) {
             Prueba prueba = new Prueba();
@@ -111,7 +111,7 @@ public class Prueba {
     }
 
     public List<Prueba> getAll(SQLiteDatabase bd) {
-        Cursor fila = bd.rawQuery("SELECT pruebaId, nombre, descripcion, nivelPrueba, tiempoEjecicion, tipoPruebaId FROM PRUEBA",null);
+        Cursor fila = bd.rawQuery("SELECT pruebaId, nombre, descripcion, nivelPrueba, tiempoEjecucion, tipoPruebaId FROM PRUEBA",null);
         List<Prueba> pruebas = new ArrayList<>();
         for (fila.moveToFirst(); !fila.isAfterLast(); fila.moveToNext()) {
             Prueba prueba = new Prueba();

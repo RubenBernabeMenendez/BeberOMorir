@@ -166,7 +166,7 @@ public class ConfigPartidaFragment extends Fragment {
         comboNivelPruebas = (Spinner) v.findViewById(R.id.comboNivelPruebas);
         final String []nivelPruebas = new String[Constantes.LISTA_NIVELES_PRUEBA];
         for (int i=0; i< Constantes.LISTA_NIVELES_PRUEBA; i++) {
-            nivelPruebas[i] = String.valueOf(i);
+            nivelPruebas[i] = String.valueOf(i + 1);
         }
         ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this.actividad,android.R.layout.simple_spinner_item, nivelPruebas);
         comboNivelPruebas.setAdapter(adapter2);
@@ -174,7 +174,7 @@ public class ConfigPartidaFragment extends Fragment {
         comboNivelResultadosPruebas = (Spinner) v.findViewById(R.id.comboNivelResultadosPruebas);
         String []nivelResultadosPruebas = new String[Constantes.LISTA_NIVELES_RESULTADOS_PRUEBA];
         for (int i=0; i< Constantes.LISTA_NIVELES_RESULTADOS_PRUEBA; i++) {
-            nivelResultadosPruebas[i] = String.valueOf(i);
+            nivelResultadosPruebas[i] = String.valueOf(i + 1);
         }
         ArrayAdapter<String> adapter3 = new ArrayAdapter<String>(this.actividad,android.R.layout.simple_spinner_item, nivelResultadosPruebas);
         comboNivelResultadosPruebas.setAdapter(adapter3);

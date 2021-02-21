@@ -8,15 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EstadoResultadoPrueba {
-    private int estadoResultadoPruebaId;
+    private Integer estadoResultadoPruebaId;
     private String nombre;
     private String descripcion;
 
-    public int getEstadoResultadoPruebaId() {
+    public Integer getEstadoResultadoPruebaId() {
         return estadoResultadoPruebaId;
     }
 
-    public void setEstadoResultadoPruebaId(int estadoResultadoPruebaId) {
+    public void setEstadoResultadoPruebaId(Integer estadoResultadoPruebaId) {
         this.estadoResultadoPruebaId = estadoResultadoPruebaId;
     }
 
@@ -43,7 +43,7 @@ public class EstadoResultadoPrueba {
         bd.insert("ESTADO_RESULTADO_PRUEBA", null, cv);
     }
 
-    public EstadoResultadoPrueba findById(SQLiteDatabase bd, int estadoResultadoPruebaId) {
+    public EstadoResultadoPrueba findById(SQLiteDatabase bd, Integer estadoResultadoPruebaId) {
         Cursor fila = bd.rawQuery("SELECT estadoResultadoPruebaId, nombre, descripcion FROM ESTADO_RESULTADO_PRUEBA WHERE estadoResultadoPruebaId=" + estadoResultadoPruebaId,null);
         if (fila.moveToFirst()) {
             EstadoResultadoPrueba estadoResultadoPrueba = new EstadoResultadoPrueba();

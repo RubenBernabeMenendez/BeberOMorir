@@ -8,26 +8,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConfigTipoPrueba {
-    int configPartidaId;
-    int tipoPruebaId;
+    Integer configPartidaId;
+    Integer tipoPruebaId;
 
-    public int getConfigPartidaId() {
+    public Integer getConfigPartidaId() {
         return configPartidaId;
     }
 
-    public void setConfigPartidaId(int configPartidaId) {
+    public void setConfigPartidaId(Integer configPartidaId) {
         this.configPartidaId = configPartidaId;
     }
 
-    public int getTipoPruebaId() {
+    public Integer getTipoPruebaId() {
         return tipoPruebaId;
     }
 
-    public void setTipoPruebaId(int tipoPruebaId) {
+    public void setTipoPruebaId(Integer tipoPruebaId) {
         this.tipoPruebaId = tipoPruebaId;
     }
 
-    public List<ConfigTipoPrueba> findById(SQLiteDatabase bd, int configPartidaId) {
+    public List<ConfigTipoPrueba> findById(SQLiteDatabase bd, Integer configPartidaId) {
         List<ConfigTipoPrueba> configTipoPruebas = new ArrayList<>();
         Cursor fila = bd.rawQuery("SELECT configPartidaId, tipoPruebaId FROM CONFIG_TIPO_PRUEBA WHERE configPartidaId=" + configPartidaId,null);
         for (fila.moveToFirst(); !fila.isAfterLast(); fila.moveToNext()) {
@@ -40,7 +40,7 @@ public class ConfigTipoPrueba {
         return configTipoPruebas;
     }
 
-    public void insertar(SQLiteDatabase bd, int configPartidaId, int tipoPruebaId){
+    public void insertar(SQLiteDatabase bd, Integer configPartidaId, Integer tipoPruebaId){
         ContentValues cv = new ContentValues();
         cv.put("configPartidaId", configPartidaId);
         cv.put("tipoPruebaId", tipoPruebaId);

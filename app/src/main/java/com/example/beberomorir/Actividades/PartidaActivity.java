@@ -29,6 +29,7 @@ import com.example.beberomorir.AdminSQLDataBase;
 import com.example.beberomorir.Constantes;
 import com.example.beberomorir.Fragmentos.ConfigPartidaFragment;
 import com.example.beberomorir.Fragmentos.ElegirJugadoresFragment;
+import com.example.beberomorir.Fragmentos.MenuRondaJugadorFragment;
 import com.example.beberomorir.Fragmentos.NuevoJugadorFragment;
 import com.example.beberomorir.Fragmentos.PruebaAzarFragment;
 import com.example.beberomorir.Fragmentos.TableroFragment;
@@ -37,11 +38,19 @@ import com.example.beberomorir.MainActivity;
 import com.example.beberomorir.Modelos.ConfigPartida;
 import com.example.beberomorir.Modelos.ConfigTipoPrueba;
 import com.example.beberomorir.Modelos.ConfigTipoResultadoPrueba;
+import com.example.beberomorir.Modelos.EntidadResultadoPrueba;
+import com.example.beberomorir.Modelos.EntidadResultadoTipoPrueba;
+import com.example.beberomorir.Modelos.EstadoResultadoTipoPrueba;
 import com.example.beberomorir.Modelos.Jugador;
 import com.example.beberomorir.Modelos.JugadorPartida;
 import com.example.beberomorir.Modelos.Mundo;
 import com.example.beberomorir.Modelos.MundoPartida;
+import com.example.beberomorir.Modelos.MundoPartidaTipoPrueba;
 import com.example.beberomorir.Modelos.Partida;
+import com.example.beberomorir.Modelos.Prueba;
+import com.example.beberomorir.Modelos.PruebaJugador;
+import com.example.beberomorir.Modelos.PruebaPartida;
+import com.example.beberomorir.Modelos.ResultadoPrueba;
 import com.example.beberomorir.Modelos.TipoPartida;
 import com.example.beberomorir.Modelos.TipoPrueba;
 import com.example.beberomorir.Modelos.TipoResultadoPrueba;
@@ -59,6 +68,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class PartidaActivity extends AppCompatActivity implements IComunicaPartida {
 
@@ -68,6 +78,8 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
     ElegirJugadoresFragment fragmentElegirJugadores;
     NuevoJugadorFragment addJugador;
     PruebaAzarFragment fragmentPruebaAzar;
+    MenuRondaJugadorFragment menuRondaJugadorFragment;
+
 
 
     //Datos
@@ -78,6 +90,9 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
     private List<JugadorPartida> jugadoresPartida;
     private Partida partida;
     private List<MundoPartida> mundosPartida;
+    private List<MundoPartidaTipoPrueba> mundoPartidaTipoPruebas;
+    private List<PruebaPartida> pruebaPartidas;
+    private List<PruebaJugador> pruebaJugadors;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +102,9 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
         fragmentElegirJugadores = new ElegirJugadoresFragment();
         fragmentTablero = new TableroFragment();
         fragmentPruebaAzar = new PruebaAzarFragment();
+        menuRondaJugadorFragment = new MenuRondaJugadorFragment();
+        this.pruebaJugadors = new ArrayList<>();
+        this.pruebaPartidas = new ArrayList<>();
         getSupportFragmentManager().beginTransaction().replace(R.id.contenedorPartida, fragmentConfigPartida).commit();
     }
 
@@ -118,6 +136,28 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
     }
 
     @Override
+    public void menuRondaJugador(JugadorPartida jugadorPartida, MundoPartida mundoPartida) {
+        // Usamos MundoPartida para obtener lista de MundoPartidaTipoPruebas para dibujar el menu de elegir el tipo de prueba
+        // Usamos JugadorPartida y MundoPartida para obtener lista de PruebasJugador y así saber cuáles quedan por elegir
+
+        AdminSQLDataBase admin = new AdminSQLDataBase(this);
+        SQLiteDatabase bd = admin.getWritableDatabase();
+
+        MundoPartidaTipoPrueba mundoPartidaTipoPrueba = new MundoPartidaTipoPrueba();
+        List<MundoPartidaTipoPrueba> mundoPartidaTipoPruebas = mundoPartidaTipoPrueba.findById(bd, mundoPartida.getMundoPartidaId());
+        menuRondaJugadorFragment.setMundoPartidaTipoPruebas(mundoPartidaTipoPruebas);
+
+        PruebaJugador pruebaJugador = new PruebaJugador();
+        List<PruebaJugador> pruebaJugadors = pruebaJugador.findByJugadorPartidaId(bd, jugadorPartida.getJugadorPartidaId());
+        PruebaPartida pruebaPartida = new PruebaPartida();
+        List<PruebaPartida> pruebaPartidas = pruebaPartida.findByMundoPartida(bd, mundoPartida.getMundoPartidaId());
+        List<PruebaJugador> pruebaJugadorsPorMundo = pruebaJugadors.stream().filter(pj -> pruebaPartidas.stream().map(PruebaPartida::getPruebaPartidaId).collect(Collectors.toList()).contains(pj.getPruebaPartidaId().getPruebaPartidaId())).collect(Collectors.toList());
+        menuRondaJugadorFragment.setJugadorPartida(jugadorPartida);
+        menuRondaJugadorFragment.setPruebaJugadors(pruebaJugadorsPorMundo);
+        menuRondaJugadorFragment.show(getSupportFragmentManager(), "Menu ronda");
+    }
+
+    @Override
     public void empezarPartida(List<Jugador> jugadores){
         AdminSQLDataBase admin = new AdminSQLDataBase(this);
         SQLiteDatabase bd = admin.getWritableDatabase();
@@ -132,17 +172,72 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
         this.partida = crearPartida(bd, this.configPartida.getConfigPartidaId(), sdf.format(new Date()));
         this.jugadoresPartida = crearJugadoresPartida(bd, jugadores);
         this.mundosPartida = crearMundosPartida(bd);
+        this.mundoPartidaTipoPruebas = crearMundosPartidaTipoPruebas(bd, this.mundosPartida, this.configPartida);
 
-        // crearemos la configuración de cuántas tipos de pruebas tiene que hacer jugador por mundo (MundoPartidaTipoPrueba)
-        // según el tipoPartida de ConfiguracionPartida
         // Crear las PruebaPartida y ResultadoPruebaPartida del nivel seleccionado o menor en configuracionPartida
         // a partir de los jugadoresPartida y los mundoPartida editaremos las pruebas y los resultados
+        // para cada tipo de prueba crearemos los resultados de la entidadResultadoTipoPrueba
+        // A partir de las PruebaPartida y JugadoresPartida crearemos las PruebaJugador
+        // numPruebasPartida = numJugadoresPartida * mundoPartidaTipoPrueba.numero
 
+        crearPruebasPartida(bd);
+
+        //crearResultadosPartida(bd);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.contenedorPartida, fragmentTablero).commit();
         fragmentTablero.setMundoPartidas(this.mundosPartida);
         fragmentTablero.setJugadoresPartida(this.jugadoresPartida);
     }
+
+    private void crearResultadosPartida(SQLiteDatabase bd) {
+        for (PruebaJugador pruebaJugador : this.pruebaJugadors) {
+            EntidadResultadoTipoPrueba entidadResultadoTipoPrueba = new EntidadResultadoTipoPrueba();
+            List<EntidadResultadoTipoPrueba> entidadResultadoTipoPruebas = entidadResultadoTipoPrueba.findByTipoPruebaId(bd, pruebaJugador.getPruebaPartidaId().getPrueba().getTipoPrueba().getTipoPruebaId());
+            List<ResultadoPrueba> resultadoPruebas = new ArrayList<>();
+            for (EntidadResultadoTipoPrueba ertp: entidadResultadoTipoPruebas) {
+                ResultadoPrueba resultadoPrueba = new ResultadoPrueba();
+                resultadoPruebas.addAll(resultadoPrueba.findByEntidadResultadoPruebaIdAndNivelMenor(bd, ertp.getEntidadResultadoPruebaId(), configPartida.getNivelResultadoPruebas()));
+            }
+            // Filtramos por los tipoResultados definidos en la configuración
+            resultadoPruebas = resultadoPruebas.stream().filter(el -> this.configPartida.getConfigTipoResultadoPruebas().stream().map(ConfigTipoResultadoPrueba::getTipoResultadoPruebaId).collect(Collectors.toList()).contains(el.getTipoResultadoPrueba().getTipoResultadoPruebaId())).collect(Collectors.toList());
+            // Filtramos por los estadoResultadoTipoPrueba
+            EstadoResultadoTipoPrueba estadoResultadoTipoPrueba = new EstadoResultadoTipoPrueba();
+            List<EstadoResultadoTipoPrueba> estadoResultadoTipoPruebas = estadoResultadoTipoPrueba.findByTipoPruebaId(bd, pruebaJugador.getPruebaPartidaId().getPrueba().getTipoPrueba().getTipoPruebaId());
+            resultadoPruebas = resultadoPruebas.stream().filter(el -> estadoResultadoTipoPruebas.stream().map(EstadoResultadoTipoPrueba::getEstadoResultadoPruebaId).collect(Collectors.toList()).contains(el.getEstadoResultadoPrueba().getEstadoResultadoPruebaId())).collect(Collectors.toList());
+            Collections.shuffle(resultadoPruebas);
+            for (EstadoResultadoTipoPrueba ertp: estadoResultadoTipoPruebas) {
+                List<ResultadoPrueba> resultadoPruebasAux = resultadoPruebas.stream().filter(el -> el.getEstadoResultadoPrueba().getEstadoResultadoPruebaId().equals(ertp.getEstadoResultadoPruebaId())).collect(Collectors.toList());
+                Collections.shuffle(resultadoPruebasAux);
+                // Crear resultadoPruebaPartida y PruebaResultadoRelaci
+            }
+        }
+    }
+
+    private void crearPruebasPartida(SQLiteDatabase bd) {
+        Prueba prueba = new Prueba();
+        List<Prueba> pruebas = prueba.getAll(bd);
+        pruebas = pruebas.stream().filter(prueba1 -> prueba1.getNivelPrueba() <= this.configPartida.getNivelPruebas()).collect(Collectors.toList());
+        pruebas = pruebas.stream().filter(prueba1 -> this.configPartida.getConfigTipoPruebas().stream().map(ConfigTipoPrueba::getTipoPruebaId).collect(Collectors.toList()).contains(prueba1.getTipoPrueba().getTipoPruebaId())).collect(Collectors.toList());
+        for (JugadorPartida jugadorPartida : this.jugadoresPartida) {
+            for (MundoPartidaTipoPrueba mundoPartidaTipoPrueba: this.mundoPartidaTipoPruebas) {
+                for (int j=0; j< mundoPartidaTipoPrueba.getNumeroTiposPrueba(); j++) {
+                    PruebaPartida pruebaPartida = new PruebaPartida();
+                    PruebaJugador pruebaJugador = new PruebaJugador();
+                    List<Prueba> pruebasAux = pruebas.stream().filter(p -> mundoPartidaTipoPrueba.getTipoPruebaId().equals(p.getTipoPrueba().getTipoPruebaId())).collect(Collectors.toList());
+                    Collections.shuffle(pruebasAux);
+                    // Replace @Jugador y @Mundo
+                    String nombreEditado = pruebasAux.get(0).getNombre();
+                    String descripcionEditada = pruebasAux.get(0).getDescripcion();
+                    // crear PruebaPartida y PruebaJugador
+                    pruebaPartida = pruebaPartida.insertar(bd, pruebasAux.get(0).getPruebaId(), mundoPartidaTipoPrueba.getMundoPartidaId(), nombreEditado, descripcionEditada, Constantes.NO);
+                    this.pruebaPartidas.add(pruebaPartida);
+                    pruebaJugador = pruebaJugador.insertar(bd, pruebaPartida.getPruebaPartidaId(), null, jugadorPartida.getJugadorPartidaId(), null);
+                    this.pruebaJugadors.add(pruebaJugador);
+                }
+            }
+        }
+    }
+
 
     @Override
     public void addJugador() {
@@ -301,6 +396,33 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
 
         }
         return mundoPartidas;
+    }
+
+    private List<MundoPartidaTipoPrueba> crearMundosPartidaTipoPruebas(SQLiteDatabase bd, List<MundoPartida> mundoPartidas, ConfigPartida configPartida) {
+        List<MundoPartidaTipoPrueba> mundoPartidaTipoPruebas = new ArrayList<>();
+        int numPruebasPorTipoPruebaRepe = configPartida.getTipoPartida().getNumeroPruebasMundo() / configPartida.getConfigTipoPruebas().size();
+        int numPruebasPorTipoPruebaRepeMod = configPartida.getTipoPartida().getNumeroPruebasMundo() / configPartida.getConfigTipoPruebas().size();
+        Collections.shuffle(configPartida.getConfigTipoPruebas());
+        int numTipoPruebas = 0;
+        for (MundoPartida mp: mundoPartidas) {
+            for (ConfigTipoPrueba configTipoPrueba: configPartida.getConfigTipoPruebas()) {
+                MundoPartidaTipoPrueba mundoPartidaTipoPrueba = new MundoPartidaTipoPrueba();
+                numTipoPruebas = 1;
+                if (Constantes.TIPO_PRUEBAS_REPETIBLES.contains(configTipoPrueba.getTipoPruebaId())) {
+                    numTipoPruebas = numTipoPruebas + numPruebasPorTipoPruebaRepe;
+                    if (numPruebasPorTipoPruebaRepeMod != 0) {
+                        numTipoPruebas +=1;
+                        numPruebasPorTipoPruebaRepeMod -=1;
+                    }
+                }
+                // insertar
+                mundoPartidaTipoPrueba.insertar(bd, mp.getMundoPartidaId(), configTipoPrueba.getTipoPruebaId(), numTipoPruebas);
+            }
+            MundoPartidaTipoPrueba mundoPartidaTipoPrueba = new MundoPartidaTipoPrueba();
+            mundoPartidaTipoPruebas.addAll(mundoPartidaTipoPrueba.findById(bd, mp.getMundoPartidaId()));
+        }
+
+        return mundoPartidaTipoPruebas;
     }
 
     private void añadirNivelMundosPartida(SQLiteDatabase bd, int ultimoNivel) throws Exception {

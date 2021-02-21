@@ -50,8 +50,8 @@
 
                 <TextView
                     android:id="@+id/nombreJugador"
-                    android:layout_width="138dp"
-                    android:layout_height="24dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal|center_vertical"
                     android:layout_marginStart="10dp"
                     android:fontFamily="@font/architects_daughter"

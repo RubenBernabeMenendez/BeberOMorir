@@ -7,35 +7,35 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.List;
 
 public class ConfigPartida {
-    private int configPartidaId;
-    private int nivelPruebas;
-    private int nivelResultadoPruebas;
+    private Integer configPartidaId;
+    private Integer nivelPruebas;
+    private Integer nivelResultadoPruebas;
     private TipoPartida tipoPartida;
     private String rolesJugador;
     private List<ConfigTipoPrueba> configTipoPruebas;
     private List<ConfigTipoResultadoPrueba> configTipoResultadoPruebas;
 
-    public int getConfigPartidaId() {
+    public Integer getConfigPartidaId() {
         return configPartidaId;
     }
 
-    public void setConfigPartidaId(int configPartidaId) {
+    public void setConfigPartidaId(Integer configPartidaId) {
         this.configPartidaId = configPartidaId;
     }
 
-    public int getNivelPruebas() {
+    public Integer getNivelPruebas() {
         return nivelPruebas;
     }
 
-    public void setNivelPruebas(int nivelPruebas) {
+    public void setNivelPruebas(Integer nivelPruebas) {
         this.nivelPruebas = nivelPruebas;
     }
 
-    public int getNivelResultadoPruebas() {
+    public Integer getNivelResultadoPruebas() {
         return nivelResultadoPruebas;
     }
 
-    public void setNivelResultadoPruebas(int nivelResultadoPruebas) {
+    public void setNivelResultadoPruebas(Integer nivelResultadoPruebas) {
         this.nivelResultadoPruebas = nivelResultadoPruebas;
     }
 
@@ -71,7 +71,7 @@ public class ConfigPartida {
         this.configTipoResultadoPruebas = configTipoResultadoPruebas;
     }
 
-    public ConfigPartida findConfigById(SQLiteDatabase bd, int configPartidaId) {
+    public ConfigPartida findConfigById(SQLiteDatabase bd, Integer configPartidaId) {
         Cursor fila = bd.rawQuery("SELECT configPartidaId, nivelPruebas, nivelResultadoPruebas, tipoPartidaId, rolesJugador FROM CONFIG_PARTIDA WHERE configPartidaId=" + configPartidaId,null);
         if (fila.moveToFirst()) {
             ConfigPartida configPartida = new ConfigPartida();
@@ -93,7 +93,7 @@ public class ConfigPartida {
         }
     }
 
-    public ConfigPartida findById(SQLiteDatabase bd, int configPartidaId) {
+    public ConfigPartida findById(SQLiteDatabase bd, Integer configPartidaId) {
         Cursor fila = bd.rawQuery("SELECT configPartidaId, nivelPruebas, nivelResultadoPruebas, tipoPartidaId, rolesJugador FROM CONFIG_PARTIDA WHERE configPartidaId=" + configPartidaId,null);
         if (fila.moveToFirst()) {
             ConfigPartida configPartida = new ConfigPartida();
@@ -109,7 +109,7 @@ public class ConfigPartida {
         }
     }
 
-    public ConfigPartida insertar(SQLiteDatabase bd, int nivelPruebas, int nivelResultadoPruebas, int tipoPartidaId, String rolesJugador){
+    public ConfigPartida insertar(SQLiteDatabase bd, Integer nivelPruebas, Integer nivelResultadoPruebas, Integer tipoPartidaId, String rolesJugador){
         ContentValues cv = new ContentValues();
         cv.put("nivelPruebas", nivelPruebas);
         cv.put("nivelResultadoPruebas", nivelResultadoPruebas);

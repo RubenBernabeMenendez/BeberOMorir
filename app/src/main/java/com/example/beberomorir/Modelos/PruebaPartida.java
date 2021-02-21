@@ -8,18 +8,18 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class PruebaPartida {
-    private int pruebaPartidaId;
+    private Integer pruebaPartidaId;
     private Prueba prueba;
-    private int mundoPartidaId;
+    private Integer mundoPartidaId;
     private String nombre;
     private String descripcion;
     private String finalizado;
 
-    public int getPruebaPartidaId() {
+    public Integer getPruebaPartidaId() {
         return pruebaPartidaId;
     }
 
-    public void setPruebaPartidaId(int pruebaPartidaId) {
+    public void setPruebaPartidaId(Integer pruebaPartidaId) {
         this.pruebaPartidaId = pruebaPartidaId;
     }
 
@@ -31,11 +31,11 @@ public class PruebaPartida {
         this.prueba = prueba;
     }
 
-    public int getMundoPartidaId() {
+    public Integer getMundoPartidaId() {
         return mundoPartidaId;
     }
 
-    public void setMundoPartidaId(int mundoPartidaId) {
+    public void setMundoPartidaId(Integer mundoPartidaId) {
         this.mundoPartidaId = mundoPartidaId;
     }
 
@@ -63,10 +63,10 @@ public class PruebaPartida {
         this.finalizado = finalizado;
     }
 
-    public PruebaPartida insertar(SQLiteDatabase bd, int pruebaId, int mundoPartidaId, String nombre, String descripcion, String finalizado){
+    public PruebaPartida insertar(SQLiteDatabase bd, Integer pruebaId, Integer mundoPartidaId, String nombre, String descripcion, String finalizado){
         ContentValues cv = new ContentValues();
         cv.put("pruebaId", pruebaId);
-        cv.put("mundaPartidaId", mundoPartidaId);
+        cv.put("mundoPartidaId", mundoPartidaId);
         cv.put("nombre", nombre);
         cv.put("descripcion", descripcion);
         cv.put("finalizado", finalizado);
@@ -75,7 +75,7 @@ public class PruebaPartida {
         return  findById(bd, (int) id);
     }
 
-    public PruebaPartida findById(SQLiteDatabase bd, int pruebaPartidaId) {
+    public PruebaPartida findById(SQLiteDatabase bd, Integer pruebaPartidaId) {
         Cursor fila = bd.rawQuery("SELECT pruebaPartidaId, pruebaId, mundoPartidaId, nombre, descripcion, finalizado FROM PRUEBA_PARTIDA WHERE pruebaPartidaId=" + pruebaPartidaId,null);
         if (fila.moveToFirst()) {
             PruebaPartida pruebaPartida = new PruebaPartida();
@@ -112,7 +112,7 @@ public class PruebaPartida {
         return pruebaPartidas;
     }
 
-    public ArrayList<PruebaPartida> findByTipoPruebaAndMundoPartida(SQLiteDatabase bd, int tipoPruebaId, int mundoPartidaId) {
+    public ArrayList<PruebaPartida> findByMundoPartida(SQLiteDatabase bd, Integer mundoPartidaId) {
         Cursor fila = bd.rawQuery("SELECT pruebaPartidaId, pruebaId, mundoPartidaId, nombre, descripcion, finalizado FROM PRUEBA_PARTIDA WHERE mundoPartidaId=" + mundoPartidaId,null);
         ArrayList<PruebaPartida> pruebaPartidas = new ArrayList<>();
         for (fila.moveToFirst(); !fila.isAfterLast(); fila.moveToNext()) {
@@ -127,7 +127,6 @@ public class PruebaPartida {
             pruebaPartidas.add(pruebaPartida);
         }
         fila.close();
-        pruebaPartidas.removeIf(el -> el.getPrueba().getTipoPrueba().getTipoPruebaId() != tipoPruebaId);
         return pruebaPartidas;
     }
 }
