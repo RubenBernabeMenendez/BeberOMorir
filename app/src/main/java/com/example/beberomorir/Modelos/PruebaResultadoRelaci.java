@@ -9,7 +9,7 @@ import java.util.List;
 
 public class PruebaResultadoRelaci {
     Integer resultadoPruebaPartidaId;
-    Integer tipoPruebaPartidaId;
+    Integer pruebaPartidaId;
 
     public Integer getResultadoPruebaPartidaId() {
         return resultadoPruebaPartidaId;
@@ -19,31 +19,31 @@ public class PruebaResultadoRelaci {
         this.resultadoPruebaPartidaId = resultadoPruebaPartidaId;
     }
 
-    public Integer getTipoPruebaPartidaId() {
-        return tipoPruebaPartidaId;
+    public Integer getPruebaPartidaId() {
+        return pruebaPartidaId;
     }
 
-    public void setTipoPruebaPartidaId(Integer tipoPruebaPartidaId) {
-        this.tipoPruebaPartidaId = tipoPruebaPartidaId;
+    public void setPruebaPartidaId(Integer pruebaPartidaId) {
+        this.pruebaPartidaId = pruebaPartidaId;
     }
 
-    public List<PruebaResultadoRelaci> findByTipoPruebaPartidaId(SQLiteDatabase bd, Integer tipoPruebaPartidaId) {
+    public List<PruebaResultadoRelaci> findByPruebaPartidaId(SQLiteDatabase bd, Integer pruebaPartidaId) {
         List<PruebaResultadoRelaci> estadoResultadoTipoPruebas = new ArrayList<>();
-        Cursor fila = bd.rawQuery("SELECT resultadoPruebaPartidaId, tipoPruebaPartidaId FROM PRUEBA_RESULTADO_RELACI WHERE tipoPruebaPartidaId=" + tipoPruebaPartidaId,null);
+        Cursor fila = bd.rawQuery("SELECT resultadoPruebaPartidaId, pruebaPartidaId FROM PRUEBA_RESULTADO_RELACI WHERE pruebaPartidaId=" + pruebaPartidaId,null);
         for (fila.moveToFirst(); !fila.isAfterLast(); fila.moveToNext()) {
             PruebaResultadoRelaci estadoResultadoTipoPrueba = new PruebaResultadoRelaci();
             estadoResultadoTipoPrueba.setResultadoPruebaPartidaId(Integer.parseInt(fila.getString(0)));
-            estadoResultadoTipoPrueba.setTipoPruebaPartidaId(Integer.parseInt(fila.getString(1)));
+            estadoResultadoTipoPrueba.setPruebaPartidaId(Integer.parseInt(fila.getString(1)));
             estadoResultadoTipoPruebas.add(estadoResultadoTipoPrueba);
         }
         fila.close();
         return estadoResultadoTipoPruebas;
     }
 
-    public void insertar(SQLiteDatabase bd, Integer resultadoPruebaPartidaId, Integer tipoPruebaPartidaId){
+    public void insertar(SQLiteDatabase bd, Integer resultadoPruebaPartidaId, Integer pruebaPartidaId){
         ContentValues cv = new ContentValues();
         cv.put("resultadoPruebaPartidaId", resultadoPruebaPartidaId);
-        cv.put("tipoPruebaPartidaId", tipoPruebaPartidaId);
+        cv.put("pruebaPartidaId", pruebaPartidaId);
         bd.insert("PRUEBA_RESULTADO_RELACI", null, cv);
     }
 }

@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.beberomorir.Constantes;
 import com.example.beberomorir.Interfaces.IComunicaPartida;
 import com.example.beberomorir.Modelos.JugadorPartida;
 import com.example.beberomorir.Modelos.MundoPartida;
@@ -27,8 +28,12 @@ import com.example.beberomorir.Modelos.MundoPartidaTipoPrueba;
 import com.example.beberomorir.Modelos.PruebaJugador;
 import com.example.beberomorir.Modelos.TipoPrueba;
 import com.example.beberomorir.R;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.example.beberomorir.Constantes.distinctByKey;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -107,7 +112,12 @@ public class MenuRondaJugadorFragment extends AppCompatDialogFragment {
         imageViewJugador.setImageBitmap(bitmap);
         textViewJugador.setText(this.jugadorPartida.getJugador().getNombre());
 
-        for (int i= 0; i < this.pruebaJugadors.size(); i++) {
+        List<PruebaJugador> pruebaJugadorsSorter = this.pruebaJugadors.stream()
+                .filter(distinctByKey(p -> p.getPruebaPartidaId().getPrueba().getTipoPrueba().getTipoPruebaId()))
+                .collect(Collectors.toList());
+
+        for (int i= 0; i < pruebaJugadorsSorter.size(); i++) {
+            final Integer index = i;
             CardView cardView = new CardView(this.actividad);
             LinearLayout.LayoutParams layoutParamsCard = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, (float) 1.0);
             layoutParamsCard.leftMargin = 10;
@@ -118,6 +128,28 @@ public class MenuRondaJugadorFragment extends AppCompatDialogFragment {
             cardView.setCardElevation(0);
             cardView.setLayoutParams(layoutParamsCard);
             cardView.setRadius(20);
+            List<PruebaJugador> pruebaJugadorsLibres = this.pruebaJugadors.stream()
+                    .filter(pruebaJugador -> pruebaJugadorsSorter.get(index).getPruebaPartidaId().getPrueba().getTipoPrueba().getTipoPruebaId().equals(pruebaJugador.getPruebaPartidaId().getPrueba().getTipoPrueba().getTipoPruebaId()))
+                    .filter(p -> Constantes.NO.equals(p.getPruebaPartidaId().getFinalizado())).collect(Collectors.toList());
+            if (!pruebaJugadorsLibres.isEmpty()) {
+                PruebaJugador pruebaJugadorAux = pruebaJugadorsLibres.get(0);
+                cardView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        iComunicaPartida.empezarPrueba(pruebaJugadorAux);
+                    }
+                });
+            } else {
+                cardView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Snackbar snackbar = Snackbar
+                                .make(view,"No quedan pruebas", Snackbar.LENGTH_LONG);
+                        snackbar.show();
+                    }
+                });
+            }
+
 
             LinearLayout linearLayoutCard = new LinearLayout(this.actividad);
             linearLayoutCard.setOrientation(LinearLayout.VERTICAL);
@@ -128,7 +160,7 @@ public class MenuRondaJugadorFragment extends AppCompatDialogFragment {
             linearLayoutCard.setTextAlignment(LinearLayout.TEXT_ALIGNMENT_CENTER);
 
             ImageView imageView = new ImageView(this.actividad);
-            imageView.setImageResource(R.mipmap.play_black);
+            imageView.setImageResource(this.pruebaJugadors.get(i).getPruebaPartidaId().getPrueba().getTipoPrueba().getUrlImagen());
             imageView.setScaleType(ImageView.ScaleType.CENTER);
             LinearLayout.LayoutParams layoutParamsImage = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, (float) 1.0);
             layoutParamsImage.gravity = Gravity.CENTER;
@@ -137,7 +169,7 @@ public class MenuRondaJugadorFragment extends AppCompatDialogFragment {
             layoutParamsImage.leftMargin = 4;
 
             TextView textView = new TextView(this.actividad);
-            textView.setText("Prueba");
+            textView.setText(this.pruebaJugadors.get(i).getPruebaPartidaId().getPrueba().getTipoPrueba().getNombre());
 
 
             linearLayoutCard.addView(imageView);

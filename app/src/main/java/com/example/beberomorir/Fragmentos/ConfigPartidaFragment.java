@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -105,10 +106,13 @@ public class ConfigPartidaFragment extends Fragment {
             CheckBox checkBox = new CheckBox(this.actividad);
             checkBox.setButtonDrawable(ContextCompat.getDrawable(this.actividad, R.drawable.checkbox));
             checkBox.setId(tP.getTipoPruebaId());
-            checkBox.setHeight(85);
-            checkBox.setPadding(10,10,10,10);
-            checkBox.setWidth(250);
-            checkBox.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            checkBox.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+            checkBox.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
+            checkBox.setPadding(10,0,10,0);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            layoutParams.topMargin = 6;
+            layoutParams.bottomMargin = 6;
+            checkBox.setLayoutParams(layoutParams);
 
             checkBox.setTextSize(14);
             checkBox.setTextColor(getResources().getColor(R.color.black));
@@ -133,10 +137,13 @@ public class ConfigPartidaFragment extends Fragment {
             CheckBox checkBox = new CheckBox(this.actividad);
             checkBox.setButtonDrawable(ContextCompat.getDrawable(this.actividad, R.drawable.checkbox));
             checkBox.setId(Constantes.TIPO_RESULTADO_PRUEBA_CHECK_ID + tP.getTipoResultadoPruebaId());
-            checkBox.setHeight(85);
-            checkBox.setPadding(10,10,10,10);
-            checkBox.setWidth(250);
-            checkBox.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            checkBox.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+            checkBox.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
+            checkBox.setPadding(10,0,10,0);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            layoutParams.topMargin = 6;
+            layoutParams.bottomMargin = 6;
+            checkBox.setLayoutParams(layoutParams);
 
             checkBox.setTextSize(14);
             checkBox.setTextColor(getResources().getColor(R.color.black));

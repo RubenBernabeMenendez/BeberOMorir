@@ -50,7 +50,9 @@ import com.example.beberomorir.Modelos.Partida;
 import com.example.beberomorir.Modelos.Prueba;
 import com.example.beberomorir.Modelos.PruebaJugador;
 import com.example.beberomorir.Modelos.PruebaPartida;
+import com.example.beberomorir.Modelos.PruebaResultadoRelaci;
 import com.example.beberomorir.Modelos.ResultadoPrueba;
+import com.example.beberomorir.Modelos.ResultadoPruebaPartida;
 import com.example.beberomorir.Modelos.TipoPartida;
 import com.example.beberomorir.Modelos.TipoPrueba;
 import com.example.beberomorir.Modelos.TipoResultadoPrueba;
@@ -93,6 +95,7 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
     private List<MundoPartidaTipoPrueba> mundoPartidaTipoPruebas;
     private List<PruebaPartida> pruebaPartidas;
     private List<PruebaJugador> pruebaJugadors;
+    private List<ResultadoPruebaPartida> resultadoPruebaPartidas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,8 +106,10 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
         fragmentTablero = new TableroFragment();
         fragmentPruebaAzar = new PruebaAzarFragment();
         menuRondaJugadorFragment = new MenuRondaJugadorFragment();
+        menuRondaJugadorFragment.setCancelable(false);
         this.pruebaJugadors = new ArrayList<>();
         this.pruebaPartidas = new ArrayList<>();
+        this.resultadoPruebaPartidas = new ArrayList<>();
         getSupportFragmentManager().beginTransaction().replace(R.id.contenedorPartida, fragmentConfigPartida).commit();
     }
 
@@ -158,6 +163,21 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
     }
 
     @Override
+    public void empezarPrueba(PruebaJugador pruebaJugador) {
+        menuRondaJugadorFragment.onStop();
+        switch (pruebaJugador.getPruebaPartidaId().getPrueba().getTipoPrueba().getTipoPruebaId()) {
+            case Constantes.TIPO_PRUEBA_SENALAR:
+                System.out.println("Ey");
+                break;
+            case Constantes.TIPO_PRUEBA_AZAR:
+                getSupportFragmentManager().beginTransaction().replace(R.id.contenedorPartida, fragmentPruebaAzar).commit();
+                break;
+            default:
+
+        }
+    }
+
+    @Override
     public void empezarPartida(List<Jugador> jugadores){
         AdminSQLDataBase admin = new AdminSQLDataBase(this);
         SQLiteDatabase bd = admin.getWritableDatabase();
@@ -182,7 +202,7 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
 
         crearPruebasPartida(bd);
 
-        //crearResultadosPartida(bd);
+        crearResultadosPartida(bd);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.contenedorPartida, fragmentTablero).commit();
         fragmentTablero.setMundoPartidas(this.mundosPartida);
@@ -205,10 +225,24 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
             List<EstadoResultadoTipoPrueba> estadoResultadoTipoPruebas = estadoResultadoTipoPrueba.findByTipoPruebaId(bd, pruebaJugador.getPruebaPartidaId().getPrueba().getTipoPrueba().getTipoPruebaId());
             resultadoPruebas = resultadoPruebas.stream().filter(el -> estadoResultadoTipoPruebas.stream().map(EstadoResultadoTipoPrueba::getEstadoResultadoPruebaId).collect(Collectors.toList()).contains(el.getEstadoResultadoPrueba().getEstadoResultadoPruebaId())).collect(Collectors.toList());
             Collections.shuffle(resultadoPruebas);
-            for (EstadoResultadoTipoPrueba ertp: estadoResultadoTipoPruebas) {
-                List<ResultadoPrueba> resultadoPruebasAux = resultadoPruebas.stream().filter(el -> el.getEstadoResultadoPrueba().getEstadoResultadoPruebaId().equals(ertp.getEstadoResultadoPruebaId())).collect(Collectors.toList());
-                Collections.shuffle(resultadoPruebasAux);
-                // Crear resultadoPruebaPartida y PruebaResultadoRelaci
+            ResultadoPruebaPartida resultadoPruebaPartida = new ResultadoPruebaPartida();
+            PruebaResultadoRelaci pruebaResultadoRelaci = new PruebaResultadoRelaci();
+            if (pruebaJugador.getPruebaPartidaId().getPrueba().getTipoPrueba().getTipoPruebaId().equals(Constantes.TIPO_PRUEBA_AZAR)) {
+                for (int j=0; j < 6; j++) {
+                    // Crear resultadoPruebaPartida y PruebaResultadoRelaci
+                    resultadoPruebaPartida = resultadoPruebaPartida.insertar(bd, resultadoPruebas.get(j).getResultadoPruebaId(), pruebaJugador.getPruebaPartidaId().getMundoPartidaId(), resultadoPruebas.get(j).getNombre(), resultadoPruebas.get(j).getDescripcion());
+                    this.resultadoPruebaPartidas.add(resultadoPruebaPartida);
+                    pruebaResultadoRelaci.insertar(bd, resultadoPruebaPartida.getResultadoPruebaPartidaId(), pruebaJugador.getPruebaPartidaId().getPruebaPartidaId());
+                }
+            } else {
+                for (EstadoResultadoTipoPrueba ertp: estadoResultadoTipoPruebas) {
+                    List<ResultadoPrueba> resultadoPruebasAux = resultadoPruebas.stream().filter(el -> el.getEstadoResultadoPrueba().getEstadoResultadoPruebaId().equals(ertp.getEstadoResultadoPruebaId())).collect(Collectors.toList());
+                    Collections.shuffle(resultadoPruebasAux);
+                    // Crear resultadoPruebaPartida y PruebaResultadoRelaci
+                    resultadoPruebaPartida = resultadoPruebaPartida.insertar(bd, resultadoPruebasAux.get(0).getResultadoPruebaId(), pruebaJugador.getPruebaPartidaId().getMundoPartidaId(), resultadoPruebasAux.get(0).getNombre(), resultadoPruebasAux.get(0).getDescripcion());
+                    this.resultadoPruebaPartidas.add(resultadoPruebaPartida);
+                    pruebaResultadoRelaci.insertar(bd, resultadoPruebaPartida.getResultadoPruebaPartidaId(), pruebaJugador.getPruebaPartidaId().getPruebaPartidaId());
+                }
             }
         }
     }

@@ -97,12 +97,12 @@ public class TableroFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_tablero, container, false);
-        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+        /*OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
                 iComunicaPartida.verPruebaAzar();
             }
-        };
+        };*/
         nivel0 = view.findViewById(R.id.casillaNivel0);
         nivel1_1 = view.findViewById(R.id.casillaNivel1_1);
         nivel1_2 = view.findViewById(R.id.casillaNivel1_2);
@@ -142,7 +142,7 @@ public class TableroFragment extends Fragment {
         }
 
 
-        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
+        //requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
         return view;
     }
 

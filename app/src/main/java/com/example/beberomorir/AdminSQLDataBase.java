@@ -15,7 +15,7 @@ public class AdminSQLDataBase extends SQLiteOpenHelper {
     //private static final String NIVEL_PARTIDA_TABLE_CREATE = "CREATE TABLE NIVEL_PARTIDA(nivelPartidaId INTEGER PRIMARY KEY AUTOINCREMENT, nivelPruebas INTEGER, nivelResultadosPruebas INTEGER)";
     private static final String CONFIG_PARTIDA_TABLE_CREATE = "CREATE TABLE CONFIG_PARTIDA(configPartidaId INTEGER PRIMARY KEY AUTOINCREMENT, nivelPruebas INTEGER, nivelResultadoPruebas INTEGER, tipoPartidaId INTEGER, rolesJugador TEXT, FOREIGN KEY (tipoPartidaId) REFERENCES TIPO_PARTIDA(tipoPartidaId))";
     private static final String PARTIDA_TABLE_CREATE = "CREATE TABLE PARTIDA(partidaId INTEGER PRIMARY KEY AUTOINCREMENT, configPartidaId INTEGER, fecha DATE, nombre TEXT, descripcion TEXT, finalizada TEXT, mundoPartidaActualId INTEGER, FOREIGN KEY (configPartidaId) REFERENCES CONFIG_PARTIDA(configPartidaId))";
-    private static final String TIPO_PRUEBA_TABLE_CREATE = "CREATE TABLE TIPO_PRUEBA(tipoPruebaId INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, descripcion TEXT, activo TEXT, entidadResultadoPruebaId INTEGER)";
+    private static final String TIPO_PRUEBA_TABLE_CREATE = "CREATE TABLE TIPO_PRUEBA(tipoPruebaId INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, descripcion TEXT, activo TEXT, urlImagen INTEGER)";
     private static final String TIPO_RESULTADO_PRUEBA_TABLE_CREATE = "CREATE TABLE TIPO_RESULTADO_PRUEBA(tipoResultadoPruebaId INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, descripcion TEXT, activo TEXT, visible TEXT)";
     private static final String ESTADO_RESULTADO_PRUEBA_TABLE_CREATE = "CREATE TABLE ESTADO_RESULTADO_PRUEBA(estadoResultadoPruebaId INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, descripcion TEXT, activo TEXT, visible TEXT)";
     private static final String ENTIDAD_RESULTADO_PRUEBA_TABLE_CREATE = "CREATE TABLE ENTIDAD_RESULTADO_PRUEBA(entidadResultadoPruebaId INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, descripcion TEXT)";
@@ -119,14 +119,14 @@ public class AdminSQLDataBase extends SQLiteOpenHelper {
 
 
         TipoPrueba tipoPrueba = new TipoPrueba();
-        tipoPrueba.insertar(sqLiteDatabase, "Yo nunca restrictivo","En esta prueba hay que crear un yo nunca para que beban todos menos");
-        tipoPrueba.insertar(sqLiteDatabase, "Yo nunca","En esta prueba hay que leer un yo nunca y todos los participantes deben responder bebiendo o no");
-        tipoPrueba.insertar(sqLiteDatabase, "Azar","En esta prueba hay que girar una ruleta");
-        tipoPrueba.insertar(sqLiteDatabase, "Reto imagen","En esta prueba hay que conseguir realizar una fotografía con unos requisitos");
-        tipoPrueba.insertar(sqLiteDatabase, "Reto escritura","En esta prueba hay que conseguir realizar una composición escrita con unos requisitos");
-        tipoPrueba.insertar(sqLiteDatabase, "Reto tiempo TIC TAC","En esta prueba hay que conseguir calcular un número de segundos");
-        tipoPrueba.insertar(sqLiteDatabase, "Qué preferirías","En esta prueba el jugador del turno debe responer a una pregunta, después todos los demás jugadores responderán también");
-        tipoPrueba.insertar(sqLiteDatabase, "Señalar es de maleducados","En esta prueba se planteará una situación y los jugadores deben escoger qué jugador se adapta mejor con la situación");
+        tipoPrueba.insertar(sqLiteDatabase, "Yo nunca restrictivo","En esta prueba hay que crear un yo nunca para que beban todos menos", R.mipmap.yonuncarest_prueba);
+        tipoPrueba.insertar(sqLiteDatabase, "Yo nunca","En esta prueba hay que leer un yo nunca y todos los participantes deben responder bebiendo o no", R.mipmap.yonunca_prueba);
+        tipoPrueba.insertar(sqLiteDatabase, "Azar","En esta prueba hay que girar una ruleta", R.mipmap.azar_prueba);
+        tipoPrueba.insertar(sqLiteDatabase, "Reto imagen","En esta prueba hay que conseguir realizar una fotografía con unos requisitos", R.mipmap.foto_prueba);
+        tipoPrueba.insertar(sqLiteDatabase, "Reto escritura","En esta prueba hay que conseguir realizar una composición escrita con unos requisitos", R.mipmap.escritura_prueba);
+        tipoPrueba.insertar(sqLiteDatabase, "Reto tiempo TIC TAC","En esta prueba hay que conseguir calcular un número de segundos", R.mipmap.tiktak_prueba);
+        tipoPrueba.insertar(sqLiteDatabase, "Qué preferirías","En esta prueba el jugador del turno debe responer a una pregunta, después todos los demás jugadores responderán también", R.mipmap.elegir_prueba);
+        tipoPrueba.insertar(sqLiteDatabase, "Señalar es de maleducados","En esta prueba se planteará una situación y los jugadores deben escoger qué jugador se adapta mejor con la situación", R.mipmap.senalar_prueba);
 
         EntidadResultadoPrueba entidadResultadoPrueba = new EntidadResultadoPrueba();
         entidadResultadoPrueba.insertar(sqLiteDatabase, "El jugador","El ganador recibe el premio/castigo");
@@ -431,6 +431,13 @@ public class AdminSQLDataBase extends SQLiteOpenHelper {
         prueba.insertar(sqLiteDatabase, "Manos quietas, o no...","¿Preferirías tener una pareja a la que no le guste el sexo oral o una pareja obsesionada con el sexo anal?",3,10,7);
         prueba.insertar(sqLiteDatabase, "Manos quietas, o no...","¿Preferirías tener sexo con alguien que tenga acento alemán o acento ruso?",3,10,7);
         prueba.insertar(sqLiteDatabase, "Manos quietas, o no...","¿Preferirías que comerle el culo a tu pareja o que tu pareja te coma el culo? ¿Quieres hacer tú el trabajo o que lo haga tu pareja?",3,10,7);
+
+        prueba.insertar(sqLiteDatabase, "Quién será será…","Señalar a la persona que creéis es más rechulón",1,10,8);
+        prueba.insertar(sqLiteDatabase, "Se viene la suerte","Elegir entre resultadoPruebas",1,10,3);
+        prueba.insertar(sqLiteDatabase, "A pensar…","Realiza un yo nunca para beber todos menos tú",1,10,1);
+        prueba.insertar(sqLiteDatabase, "Posa posa","Hazte una foto con un árbol",1,10,4);
+        prueba.insertar(sqLiteDatabase, "Hazte un Neruda","Escribe 4 versos que rimen con polla",1,10,5);
+        prueba.insertar(sqLiteDatabase, "A contar","Cuenta hasta 30 segundos y pulsa el botón",1,10,6);
 
 
         TipoPartida tipoPartida = new TipoPartida();

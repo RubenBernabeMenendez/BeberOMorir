@@ -5,6 +5,7 @@ import android.widget.LinearLayout;
 import com.example.beberomorir.Modelos.Jugador;
 import com.example.beberomorir.Modelos.JugadorPartida;
 import com.example.beberomorir.Modelos.MundoPartida;
+import com.example.beberomorir.Modelos.PruebaJugador;
 import com.example.beberomorir.Modelos.TipoPartida;
 import com.example.beberomorir.Modelos.TipoPrueba;
 import com.example.beberomorir.Modelos.TipoResultadoPrueba;
@@ -30,4 +31,6 @@ public interface IComunicaPartida {
     void verPruebaAzar();
 
     void menuRondaJugador(JugadorPartida jugadorPartida, MundoPartida mundoPartida);
+
+    void empezarPrueba(PruebaJugador pruebaJugador);
 }
