@@ -61,6 +61,7 @@ public class TableroFragment extends Fragment {
     ImageView nivel0, nivel1_1, nivel1_2, nivel2_1, nivel2_2, nivel2_3, nivel2_4;
     TextView tNivel0, tNivel1_1, tNivel1_2, tNivel2_1, tNivel2_2, tNivel2_3, tNivel2_4;
     LinearLayout layoutJugadoresPrincipal;
+    ListView lv1;
 
     public TableroFragment() {
         // Required empty public constructor
@@ -97,12 +98,6 @@ public class TableroFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_tablero, container, false);
-        /*OnBackPressedCallback callback = new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                iComunicaPartida.verPruebaAzar();
-            }
-        };*/
         nivel0 = view.findViewById(R.id.casillaNivel0);
         nivel1_1 = view.findViewById(R.id.casillaNivel1_1);
         nivel1_2 = view.findViewById(R.id.casillaNivel1_2);
@@ -120,29 +115,24 @@ public class TableroFragment extends Fragment {
         tNivel2_4 = view.findViewById(R.id.textoNivel2_4);
 
         layoutJugadoresPrincipal = view.findViewById(R.id.linearLayoutJugadores);
-        final ListView lv1 = (ListView)view.findViewById(R.id.jugadoresPartidaPrincipal);
+        lv1 = (ListView)view.findViewById(R.id.jugadoresPartidaPrincipal);
         final List<JugadorPartida> jugadoresAux = this.jugadorPartidas;
         final Activity actividadAux = this.actividad;
 
         if (this.mundoPartidaActual == null) {
             crearTablero();
-            view.post(new Runnable() {
-                @Override
-                public void run() {
-                    // for instance
-                    int height = layoutJugadoresPrincipal.getMeasuredHeight();
-                    System.out.println(layoutJugadoresPrincipal.getHeight());
-                    final AdaptadorJugadorTablero adaptador = new AdaptadorJugadorTablero(actividadAux, jugadoresAux, Math.min(layoutJugadoresPrincipal.getHeight()/jugadoresAux.size(), 100));
-                    lv1.setAdapter(adaptador);
-                    iComunicaPartida.menuRondaJugador(jugadoresAux.get(0), mundoPartidaActual);
-                }
-            });
         } else {
             actualizarTablero();
         }
+        view.post(new Runnable() {
+            @Override
+            public void run() {
+                final AdaptadorJugadorTablero adaptador = new AdaptadorJugadorTablero(actividadAux, jugadoresAux, Math.min(layoutJugadoresPrincipal.getHeight()/jugadoresAux.size(), 100));
+                lv1.setAdapter(adaptador);
+                iComunicaPartida.menuRondaJugador(jugadoresAux.get(0), mundoPartidaActual);
+            }
+        });
 
-
-        //requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
         return view;
     }
 
@@ -263,6 +253,12 @@ public class TableroFragment extends Fragment {
 
     public void setJugadoresPartida(List<JugadorPartida> jugadoresPartida) {
         this.jugadorPartidas = jugadoresPartida;
+    }
+
+    public void nextJugadorPartida() {
+        JugadorPartida jugadorPartidaAux = this.jugadorPartidas.get(0);
+        this.jugadorPartidas.remove(0);
+        this.jugadorPartidas.add(jugadorPartidaAux);
     }
 
     public void setMundoPartidasAndMundoActual(List<MundoPartida> mundoPartidas, MundoPartida mundoPartida) {

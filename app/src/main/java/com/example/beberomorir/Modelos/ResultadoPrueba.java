@@ -149,7 +149,7 @@ public class ResultadoPrueba {
     }
 
     public List<ResultadoPrueba> findByEntidadResultadoPruebaIdAndNivelMenor(SQLiteDatabase bd, Integer entidadResultadoPruebaId, Integer nivelResultadoPrueba) {
-        Cursor fila = bd.rawQuery("SELECT resultadoPruebaId, nombre, descripcion, nivelResultadoPrueba,tipoResultadoPruebaId, estadoResultadoPruebaId, entidadResultadoPruebaId FROM RESULTADO_PRUEBA WHERE entidadResultadoPruebaId=" + entidadResultadoPruebaId + "AND (nivelResultadoPrueba <" + nivelResultadoPrueba + "OR nivelResultadoPrueba =" + nivelResultadoPrueba + ")",null);
+        Cursor fila = bd.rawQuery("SELECT resultadoPruebaId, nombre, descripcion, nivelResultadoPrueba,tipoResultadoPruebaId, estadoResultadoPruebaId, entidadResultadoPruebaId FROM RESULTADO_PRUEBA WHERE entidadResultadoPruebaId=" + entidadResultadoPruebaId + " AND (nivelResultadoPrueba <" + nivelResultadoPrueba + " OR nivelResultadoPrueba =" + nivelResultadoPrueba + ")",null);
         List<ResultadoPrueba> resultadoPruebas = new ArrayList<>();
         for (fila.moveToFirst(); !fila.isAfterLast(); fila.moveToNext()) {
             ResultadoPrueba resultadoPrueba = new ResultadoPrueba();

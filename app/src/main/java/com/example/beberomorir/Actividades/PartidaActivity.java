@@ -136,6 +136,12 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
     }
 
     @Override
+    public void nextPlayer() {
+        fragmentTablero.nextJugadorPartida();
+        getSupportFragmentManager().beginTransaction().replace(R.id.contenedorPartida, fragmentTablero).commit();
+    }
+
+    @Override
     public void verPruebaAzar() {
         getSupportFragmentManager().beginTransaction().replace(R.id.contenedorPartida, fragmentPruebaAzar).commit();
     }
@@ -165,6 +171,8 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
     @Override
     public void empezarPrueba(PruebaJugador pruebaJugador) {
         menuRondaJugadorFragment.onStop();
+        menuRondaJugadorFragment.onDestroy();
+        menuRondaJugadorFragment.dismiss();
         switch (pruebaJugador.getPruebaPartidaId().getPrueba().getTipoPrueba().getTipoPruebaId()) {
             case Constantes.TIPO_PRUEBA_SENALAR:
                 System.out.println("Ey");
@@ -202,7 +210,7 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
 
         crearPruebasPartida(bd);
 
-        crearResultadosPartida(bd);
+        //crearResultadosPartida(bd);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.contenedorPartida, fragmentTablero).commit();
         fragmentTablero.setMundoPartidas(this.mundosPartida);

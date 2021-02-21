@@ -20,6 +20,8 @@ public interface IComunicaPartida {
 
     void verTablero(List<MundoPartida> mundoPartidas);
 
+    void nextPlayer();
+
     void empezarPartida(List<Jugador> jugadores);
 
     void addJugador();

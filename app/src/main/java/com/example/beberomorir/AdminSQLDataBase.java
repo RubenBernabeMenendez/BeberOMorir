@@ -27,7 +27,7 @@ public class AdminSQLDataBase extends SQLiteOpenHelper {
     private static final String JUGADOR_PARTIDA_TABLE_CREATE = "CREATE TABLE JUGADOR_PARTIDA(jugadorPartidaId INTEGER PRIMARY KEY AUTOINCREMENT, partidaId INTEGER, jugadorId INTEGER, rolId INTEGER)";
     private static final String MUNDO_TABLE_CREATE = "CREATE TABLE MUNDO(mundoId INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, descripcion TEXT, urlImagen INTEGER)";
     private static final String PRUEBA_TABLE_CREATE = "CREATE TABLE PRUEBA(pruebaId INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, descripcion TEXT, nivelPrueba INTEGER, tiempoEjecucion INTEGER, tipoPruebaId INTEGER, FOREIGN KEY (tipoPruebaId) REFERENCES TIPO_PRUEBA(tipoPruebaId))";
-    private static final String RESULTADO_PRUEBA_TABLE_CREATE = "CREATE TABLE RESULTADO_PRUEBA(resultadoPruebaId INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, descripcion TEXT, nivelResultadoPrueba INTEGER, tipoResultadoPruebaId INTEGER, estadoResultadoPruebaId INTEGER, FOREIGN KEY (tipoResultadoPruebaId) REFERENCES TIPO_RESULTADO_PRUEBA(tipoResultadoPruebaId), FOREIGN KEY (estadoResultadoPruebaId) REFERENCES ESTADO_RESULTADO_PRUEBA(estadoResultadoPruebaId))";
+    private static final String RESULTADO_PRUEBA_TABLE_CREATE = "CREATE TABLE RESULTADO_PRUEBA(resultadoPruebaId INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, descripcion TEXT, nivelResultadoPrueba INTEGER, tipoResultadoPruebaId INTEGER, estadoResultadoPruebaId INTEGER, entidadResultadoPruebaId INTEGER, FOREIGN KEY (entidadResultadoPruebaId) REFERENCES ENTIDAD_RESULTADO_PRUEBA(entidadResultadoPruebaId), FOREIGN KEY (tipoResultadoPruebaId) REFERENCES TIPO_RESULTADO_PRUEBA(tipoResultadoPruebaId), FOREIGN KEY (estadoResultadoPruebaId) REFERENCES ESTADO_RESULTADO_PRUEBA(estadoResultadoPruebaId))";
     private static final String MUNDO_PARTIDA_TABLE_CREATE = "CREATE TABLE MUNDO_PARTIDA(mundoPartidaId INTEGER PRIMARY KEY AUTOINCREMENT, mundoId INTEGER, partidaId INTEGER, orden INTEGER, nivelMundo INTEGER, urlImagen INTEGER, finalizado TEXT, FOREIGN KEY (mundoId) REFERENCES MUNDO(mundoId), FOREIGN KEY (partidaId) REFERENCES PARTIDA(partidaId))";
     private static final String PRUEBA_PARTIDA_TABLE_CREATE = "CREATE TABLE PRUEBA_PARTIDA(pruebaPartidaId INTEGER PRIMARY KEY AUTOINCREMENT, mundoPartidaId INTEGER, pruebaId INTEGER, nombre TEXT, descripcion TEXT, finalizado TEXT, FOREIGN KEY (mundoPartidaId) REFERENCES MUNDO_PARTIDA(mundoPartidaId), FOREIGN KEY (pruebaId) REFERENCES PRUEBA(pruebaId))";
     private static final String MUNDO_PARTIDA_TIPO_PRUEBA_TABLE_CREATE = "CREATE TABLE MUNDO_PARTIDA_TIPO_PRUEBA(mundoPartidaId INTEGER, tipoPruebaId INTEGER, numeroTiposPrueba INTEGER, PRIMARY KEY (mundoPartidaId, tipoPruebaId), FOREIGN KEY (mundoPartidaId) REFERENCES MUNDO_PARTIDA(mundoPartidaId), FOREIGN KEY (tipoPruebaId) REFERENCES TIPO_PRUEBA(tipoPruebaId))";
@@ -449,6 +449,18 @@ public class AdminSQLDataBase extends SQLiteOpenHelper {
         tipoResultadoPrueba.insertar(sqLiteDatabase, "Reto", "Puedes repartir reto", Constantes.YES, Constantes.YES);
         tipoResultadoPrueba.insertar(sqLiteDatabase, "Confesion", "Puedes repartir confesion", Constantes.YES, Constantes.YES);
 
+
+        ResultadoPrueba resultadoPrueba = new ResultadoPrueba();
+        resultadoPrueba.insertar(sqLiteDatabase, "A beber se ha dicho","Manda beber 3 chupitos",2,1,1,1);
+        resultadoPrueba.insertar(sqLiteDatabase, "Toca mojarse","¿Quién está borrach@?",1,2,1,2);
+        resultadoPrueba.insertar(sqLiteDatabase, "A beber se ha dicho","Beber todos 1 chupito",1,1,1,2);
+        resultadoPrueba.insertar(sqLiteDatabase, "A beber se ha dicho","Manda beber entre 1 y 3 chupitos a @Jugador",2,1,1,1);
+        resultadoPrueba.insertar(sqLiteDatabase, "A beber se ha dicho"," @Jugador te manda beber entre 1 y 3 chupitos",2,1,2,1);
+        resultadoPrueba.insertar(sqLiteDatabase, "A beber se ha dicho","El último que coja su vaso se lo tiene que terminar",2,1,1,2);
+        resultadoPrueba.insertar(sqLiteDatabase, "Hace un poco de calor ¿no?","Todos los que lleven una prenda/complemento de color rojo deben elegir uno y quitárselo",1,3,1,2);
+        resultadoPrueba.insertar(sqLiteDatabase, "A beber se ha dicho","Los que coincidan mandar beber entre 1 y 3 chupitos",1,1,1,4);
+        resultadoPrueba.insertar(sqLiteDatabase, "Toca mojarse","¿Cuántas veces te has tocado como máximo en un día?",1,2,1,2);
+        resultadoPrueba.insertar(sqLiteDatabase, "¿Eres sociable?","Publica en una red social algún mensaje con el texto \"Quiero que seas mi papi/mami\" y menciona a @Jugador",2,4,2,1);
 
 
 
