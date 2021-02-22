@@ -251,6 +251,10 @@ public class TableroFragment extends Fragment {
         this.mundoPartidas = mundoPartidas;
     }
 
+    public void addMundoPartidas(List<MundoPartida> mundoPartidas) {
+        this.mundoPartidas.addAll(mundoPartidas);
+    }
+
     public void setJugadoresPartida(List<JugadorPartida> jugadoresPartida) {
         this.jugadorPartidas = jugadoresPartida;
     }

@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ResultadoPrueba {
     private Integer resultadoPruebaId;
@@ -149,7 +150,7 @@ public class ResultadoPrueba {
     }
 
     public List<ResultadoPrueba> findByEntidadResultadoPruebaIdAndNivelMenor(SQLiteDatabase bd, Integer entidadResultadoPruebaId, Integer nivelResultadoPrueba) {
-        Cursor fila = bd.rawQuery("SELECT resultadoPruebaId, nombre, descripcion, nivelResultadoPrueba,tipoResultadoPruebaId, estadoResultadoPruebaId, entidadResultadoPruebaId FROM RESULTADO_PRUEBA WHERE entidadResultadoPruebaId=" + entidadResultadoPruebaId + " AND (nivelResultadoPrueba <" + nivelResultadoPrueba + " OR nivelResultadoPrueba =" + nivelResultadoPrueba + ")",null);
+        Cursor fila = bd.rawQuery("SELECT resultadoPruebaId, nombre, descripcion, nivelResultadoPrueba,tipoResultadoPruebaId, estadoResultadoPruebaId, entidadResultadoPruebaId FROM RESULTADO_PRUEBA WHERE entidadResultadoPruebaId=" + entidadResultadoPruebaId,null);
         List<ResultadoPrueba> resultadoPruebas = new ArrayList<>();
         for (fila.moveToFirst(); !fila.isAfterLast(); fila.moveToNext()) {
             ResultadoPrueba resultadoPrueba = new ResultadoPrueba();
@@ -166,7 +167,7 @@ public class ResultadoPrueba {
             resultadoPruebas.add(resultadoPrueba);
         }
         fila.close();
-        return resultadoPruebas;
+        return resultadoPruebas.stream().filter(r-> r.getNivelResultadoPrueba() <= nivelResultadoPrueba).collect(Collectors.toList());
     }
 
 }

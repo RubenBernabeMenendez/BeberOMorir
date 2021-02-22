@@ -153,6 +153,10 @@ public class AdminSQLDataBase extends SQLiteOpenHelper {
         entidadResultadoTipoPrueba.insertar(sqLiteDatabase,5,8);
         entidadResultadoTipoPrueba.insertar(sqLiteDatabase,6,8);
 
+        EstadoResultadoPrueba estadoResultadoPrueba = new EstadoResultadoPrueba();
+        estadoResultadoPrueba.insertar(sqLiteDatabase, "Correcto", "Prueba Superada");
+        estadoResultadoPrueba.insertar(sqLiteDatabase, "Fallo", "Prueba NO Superada");
+
         EstadoResultadoTipoPrueba estadoResultadoTipoPrueba = new EstadoResultadoTipoPrueba();
         estadoResultadoTipoPrueba.insertar(sqLiteDatabase, 1, 1);
         estadoResultadoTipoPrueba.insertar(sqLiteDatabase, 2, 1);
@@ -445,9 +449,11 @@ public class AdminSQLDataBase extends SQLiteOpenHelper {
 
 
         TipoResultadoPrueba tipoResultadoPrueba = new TipoResultadoPrueba();
-        tipoResultadoPrueba.insertar(sqLiteDatabase, "Beber", "Puedes repartir tragos", Constantes.YES, Constantes.YES);
-        tipoResultadoPrueba.insertar(sqLiteDatabase, "Reto", "Puedes repartir reto", Constantes.YES, Constantes.YES);
-        tipoResultadoPrueba.insertar(sqLiteDatabase, "Confesion", "Puedes repartir confesion", Constantes.YES, Constantes.YES);
+        tipoResultadoPrueba.insertar(sqLiteDatabase, "Beber","Repartir/tomar tragos","Y","Y");
+        tipoResultadoPrueba.insertar(sqLiteDatabase, "Confesión","Debes confesar/obligar a confesar algo","Y","Y");
+        tipoResultadoPrueba.insertar(sqLiteDatabase, "StripPoker","Debes quitarte/obligar a quitar algo","Y","Y");
+        tipoResultadoPrueba.insertar(sqLiteDatabase, "Regla","Puedes imponer/ser impuesto a una regla durante X tiempo","Y","Y");
+
 
 
         ResultadoPrueba resultadoPrueba = new ResultadoPrueba();
@@ -461,6 +467,15 @@ public class AdminSQLDataBase extends SQLiteOpenHelper {
         resultadoPrueba.insertar(sqLiteDatabase, "A beber se ha dicho","Los que coincidan mandar beber entre 1 y 3 chupitos",1,1,1,4);
         resultadoPrueba.insertar(sqLiteDatabase, "Toca mojarse","¿Cuántas veces te has tocado como máximo en un día?",1,2,1,2);
         resultadoPrueba.insertar(sqLiteDatabase, "¿Eres sociable?","Publica en una red social algún mensaje con el texto \"Quiero que seas mi papi/mami\" y menciona a @Jugador",2,4,2,1);
+        resultadoPrueba.insertar(sqLiteDatabase, "A beber se ha dicho","Los que no coincidan beben 1 chupito",1,1,2,4);
+        resultadoPrueba.insertar(sqLiteDatabase, "Hace un poco de calor ¿no?","La minoría manda quitar una prenda",1,3,1,5);
+        resultadoPrueba.insertar(sqLiteDatabase, "A beber se ha dicho","La mayoría manda beber 1 chupito a alguien de la minoría",1,1,1,6);
+        resultadoPrueba.insertar(sqLiteDatabase, "Toca mojarse","¿Quién quiere pillar esta noche?",1,2,2,2);
+        resultadoPrueba.insertar(sqLiteDatabase, "A beber se ha dicho","Beber todos 1 chupito",1,1,2,2);
+        resultadoPrueba.insertar(sqLiteDatabase, "A beber se ha dicho","Los que coincidan beben 2 chupitos",2,1,2,3);
+        resultadoPrueba.insertar(sqLiteDatabase, "A beber se ha dicho","Los que no coincidan mandan beben 1 chupito",1,1,1,4);
+        resultadoPrueba.insertar(sqLiteDatabase, "Hace un poco de calor ¿no?","La minoría se quita una prenda",1,3,2,5);
+        resultadoPrueba.insertar(sqLiteDatabase, "A beber se ha dicho","La mayoría bebe 1 chupito",1,1,2,6);
 
 
 

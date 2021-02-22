@@ -156,7 +156,6 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
 
         MundoPartidaTipoPrueba mundoPartidaTipoPrueba = new MundoPartidaTipoPrueba();
         List<MundoPartidaTipoPrueba> mundoPartidaTipoPruebas = mundoPartidaTipoPrueba.findById(bd, mundoPartida.getMundoPartidaId());
-        menuRondaJugadorFragment.setMundoPartidaTipoPruebas(mundoPartidaTipoPruebas);
 
         PruebaJugador pruebaJugador = new PruebaJugador();
         List<PruebaJugador> pruebaJugadors = pruebaJugador.findByJugadorPartidaId(bd, jugadorPartida.getJugadorPartidaId());
@@ -199,7 +198,10 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
         this.configPartida = crearConfigPartida(bd);
         this.partida = crearPartida(bd, this.configPartida.getConfigPartidaId(), sdf.format(new Date()));
         this.jugadoresPartida = crearJugadoresPartida(bd, jugadores);
-        this.mundosPartida = crearMundosPartida(bd);
+        fragmentTablero.setJugadoresPartida(this.jugadoresPartida);
+
+        //Cada vez que se suba de mundo
+        this.mundosPartida = crearMundosPartida(bd, 0, Constantes.NUMERO_NIVELES_MUNDO_PANTALLA);
         this.mundoPartidaTipoPruebas = crearMundosPartidaTipoPruebas(bd, this.mundosPartida, this.configPartida);
 
         // Crear las PruebaPartida y ResultadoPruebaPartida del nivel seleccionado o menor en configuracionPartida
@@ -208,13 +210,12 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
         // A partir de las PruebaPartida y JugadoresPartida crearemos las PruebaJugador
         // numPruebasPartida = numJugadoresPartida * mundoPartidaTipoPrueba.numero
 
-        crearPruebasPartida(bd);
+        crearPruebasPartida(bd, this.mundoPartidaTipoPruebas);
 
-        //crearResultadosPartida(bd);
+        crearResultadosPartida(bd);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.contenedorPartida, fragmentTablero).commit();
         fragmentTablero.setMundoPartidas(this.mundosPartida);
-        fragmentTablero.setJugadoresPartida(this.jugadoresPartida);
     }
 
     private void crearResultadosPartida(SQLiteDatabase bd) {
@@ -255,13 +256,13 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
         }
     }
 
-    private void crearPruebasPartida(SQLiteDatabase bd) {
+    private void crearPruebasPartida(SQLiteDatabase bd, List<MundoPartidaTipoPrueba> mundoPartidaTipoPruebas) {
         Prueba prueba = new Prueba();
         List<Prueba> pruebas = prueba.getAll(bd);
         pruebas = pruebas.stream().filter(prueba1 -> prueba1.getNivelPrueba() <= this.configPartida.getNivelPruebas()).collect(Collectors.toList());
         pruebas = pruebas.stream().filter(prueba1 -> this.configPartida.getConfigTipoPruebas().stream().map(ConfigTipoPrueba::getTipoPruebaId).collect(Collectors.toList()).contains(prueba1.getTipoPrueba().getTipoPruebaId())).collect(Collectors.toList());
         for (JugadorPartida jugadorPartida : this.jugadoresPartida) {
-            for (MundoPartidaTipoPrueba mundoPartidaTipoPrueba: this.mundoPartidaTipoPruebas) {
+            for (MundoPartidaTipoPrueba mundoPartidaTipoPrueba: mundoPartidaTipoPruebas) {
                 for (int j=0; j< mundoPartidaTipoPrueba.getNumeroTiposPrueba(); j++) {
                     PruebaPartida pruebaPartida = new PruebaPartida();
                     PruebaJugador pruebaJugador = new PruebaJugador();
@@ -377,7 +378,7 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
 
         ConfigTipoResultadoPrueba configTipoResultadoPrueba = new ConfigTipoResultadoPrueba();
         List<ConfigTipoResultadoPrueba> configTipoResultadoPruebas = new ArrayList<>();
-        configTipoResultadoPrueba.setConfigPartidaId(cp.getConfigPartidaId());
+        configTipoResultadoPrueba.setConfigPartidaId(this.configPartida.getConfigPartidaId());
         for (TipoResultadoPrueba tipoResultadoPrueba : this.tipoResultadosPruebasPartida) {
             configTipoResultadoPrueba.setTipoResultadoPruebaId(tipoResultadoPrueba.getTipoResultadoPruebaId());
             configTipoResultadoPruebas.add(configTipoResultadoPrueba);
@@ -413,13 +414,13 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
 
     }
 
-    private List<MundoPartida> crearMundosPartida(SQLiteDatabase bd) {
+    private List<MundoPartida> crearMundosPartida(SQLiteDatabase bd, Integer nivel, Integer numeroNiveles) {
         Mundo mundo = new Mundo();
         List<Mundo> mundos = mundo.getAll(bd);
         Collections.shuffle(mundos);
         List<MundoPartida> mundoPartidas = new ArrayList<>();
 
-        for (int i = 0; i < Constantes.NUMERO_NIVELES_MUNDO_PANTALLA; i++) {
+        for (int i = nivel; i < numeroNiveles - nivel; i++) {
             for (int j = 0; j < Constantes.NUMERO_MUNDOS_NIVEL; j++) {
                 MundoPartida mundoPartida = new MundoPartida();
                 mundoPartida.setPartidaId(this.partida.getPartidaId());

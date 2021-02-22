@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.preference.PreferenceManager;
@@ -18,6 +19,7 @@ import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.example.beberomorir.Constantes;
 import com.example.beberomorir.Interfaces.IComunicaPartida;
@@ -44,6 +46,7 @@ public class PruebaAzarFragment extends Fragment implements Animation.AnimationL
     IComunicaPartida iComunicaPartida;
     CardView girarRuleta;
     ImageView ruleta;
+    ConstraintLayout ruletaConstraintLayout;
     public float grados;
 
     // TODO: Rename and change types of parameters
@@ -104,6 +107,7 @@ public class PruebaAzarFragment extends Fragment implements Animation.AnimationL
 
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
         this.ruleta = view.findViewById(R.id.ruletaImagen);
+        this.ruletaConstraintLayout = view.findViewById(R.id.constraintLayoutRuleta);
 
         return view;
     }
@@ -143,8 +147,8 @@ public class PruebaAzarFragment extends Fragment implements Animation.AnimationL
         rotateAnimation.setFillAfter(true);
         rotateAnimation.setInterpolator(new DecelerateInterpolator());
         rotateAnimation.setAnimationListener(this);
-        this.ruleta.setAnimation(rotateAnimation);
-        this.ruleta.startAnimation(rotateAnimation);
+        this.ruletaConstraintLayout.setAnimation(rotateAnimation);
+        this.ruletaConstraintLayout.startAnimation(rotateAnimation);
         this.girarRuleta.setVisibility(View.INVISIBLE);
     }
 }

@@ -56,7 +56,7 @@ public class ResultadoPruebaPartida {
     public ResultadoPruebaPartida insertar(SQLiteDatabase bd, Integer resultadoPruebaId, Integer mundoPartidaId, String nombre, String descripcion){
         ContentValues cv = new ContentValues();
         cv.put("resultadoPruebaId", resultadoPruebaId);
-        cv.put("mundaPartidaId", mundoPartidaId);
+        cv.put("mundoPartidaId", mundoPartidaId);
         cv.put("nombre", nombre);
         cv.put("descripcion", descripcion);
         long id = bd.insert("RESULTADO_PRUEBA_PARTIDA", null, cv);

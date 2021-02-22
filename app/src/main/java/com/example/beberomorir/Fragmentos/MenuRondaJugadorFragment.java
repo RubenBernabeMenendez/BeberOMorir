@@ -53,8 +53,6 @@ public class MenuRondaJugadorFragment extends AppCompatDialogFragment {
     Activity actividad;
     IComunicaPartida iComunicaPartida;
     JugadorPartida jugadorPartida;
-    List<TipoPrueba> tipoPruebas;
-    List<MundoPartidaTipoPrueba> mundoPartidaTipoPruebas;
     List<PruebaJugador> pruebaJugadors;
 
     public MenuRondaJugadorFragment() {
@@ -191,10 +189,6 @@ public class MenuRondaJugadorFragment extends AppCompatDialogFragment {
 
     public void setJugadorPartida(JugadorPartida jugadorPartida) {
         this.jugadorPartida = jugadorPartida;
-    }
-
-    public void setMundoPartidaTipoPruebas(List<MundoPartidaTipoPrueba> mundoPartidaTipoPruebas) {
-        this.mundoPartidaTipoPruebas = mundoPartidaTipoPruebas;
     }
 
     public void setPruebaJugadors(List<PruebaJugador> pruebaJugadors) {
