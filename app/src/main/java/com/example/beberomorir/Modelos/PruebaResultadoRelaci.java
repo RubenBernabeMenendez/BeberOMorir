@@ -40,10 +40,14 @@ public class PruebaResultadoRelaci {
         return estadoResultadoTipoPruebas;
     }
 
-    public void insertar(SQLiteDatabase bd, Integer resultadoPruebaPartidaId, Integer pruebaPartidaId){
+    public PruebaResultadoRelaci insertar(SQLiteDatabase bd, Integer resultadoPruebaPartidaId, Integer pruebaPartidaId){
+        PruebaResultadoRelaci pruebaResultadoRelaci = new PruebaResultadoRelaci();
         ContentValues cv = new ContentValues();
         cv.put("resultadoPruebaPartidaId", resultadoPruebaPartidaId);
         cv.put("pruebaPartidaId", pruebaPartidaId);
         bd.insert("PRUEBA_RESULTADO_RELACI", null, cv);
+        pruebaResultadoRelaci.setPruebaPartidaId(pruebaPartidaId);
+        pruebaResultadoRelaci.setResultadoPruebaPartidaId(resultadoPruebaPartidaId);
+        return pruebaResultadoRelaci;
     }
 }

@@ -48,7 +48,7 @@ public class AdaptadorJugadorTablero extends ArrayAdapter<JugadorPartida> {
         imageView1.getLayoutParams().width = this.height;
 
         if (this.jugadorPartidas.get(position).getJugador().getUrlImagen() == null) {
-            imageView1.setImageResource(Integer.parseInt(Integer.toString(R.mipmap.mundos1)));
+            imageView1.setImageResource(Integer.parseInt(Integer.toString(R.mipmap.plantilla_mundos_caminos)));
         } else {
             Bitmap bitmap = BitmapFactory.decodeByteArray(this.jugadorPartidas.get(position).getJugador().getUrlImagen(), 0, this.jugadorPartidas.get(position).getJugador().getUrlImagen().length);
             imageView1.setImageBitmap(bitmap);

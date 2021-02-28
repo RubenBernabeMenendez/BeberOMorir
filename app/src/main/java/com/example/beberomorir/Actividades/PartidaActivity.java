@@ -32,6 +32,7 @@ import com.example.beberomorir.Fragmentos.ElegirJugadoresFragment;
 import com.example.beberomorir.Fragmentos.MenuRondaJugadorFragment;
 import com.example.beberomorir.Fragmentos.NuevoJugadorFragment;
 import com.example.beberomorir.Fragmentos.PruebaAzarFragment;
+import com.example.beberomorir.Fragmentos.PruebaDefaultFragment;
 import com.example.beberomorir.Fragmentos.TableroFragment;
 import com.example.beberomorir.Interfaces.IComunicaPartida;
 import com.example.beberomorir.MainActivity;
@@ -74,12 +75,17 @@ import java.util.stream.Collectors;
 
 public class PartidaActivity extends AppCompatActivity implements IComunicaPartida {
 
+    // Conf
+    SQLiteDatabase bd;
+    AdminSQLDataBase admin;
+
 
     TableroFragment fragmentTablero;
     Fragment fragmentConfigPartida;
     ElegirJugadoresFragment fragmentElegirJugadores;
     NuevoJugadorFragment addJugador;
     PruebaAzarFragment fragmentPruebaAzar;
+    PruebaDefaultFragment pruebaDefaultFragment;
     MenuRondaJugadorFragment menuRondaJugadorFragment;
 
 
@@ -96,20 +102,25 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
     private List<PruebaPartida> pruebaPartidas;
     private List<PruebaJugador> pruebaJugadors;
     private List<ResultadoPruebaPartida> resultadoPruebaPartidas;
+    private List<PruebaResultadoRelaci> pruebaResultadoRelacis;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_partida);
+        admin = new AdminSQLDataBase(this);
+        bd = admin.getWritableDatabase();
         fragmentConfigPartida = new ConfigPartidaFragment();
         fragmentElegirJugadores = new ElegirJugadoresFragment();
         fragmentTablero = new TableroFragment();
         fragmentPruebaAzar = new PruebaAzarFragment();
         menuRondaJugadorFragment = new MenuRondaJugadorFragment();
         menuRondaJugadorFragment.setCancelable(false);
+        pruebaDefaultFragment = new PruebaDefaultFragment();
         this.pruebaJugadors = new ArrayList<>();
         this.pruebaPartidas = new ArrayList<>();
         this.resultadoPruebaPartidas = new ArrayList<>();
+        this.pruebaResultadoRelacis = new ArrayList<>();
         getSupportFragmentManager().beginTransaction().replace(R.id.contenedorPartida, fragmentConfigPartida).commit();
     }
 
@@ -150,17 +161,8 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
     public void menuRondaJugador(JugadorPartida jugadorPartida, MundoPartida mundoPartida) {
         // Usamos MundoPartida para obtener lista de MundoPartidaTipoPruebas para dibujar el menu de elegir el tipo de prueba
         // Usamos JugadorPartida y MundoPartida para obtener lista de PruebasJugador y así saber cuáles quedan por elegir
-
-        AdminSQLDataBase admin = new AdminSQLDataBase(this);
-        SQLiteDatabase bd = admin.getWritableDatabase();
-
-        MundoPartidaTipoPrueba mundoPartidaTipoPrueba = new MundoPartidaTipoPrueba();
-        List<MundoPartidaTipoPrueba> mundoPartidaTipoPruebas = mundoPartidaTipoPrueba.findById(bd, mundoPartida.getMundoPartidaId());
-
-        PruebaJugador pruebaJugador = new PruebaJugador();
-        List<PruebaJugador> pruebaJugadors = pruebaJugador.findByJugadorPartidaId(bd, jugadorPartida.getJugadorPartidaId());
-        PruebaPartida pruebaPartida = new PruebaPartida();
-        List<PruebaPartida> pruebaPartidas = pruebaPartida.findByMundoPartida(bd, mundoPartida.getMundoPartidaId());
+        List<PruebaJugador> pruebaJugadors = this.pruebaJugadors.stream().filter(el -> el.getJugadorPartidaId().getJugadorPartidaId().equals(jugadorPartida.getJugadorPartidaId())).collect(Collectors.toList());
+        List<PruebaPartida> pruebaPartidas = this.pruebaPartidas.stream().filter(el -> el.getMundoPartidaId().equals(mundoPartida.getMundoPartidaId())).collect(Collectors.toList());
         List<PruebaJugador> pruebaJugadorsPorMundo = pruebaJugadors.stream().filter(pj -> pruebaPartidas.stream().map(PruebaPartida::getPruebaPartidaId).collect(Collectors.toList()).contains(pj.getPruebaPartidaId().getPruebaPartidaId())).collect(Collectors.toList());
         menuRondaJugadorFragment.setJugadorPartida(jugadorPartida);
         menuRondaJugadorFragment.setPruebaJugadors(pruebaJugadorsPorMundo);
@@ -172,11 +174,17 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
         menuRondaJugadorFragment.onStop();
         menuRondaJugadorFragment.onDestroy();
         menuRondaJugadorFragment.dismiss();
+        List<PruebaResultadoRelaci> pruebaResultadoRelacisAux = this.pruebaResultadoRelacis.stream().filter(el -> el.getPruebaPartidaId().equals(pruebaJugador.getPruebaPartidaId().getPruebaPartidaId())).collect(Collectors.toList());
+        List<ResultadoPruebaPartida> resultadoPruebaPartidasAux = this.resultadoPruebaPartidas.stream().filter(el -> pruebaResultadoRelacisAux.stream().map(PruebaResultadoRelaci::getResultadoPruebaPartidaId).collect(Collectors.toList()).contains(el.getResultadoPruebaPartidaId())).collect(Collectors.toList());
         switch (pruebaJugador.getPruebaPartidaId().getPrueba().getTipoPrueba().getTipoPruebaId()) {
-            case Constantes.TIPO_PRUEBA_SENALAR:
-                System.out.println("Ey");
+            case Constantes.TIPO_PRUEBA_SENALAR: case Constantes.TIPO_PRUEBA_YO_NUNCA: case Constantes.TIPO_PRUEBA_PREFERIRIAS:
+                pruebaDefaultFragment.setPruebaJugador(pruebaJugador);
+                pruebaDefaultFragment.setResultadoPruebaPartidas(resultadoPruebaPartidasAux);
+                getSupportFragmentManager().beginTransaction().replace(R.id.contenedorPartida, pruebaDefaultFragment).commit();
                 break;
             case Constantes.TIPO_PRUEBA_AZAR:
+                fragmentPruebaAzar.setPruebaJugador(pruebaJugador);
+                fragmentPruebaAzar.setResultadoPruebaPartidas(resultadoPruebaPartidasAux);
                 getSupportFragmentManager().beginTransaction().replace(R.id.contenedorPartida, fragmentPruebaAzar).commit();
                 break;
             default:
@@ -185,15 +193,21 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
     }
 
     @Override
+    public void resultadoPrueba(PruebaJugador pruebaJugador, ResultadoPruebaPartida resultadoPruebaPartida) {
+        // Actualizar PruebaJugador
+        PruebaJugador pruebaJugadorAux = new PruebaJugador();
+        this.pruebaJugadors.remove(pruebaJugador);
+        pruebaJugador.setResultadoPruebaPartidaId(resultadoPruebaPartida);
+        pruebaJugadorAux = pruebaJugadorAux.update(bd, pruebaJugador);
+        this.pruebaJugadors.add(pruebaJugadorAux);
+        fragmentTablero.nextJugadorPartida();
+        getSupportFragmentManager().beginTransaction().replace(R.id.contenedorPartida, fragmentTablero).commit();
+    }
+
+    @Override
     public void empezarPartida(List<Jugador> jugadores){
-        AdminSQLDataBase admin = new AdminSQLDataBase(this);
-        SQLiteDatabase bd = admin.getWritableDatabase();
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-
-        for (Jugador jugador : jugadores) {
-            System.out.println(jugador.getNombre() + jugador.getSeleccionado());
-        }
 
         this.configPartida = crearConfigPartida(bd);
         this.partida = crearPartida(bd, this.configPartida.getConfigPartidaId(), sdf.format(new Date()));
@@ -210,30 +224,45 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
         // A partir de las PruebaPartida y JugadoresPartida crearemos las PruebaJugador
         // numPruebasPartida = numJugadoresPartida * mundoPartidaTipoPrueba.numero
 
-        crearPruebasPartida(bd, this.mundoPartidaTipoPruebas);
+        crearPruebasResultadoPartida(bd, this.mundoPartidaTipoPruebas);
 
-        crearResultadosPartida(bd);
+        //crearResultadosPartida(bd);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.contenedorPartida, fragmentTablero).commit();
         fragmentTablero.setMundoPartidas(this.mundosPartida);
     }
 
+    @Override
+    public void guardarPartida(MundoPartida mundoPartida) {
+        // Actualizar la partida poniendo el mundoPartida actual
+        System.out.println(mundoPartida.getMundoPartidaId());
+        admin.close();
+        this.finish();
+    }
+
     private void crearResultadosPartida(SQLiteDatabase bd) {
+        EntidadResultadoTipoPrueba entidadResultadoTipoPrueba = new EntidadResultadoTipoPrueba();
+        EstadoResultadoTipoPrueba estadoResultadoTipoPrueba = new EstadoResultadoTipoPrueba();
+        ResultadoPrueba resultadoPrueba = new ResultadoPrueba();
+        List<ResultadoPrueba> resultadoPruebas = resultadoPrueba.getAll(bd);
+        List<EntidadResultadoTipoPrueba> entidadResultadoTipoPruebas = entidadResultadoTipoPrueba.findAll(bd);
+        List<EstadoResultadoTipoPrueba> estadoResultadoTipoPruebas = estadoResultadoTipoPrueba.findAll(bd);
+        // Filtramos por tipoResultados y nivel
+        resultadoPruebas = resultadoPruebas.stream().filter(el -> this.configPartida.getConfigTipoResultadoPruebas().stream().map(ConfigTipoResultadoPrueba::getTipoResultadoPruebaId).collect(Collectors.toList()).contains(el.getTipoResultadoPrueba().getTipoResultadoPruebaId())).collect(Collectors.toList());
+        resultadoPruebas = resultadoPruebas.stream().filter(rp -> rp.getNivelResultadoPrueba() <= this.configPartida.getNivelResultadoPruebas()).collect(Collectors.toList());
+
+
         for (PruebaJugador pruebaJugador : this.pruebaJugadors) {
-            EntidadResultadoTipoPrueba entidadResultadoTipoPrueba = new EntidadResultadoTipoPrueba();
-            List<EntidadResultadoTipoPrueba> entidadResultadoTipoPruebas = entidadResultadoTipoPrueba.findByTipoPruebaId(bd, pruebaJugador.getPruebaPartidaId().getPrueba().getTipoPrueba().getTipoPruebaId());
-            List<ResultadoPrueba> resultadoPruebas = new ArrayList<>();
-            for (EntidadResultadoTipoPrueba ertp: entidadResultadoTipoPruebas) {
-                ResultadoPrueba resultadoPrueba = new ResultadoPrueba();
-                resultadoPruebas.addAll(resultadoPrueba.findByEntidadResultadoPruebaIdAndNivelMenor(bd, ertp.getEntidadResultadoPruebaId(), configPartida.getNivelResultadoPruebas()));
-            }
-            // Filtramos por los tipoResultados definidos en la configuración
-            resultadoPruebas = resultadoPruebas.stream().filter(el -> this.configPartida.getConfigTipoResultadoPruebas().stream().map(ConfigTipoResultadoPrueba::getTipoResultadoPruebaId).collect(Collectors.toList()).contains(el.getTipoResultadoPrueba().getTipoResultadoPruebaId())).collect(Collectors.toList());
-            // Filtramos por los estadoResultadoTipoPrueba
-            EstadoResultadoTipoPrueba estadoResultadoTipoPrueba = new EstadoResultadoTipoPrueba();
-            List<EstadoResultadoTipoPrueba> estadoResultadoTipoPruebas = estadoResultadoTipoPrueba.findByTipoPruebaId(bd, pruebaJugador.getPruebaPartidaId().getPrueba().getTipoPrueba().getTipoPruebaId());
-            resultadoPruebas = resultadoPruebas.stream().filter(el -> estadoResultadoTipoPruebas.stream().map(EstadoResultadoTipoPrueba::getEstadoResultadoPruebaId).collect(Collectors.toList()).contains(el.getEstadoResultadoPrueba().getEstadoResultadoPruebaId())).collect(Collectors.toList());
-            Collections.shuffle(resultadoPruebas);
+
+            List<ResultadoPrueba> resultadoPruebasAux = resultadoPruebas;
+            // Pillamos las entidades y estados del tipo de prueba
+            List<EntidadResultadoTipoPrueba> entidadResultadoTipoPruebasAux = entidadResultadoTipoPruebas.stream().filter(ertp -> ertp.getTipoPruebaId().equals(pruebaJugador.getPruebaPartidaId().getPrueba().getTipoPrueba().getTipoPruebaId())).collect(Collectors.toList());
+            List<EstadoResultadoTipoPrueba> estadoResultadoTipoPruebasAux = estadoResultadoTipoPruebas.stream().filter(ertp -> ertp.getTipoPruebaId().equals(pruebaJugador.getPruebaPartidaId().getPrueba().getTipoPrueba().getTipoPruebaId())).collect(Collectors.toList());
+
+            // Filtramos por el estado y la entidad de los resultados por tipo de prueba
+            resultadoPruebasAux = resultadoPruebasAux.stream().filter(el -> estadoResultadoTipoPruebasAux.stream().map(EstadoResultadoTipoPrueba::getEstadoResultadoPruebaId).collect(Collectors.toList()).contains(el.getEstadoResultadoPrueba().getEstadoResultadoPruebaId())).collect(Collectors.toList());
+            resultadoPruebasAux = resultadoPruebasAux.stream().filter(el -> entidadResultadoTipoPruebasAux.stream().map(EntidadResultadoTipoPrueba::getEntidadResultadoPruebaId).collect(Collectors.toList()).contains(el.getEntidadResultadoPrueba().getEntidadResultadoPruebaId())).collect(Collectors.toList());
+            Collections.shuffle(resultadoPruebasAux);
             ResultadoPruebaPartida resultadoPruebaPartida = new ResultadoPruebaPartida();
             PruebaResultadoRelaci pruebaResultadoRelaci = new PruebaResultadoRelaci();
             if (pruebaJugador.getPruebaPartidaId().getPrueba().getTipoPrueba().getTipoPruebaId().equals(Constantes.TIPO_PRUEBA_AZAR)) {
@@ -241,31 +270,44 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
                     // Crear resultadoPruebaPartida y PruebaResultadoRelaci
                     resultadoPruebaPartida = resultadoPruebaPartida.insertar(bd, resultadoPruebas.get(j).getResultadoPruebaId(), pruebaJugador.getPruebaPartidaId().getMundoPartidaId(), resultadoPruebas.get(j).getNombre(), resultadoPruebas.get(j).getDescripcion());
                     this.resultadoPruebaPartidas.add(resultadoPruebaPartida);
-                    pruebaResultadoRelaci.insertar(bd, resultadoPruebaPartida.getResultadoPruebaPartidaId(), pruebaJugador.getPruebaPartidaId().getPruebaPartidaId());
+                    this.pruebaResultadoRelacis.add(pruebaResultadoRelaci.insertar(bd, resultadoPruebaPartida.getResultadoPruebaPartidaId(), pruebaJugador.getPruebaPartidaId().getPruebaPartidaId()));
                 }
             } else {
-                for (EstadoResultadoTipoPrueba ertp: estadoResultadoTipoPruebas) {
-                    List<ResultadoPrueba> resultadoPruebasAux = resultadoPruebas.stream().filter(el -> el.getEstadoResultadoPrueba().getEstadoResultadoPruebaId().equals(ertp.getEstadoResultadoPruebaId())).collect(Collectors.toList());
-                    Collections.shuffle(resultadoPruebasAux);
+                for (EstadoResultadoTipoPrueba ertp: estadoResultadoTipoPruebasAux) {
+                    List<ResultadoPrueba> resultadoPruebasAux2 = resultadoPruebasAux.stream().filter(el -> el.getEstadoResultadoPrueba().getEstadoResultadoPruebaId().equals(ertp.getEstadoResultadoPruebaId())).collect(Collectors.toList());
+                    Collections.shuffle(resultadoPruebasAux2);
                     // Crear resultadoPruebaPartida y PruebaResultadoRelaci
-                    resultadoPruebaPartida = resultadoPruebaPartida.insertar(bd, resultadoPruebasAux.get(0).getResultadoPruebaId(), pruebaJugador.getPruebaPartidaId().getMundoPartidaId(), resultadoPruebasAux.get(0).getNombre(), resultadoPruebasAux.get(0).getDescripcion());
+                    resultadoPruebaPartida = resultadoPruebaPartida.insertar(bd, resultadoPruebasAux2.get(0).getResultadoPruebaId(), pruebaJugador.getPruebaPartidaId().getMundoPartidaId(), resultadoPruebasAux.get(0).getNombre(), resultadoPruebasAux.get(0).getDescripcion());
                     this.resultadoPruebaPartidas.add(resultadoPruebaPartida);
-                    pruebaResultadoRelaci.insertar(bd, resultadoPruebaPartida.getResultadoPruebaPartidaId(), pruebaJugador.getPruebaPartidaId().getPruebaPartidaId());
+                    this.pruebaResultadoRelacis.add(pruebaResultadoRelaci.insertar(bd, resultadoPruebaPartida.getResultadoPruebaPartidaId(), pruebaJugador.getPruebaPartidaId().getPruebaPartidaId()));
                 }
             }
         }
     }
 
-    private void crearPruebasPartida(SQLiteDatabase bd, List<MundoPartidaTipoPrueba> mundoPartidaTipoPruebas) {
+    private void crearPruebasResultadoPartida(SQLiteDatabase bd, List<MundoPartidaTipoPrueba> mundoPartidaTipoPruebas) {
         Prueba prueba = new Prueba();
+        PruebaPartida pruebaPartida = new PruebaPartida();
+        PruebaJugador pruebaJugador = new PruebaJugador();
+        EntidadResultadoTipoPrueba entidadResultadoTipoPrueba = new EntidadResultadoTipoPrueba();
+        EstadoResultadoTipoPrueba estadoResultadoTipoPrueba = new EstadoResultadoTipoPrueba();
+        ResultadoPrueba resultadoPrueba = new ResultadoPrueba();
+
+        List<ResultadoPrueba> resultadoPruebas = resultadoPrueba.getAll(bd);
+        List<EntidadResultadoTipoPrueba> entidadResultadoTipoPruebas = entidadResultadoTipoPrueba.findAll(bd);
+        List<EstadoResultadoTipoPrueba> estadoResultadoTipoPruebas = estadoResultadoTipoPrueba.findAll(bd);
         List<Prueba> pruebas = prueba.getAll(bd);
+
+        // Filtramos por tipoPruebas y nivel
         pruebas = pruebas.stream().filter(prueba1 -> prueba1.getNivelPrueba() <= this.configPartida.getNivelPruebas()).collect(Collectors.toList());
         pruebas = pruebas.stream().filter(prueba1 -> this.configPartida.getConfigTipoPruebas().stream().map(ConfigTipoPrueba::getTipoPruebaId).collect(Collectors.toList()).contains(prueba1.getTipoPrueba().getTipoPruebaId())).collect(Collectors.toList());
+        // Filtramos por tipoResultados y nivel
+        resultadoPruebas = resultadoPruebas.stream().filter(el -> this.configPartida.getConfigTipoResultadoPruebas().stream().map(ConfigTipoResultadoPrueba::getTipoResultadoPruebaId).collect(Collectors.toList()).contains(el.getTipoResultadoPrueba().getTipoResultadoPruebaId())).collect(Collectors.toList());
+        resultadoPruebas = resultadoPruebas.stream().filter(rp -> rp.getNivelResultadoPrueba() <= this.configPartida.getNivelResultadoPruebas()).collect(Collectors.toList());
+
         for (JugadorPartida jugadorPartida : this.jugadoresPartida) {
             for (MundoPartidaTipoPrueba mundoPartidaTipoPrueba: mundoPartidaTipoPruebas) {
                 for (int j=0; j< mundoPartidaTipoPrueba.getNumeroTiposPrueba(); j++) {
-                    PruebaPartida pruebaPartida = new PruebaPartida();
-                    PruebaJugador pruebaJugador = new PruebaJugador();
                     List<Prueba> pruebasAux = pruebas.stream().filter(p -> mundoPartidaTipoPrueba.getTipoPruebaId().equals(p.getTipoPrueba().getTipoPruebaId())).collect(Collectors.toList());
                     Collections.shuffle(pruebasAux);
                     // Replace @Jugador y @Mundo
@@ -276,6 +318,43 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
                     this.pruebaPartidas.add(pruebaPartida);
                     pruebaJugador = pruebaJugador.insertar(bd, pruebaPartida.getPruebaPartidaId(), null, jugadorPartida.getJugadorPartidaId(), null);
                     this.pruebaJugadors.add(pruebaJugador);
+
+                    // RESULTADOS
+                    List<ResultadoPrueba> resultadoPruebasAux = resultadoPruebas;
+                    // Pillamos las entidades y estados del tipo de prueba
+                    PruebaJugador finalPruebaJugador = pruebaJugador;
+                    List<EntidadResultadoTipoPrueba> entidadResultadoTipoPruebasAux = entidadResultadoTipoPruebas.stream().filter(ertp -> ertp.getTipoPruebaId().equals(finalPruebaJugador.getPruebaPartidaId().getPrueba().getTipoPrueba().getTipoPruebaId())).collect(Collectors.toList());
+                    List<EstadoResultadoTipoPrueba> estadoResultadoTipoPruebasAux = estadoResultadoTipoPruebas.stream().filter(ertp -> ertp.getTipoPruebaId().equals(finalPruebaJugador.getPruebaPartidaId().getPrueba().getTipoPrueba().getTipoPruebaId())).collect(Collectors.toList());
+
+                    // Filtramos por el estado y la entidad de los resultados por tipo de prueba
+                    resultadoPruebasAux = resultadoPruebasAux.stream().filter(el -> estadoResultadoTipoPruebasAux.stream().map(EstadoResultadoTipoPrueba::getEstadoResultadoPruebaId).collect(Collectors.toList()).contains(el.getEstadoResultadoPrueba().getEstadoResultadoPruebaId())).collect(Collectors.toList());
+                    resultadoPruebasAux = resultadoPruebasAux.stream().filter(el -> entidadResultadoTipoPruebasAux.stream().map(EntidadResultadoTipoPrueba::getEntidadResultadoPruebaId).collect(Collectors.toList()).contains(el.getEntidadResultadoPrueba().getEntidadResultadoPruebaId())).collect(Collectors.toList());
+                    Collections.shuffle(resultadoPruebasAux);
+                    ResultadoPruebaPartida resultadoPruebaPartida = new ResultadoPruebaPartida();
+                    PruebaResultadoRelaci pruebaResultadoRelaci = new PruebaResultadoRelaci();
+                    if (pruebaJugador.getPruebaPartidaId().getPrueba().getTipoPrueba().getTipoPruebaId().equals(Constantes.TIPO_PRUEBA_AZAR)) {
+                        for (int k=0; k < 6; k++) {
+                            // Crear resultadoPruebaPartida y PruebaResultadoRelaci
+                            // Replace @Jugador y @Mundo
+                            String nombreEditadoResult = resultadoPruebasAux.get(k).getNombre();
+                            String descripcionEditadaResult = resultadoPruebasAux.get(k).getDescripcion();
+                            resultadoPruebaPartida = resultadoPruebaPartida.insertar(bd, resultadoPruebasAux.get(k).getResultadoPruebaId(), pruebaJugador.getPruebaPartidaId().getMundoPartidaId(),nombreEditadoResult, descripcionEditadaResult);
+                            this.resultadoPruebaPartidas.add(resultadoPruebaPartida);
+                            this.pruebaResultadoRelacis.add(pruebaResultadoRelaci.insertar(bd, resultadoPruebaPartida.getResultadoPruebaPartidaId(), pruebaJugador.getPruebaPartidaId().getPruebaPartidaId()));
+                        }
+                    } else {
+                        for (EstadoResultadoTipoPrueba ertp: estadoResultadoTipoPruebasAux) {
+                            List<ResultadoPrueba> resultadoPruebasAux2 = resultadoPruebasAux.stream().filter(el -> el.getEstadoResultadoPrueba().getEstadoResultadoPruebaId().equals(ertp.getEstadoResultadoPruebaId())).collect(Collectors.toList());
+                            Collections.shuffle(resultadoPruebasAux2);
+                            // Crear resultadoPruebaPartida y PruebaResultadoRelaci
+                            // Replace @Jugador y @Mundo
+                            String nombreEditadoResult = resultadoPruebasAux2.get(0).getNombre();
+                            String descripcionEditadaResult = resultadoPruebasAux2.get(0).getDescripcion();
+                            resultadoPruebaPartida = resultadoPruebaPartida.insertar(bd, resultadoPruebasAux2.get(0).getResultadoPruebaId(), pruebaJugador.getPruebaPartidaId().getMundoPartidaId(),nombreEditadoResult, descripcionEditadaResult);
+                            this.resultadoPruebaPartidas.add(resultadoPruebaPartida);
+                            this.pruebaResultadoRelacis.add(pruebaResultadoRelaci.insertar(bd, resultadoPruebaPartida.getResultadoPruebaPartidaId(), pruebaJugador.getPruebaPartidaId().getPruebaPartidaId()));
+                        }
+                    }
                 }
             }
         }

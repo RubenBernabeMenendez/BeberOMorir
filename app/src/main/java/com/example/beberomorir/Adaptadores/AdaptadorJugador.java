@@ -45,7 +45,7 @@ public class AdaptadorJugador extends ArrayAdapter<Jugador> {
         ImageView imageView1 = (ImageView) item.findViewById(R.id.imagenJugador);
 
         if (this.jugadors.get(position).getUrlImagen() == null) {
-            imageView1.setImageResource(Integer.parseInt(Integer.toString(R.mipmap.mundos1)));
+            imageView1.setImageResource(Integer.parseInt(Integer.toString(R.mipmap.plantilla_mundos_caminos)));
         } else {
             Bitmap bitmap = BitmapFactory.decodeByteArray(this.jugadors.get(position).getUrlImagen(), 0, this.jugadors.get(position).getUrlImagen().length);
             imageView1.setImageBitmap(bitmap);

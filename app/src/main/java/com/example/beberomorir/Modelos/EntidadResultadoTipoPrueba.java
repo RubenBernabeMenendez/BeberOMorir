@@ -40,6 +40,19 @@ public class EntidadResultadoTipoPrueba {
         return entidadResultadoTipoPruebas;
     }
 
+    public List<EntidadResultadoTipoPrueba> findAll(SQLiteDatabase bd) {
+        List<EntidadResultadoTipoPrueba> entidadResultadoTipoPruebas = new ArrayList<>();
+        Cursor fila = bd.rawQuery("SELECT entidadResultadoPruebaId, tipoPruebaId FROM ENTIDAD_RESULTADO_TIPO_PRUEBA",null);
+        for (fila.moveToFirst(); !fila.isAfterLast(); fila.moveToNext()) {
+            EntidadResultadoTipoPrueba entidadResultadoTipoPrueba = new EntidadResultadoTipoPrueba();
+            entidadResultadoTipoPrueba.setEntidadResultadoPruebaId(Integer.parseInt(fila.getString(0)));
+            entidadResultadoTipoPrueba.setTipoPruebaId(Integer.parseInt(fila.getString(1)));
+            entidadResultadoTipoPruebas.add(entidadResultadoTipoPrueba);
+        }
+        fila.close();
+        return entidadResultadoTipoPruebas;
+    }
+
     public void insertar(SQLiteDatabase bd, Integer entidadResultadoPruebaId, Integer tipoPruebaId){
         ContentValues cv = new ContentValues();
         cv.put("entidadResultadoPruebaId", entidadResultadoPruebaId);

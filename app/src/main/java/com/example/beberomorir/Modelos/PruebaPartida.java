@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.example.beberomorir.Constantes;
+
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -73,6 +75,21 @@ public class PruebaPartida {
         long id = bd.insert("PRUEBA_PARTIDA", null, cv);
 
         return  findById(bd, (int) id);
+    }
+
+    public PruebaPartida updateFinalizado(SQLiteDatabase bd, Integer pruebaPartidaId){
+        PruebaPartida pruebaPartida = new PruebaPartida();
+        pruebaPartida = pruebaPartida.findById(bd, (int) pruebaPartidaId);
+        ContentValues cv = new ContentValues();
+        cv.put("pruebaId", pruebaPartida.getPrueba().getPruebaId());
+        cv.put("mundoPartidaId", pruebaPartida.getMundoPartidaId());
+        cv.put("nombre", pruebaPartida.getNombre());
+        cv.put("descripcion", pruebaPartida.getDescripcion());
+        cv.put("finalizado", Constantes.YES);
+        bd.update("PRUEBA_PARTIDA", cv, "pruebaPartidaId=" + pruebaPartidaId, null);
+
+        pruebaPartida.setFinalizado(Constantes.YES);
+        return  pruebaPartida;
     }
 
     public PruebaPartida findById(SQLiteDatabase bd, Integer pruebaPartidaId) {

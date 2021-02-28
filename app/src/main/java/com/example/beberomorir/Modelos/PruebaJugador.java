@@ -64,6 +64,20 @@ public class PruebaJugador {
         return  findById(bd, (int) id);
     }
 
+    public PruebaJugador update(SQLiteDatabase bd, PruebaJugador pruebaJugador){
+        ContentValues cv = new ContentValues();
+        PruebaPartida pruebaPartida = new PruebaPartida();
+        pruebaPartida = pruebaPartida.updateFinalizado(bd, pruebaJugador.getPruebaPartidaId().getPruebaPartidaId());
+        cv.put("pruebaPartidaId", pruebaJugador.getPruebaPartidaId().getPruebaPartidaId());
+        cv.put("resultadoPruebaPartidaId", pruebaJugador.getResultadoPruebaPartidaId().getResultadoPruebaPartidaId());
+        cv.put("jugadorPartidaId", pruebaJugador.getJugadorPartidaId().getJugadorPartidaId());
+        cv.put("informacion", "HECHA");
+        bd.update("PRUEBA_JUGADOR", cv, "pruebaJugadorId=" + pruebaJugador.getPruebaJugadorId(), null);
+        pruebaJugador.setInformacion("HECHA");
+        pruebaJugador.setPruebaPartidaId(pruebaPartida);
+        return  pruebaJugador;
+    }
+
     public PruebaJugador findById(SQLiteDatabase bd, Integer pruebaJugadorId) {
         Cursor fila = bd.rawQuery("SELECT pruebaJugadorId, pruebaPartidaId, resultadoPruebaPartidaId, jugadorPartidaId, informacion FROM PRUEBA_JUGADOR WHERE pruebaJugadorId=" + pruebaJugadorId,null);
         if (fila.moveToFirst()) {

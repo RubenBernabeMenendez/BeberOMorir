@@ -158,7 +158,7 @@ public class MenuRondaJugadorFragment extends AppCompatDialogFragment {
             linearLayoutCard.setTextAlignment(LinearLayout.TEXT_ALIGNMENT_CENTER);
 
             ImageView imageView = new ImageView(this.actividad);
-            imageView.setImageResource(this.pruebaJugadors.get(i).getPruebaPartidaId().getPrueba().getTipoPrueba().getUrlImagen());
+            imageView.setImageResource(pruebaJugadorsSorter.get(i).getPruebaPartidaId().getPrueba().getTipoPrueba().getUrlImagen());
             imageView.setScaleType(ImageView.ScaleType.CENTER);
             LinearLayout.LayoutParams layoutParamsImage = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, (float) 1.0);
             layoutParamsImage.gravity = Gravity.CENTER;
@@ -167,7 +167,7 @@ public class MenuRondaJugadorFragment extends AppCompatDialogFragment {
             layoutParamsImage.leftMargin = 4;
 
             TextView textView = new TextView(this.actividad);
-            textView.setText(this.pruebaJugadors.get(i).getPruebaPartidaId().getPrueba().getTipoPrueba().getNombre());
+            textView.setText(pruebaJugadorsSorter.get(i).getPruebaPartidaId().getPrueba().getTipoPrueba().getNombre() + " " + pruebaJugadorsLibres.size());
 
 
             linearLayoutCard.addView(imageView);

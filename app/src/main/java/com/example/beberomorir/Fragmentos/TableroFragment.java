@@ -133,6 +133,15 @@ public class TableroFragment extends Fragment {
             }
         });
 
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                iComunicaPartida.guardarPartida(mundoPartidaActual);
+            }
+        };
+
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
+
         return view;
     }
 
