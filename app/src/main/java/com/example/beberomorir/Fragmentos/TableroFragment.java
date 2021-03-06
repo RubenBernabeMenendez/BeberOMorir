@@ -9,12 +9,15 @@ import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -60,6 +63,8 @@ public class TableroFragment extends Fragment {
     // View
     ImageView nivel0, nivel1_1, nivel1_2, nivel2_1, nivel2_2, nivel2_3, nivel2_4;
     TextView tNivel0, tNivel1_1, tNivel1_2, tNivel2_1, tNivel2_2, tNivel2_3, tNivel2_4;
+    ImageView jugadorPausa;
+    CardView jugadorPausaVisibility;
     LinearLayout layoutJugadoresPrincipal;
     ListView lv1;
 
@@ -118,6 +123,17 @@ public class TableroFragment extends Fragment {
         lv1 = (ListView)view.findViewById(R.id.jugadoresPartidaPrincipal);
         final List<JugadorPartida> jugadoresAux = this.jugadorPartidas;
         final Activity actividadAux = this.actividad;
+
+        jugadorPausaVisibility = view.findViewById(R.id.jugadorPausaCard);
+        jugadorPausa = view.findViewById(R.id.jugadorPausaImage);
+        jugadorPausaVisibility.setOnClickListener(new AdapterView.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                jugadorPausaVisibility.setVisibility(View.INVISIBLE);
+                iComunicaPartida.menuRondaJugador(jugadoresAux.get(0), mundoPartidaActual);
+            }
+        });
+
 
         if (this.mundoPartidaActual == null) {
             crearTablero();
@@ -272,6 +288,12 @@ public class TableroFragment extends Fragment {
         JugadorPartida jugadorPartidaAux = this.jugadorPartidas.get(0);
         this.jugadorPartidas.remove(0);
         this.jugadorPartidas.add(jugadorPartidaAux);
+    }
+
+    public void pausarPartida() {
+        Bitmap bitmap = BitmapFactory.decodeByteArray(this.jugadorPartidas.get(0).getJugador().getUrlImagen(), 0, this.jugadorPartidas.get(0).getJugador().getUrlImagen().length);
+        this.jugadorPausa.setImageBitmap(bitmap);
+        this.jugadorPausaVisibility.setVisibility(View.VISIBLE);
     }
 
     public void setMundoPartidasAndMundoActual(List<MundoPartida> mundoPartidas, MundoPartida mundoPartida) {

@@ -28,6 +28,8 @@ public interface IComunicaPartida {
 
     void guardarPartida(MundoPartida mundoPartida);
 
+    void pausarPartida();
+
     void addJugador();
 
     void nuevaImagen();

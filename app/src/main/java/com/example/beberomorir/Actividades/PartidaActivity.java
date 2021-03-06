@@ -33,6 +33,7 @@ import com.example.beberomorir.Fragmentos.MenuRondaJugadorFragment;
 import com.example.beberomorir.Fragmentos.NuevoJugadorFragment;
 import com.example.beberomorir.Fragmentos.PruebaAzarFragment;
 import com.example.beberomorir.Fragmentos.PruebaDefaultFragment;
+import com.example.beberomorir.Fragmentos.ResultadoPruebaFragment;
 import com.example.beberomorir.Fragmentos.TableroFragment;
 import com.example.beberomorir.Interfaces.IComunicaPartida;
 import com.example.beberomorir.MainActivity;
@@ -87,6 +88,7 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
     PruebaAzarFragment fragmentPruebaAzar;
     PruebaDefaultFragment pruebaDefaultFragment;
     MenuRondaJugadorFragment menuRondaJugadorFragment;
+    ResultadoPruebaFragment resultadoPruebaFragment;
 
 
 
@@ -115,8 +117,8 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
         fragmentTablero = new TableroFragment();
         fragmentPruebaAzar = new PruebaAzarFragment();
         menuRondaJugadorFragment = new MenuRondaJugadorFragment();
-        menuRondaJugadorFragment.setCancelable(false);
         pruebaDefaultFragment = new PruebaDefaultFragment();
+        resultadoPruebaFragment = new ResultadoPruebaFragment();
         this.pruebaJugadors = new ArrayList<>();
         this.pruebaPartidas = new ArrayList<>();
         this.resultadoPruebaPartidas = new ArrayList<>();
@@ -200,8 +202,8 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
         pruebaJugador.setResultadoPruebaPartidaId(resultadoPruebaPartida);
         pruebaJugadorAux = pruebaJugadorAux.update(bd, pruebaJugador);
         this.pruebaJugadors.add(pruebaJugadorAux);
-        fragmentTablero.nextJugadorPartida();
-        getSupportFragmentManager().beginTransaction().replace(R.id.contenedorPartida, fragmentTablero).commit();
+        resultadoPruebaFragment.setResultadoPruebaPartida(resultadoPruebaPartida);
+        resultadoPruebaFragment.show(getSupportFragmentManager(), "Resultado Partida");
     }
 
     @Override
@@ -238,6 +240,12 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
         System.out.println(mundoPartida.getMundoPartidaId());
         admin.close();
         this.finish();
+    }
+
+    @Override
+    public void pausarPartida() {
+        fragmentTablero.pausarPartida();
+        getSupportFragmentManager().beginTransaction().replace(R.id.contenedorPartida, fragmentTablero).commit();
     }
 
     private void crearResultadosPartida(SQLiteDatabase bd) {

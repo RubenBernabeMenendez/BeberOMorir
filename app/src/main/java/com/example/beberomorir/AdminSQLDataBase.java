@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.beberomorir.Modelos.*;
 
+import java.util.Random;
+
 import androidx.annotation.Nullable;
 
 public class AdminSQLDataBase extends SQLiteOpenHelper {
@@ -27,7 +29,7 @@ public class AdminSQLDataBase extends SQLiteOpenHelper {
     private static final String JUGADOR_PARTIDA_TABLE_CREATE = "CREATE TABLE JUGADOR_PARTIDA(jugadorPartidaId INTEGER PRIMARY KEY AUTOINCREMENT, partidaId INTEGER, jugadorId INTEGER, rolId INTEGER)";
     private static final String MUNDO_TABLE_CREATE = "CREATE TABLE MUNDO(mundoId INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, descripcion TEXT, urlImagen INTEGER)";
     private static final String PRUEBA_TABLE_CREATE = "CREATE TABLE PRUEBA(pruebaId INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, descripcion TEXT, nivelPrueba INTEGER, tiempoEjecucion INTEGER, tipoPruebaId INTEGER, FOREIGN KEY (tipoPruebaId) REFERENCES TIPO_PRUEBA(tipoPruebaId))";
-    private static final String RESULTADO_PRUEBA_TABLE_CREATE = "CREATE TABLE RESULTADO_PRUEBA(resultadoPruebaId INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, descripcion TEXT, nivelResultadoPrueba INTEGER, tipoResultadoPruebaId INTEGER, estadoResultadoPruebaId INTEGER, entidadResultadoPruebaId INTEGER, FOREIGN KEY (entidadResultadoPruebaId) REFERENCES ENTIDAD_RESULTADO_PRUEBA(entidadResultadoPruebaId), FOREIGN KEY (tipoResultadoPruebaId) REFERENCES TIPO_RESULTADO_PRUEBA(tipoResultadoPruebaId), FOREIGN KEY (estadoResultadoPruebaId) REFERENCES ESTADO_RESULTADO_PRUEBA(estadoResultadoPruebaId))";
+    private static final String RESULTADO_PRUEBA_TABLE_CREATE = "CREATE TABLE RESULTADO_PRUEBA(resultadoPruebaId INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, descripcion TEXT, nivelResultadoPrueba INTEGER, tipoResultadoPruebaId INTEGER, estadoResultadoPruebaId INTEGER, entidadResultadoPruebaId INTEGER, urlImagen INTEGER, urlImagenEntidad INTEGER, FOREIGN KEY (entidadResultadoPruebaId) REFERENCES ENTIDAD_RESULTADO_PRUEBA(entidadResultadoPruebaId), FOREIGN KEY (tipoResultadoPruebaId) REFERENCES TIPO_RESULTADO_PRUEBA(tipoResultadoPruebaId), FOREIGN KEY (estadoResultadoPruebaId) REFERENCES ESTADO_RESULTADO_PRUEBA(estadoResultadoPruebaId))";
     private static final String MUNDO_PARTIDA_TABLE_CREATE = "CREATE TABLE MUNDO_PARTIDA(mundoPartidaId INTEGER PRIMARY KEY AUTOINCREMENT, mundoId INTEGER, partidaId INTEGER, orden INTEGER, nivelMundo INTEGER, urlImagen INTEGER, finalizado TEXT, FOREIGN KEY (mundoId) REFERENCES MUNDO(mundoId), FOREIGN KEY (partidaId) REFERENCES PARTIDA(partidaId))";
     private static final String PRUEBA_PARTIDA_TABLE_CREATE = "CREATE TABLE PRUEBA_PARTIDA(pruebaPartidaId INTEGER PRIMARY KEY AUTOINCREMENT, mundoPartidaId INTEGER, pruebaId INTEGER, nombre TEXT, descripcion TEXT, finalizado TEXT, FOREIGN KEY (mundoPartidaId) REFERENCES MUNDO_PARTIDA(mundoPartidaId), FOREIGN KEY (pruebaId) REFERENCES PRUEBA(pruebaId))";
     private static final String MUNDO_PARTIDA_TIPO_PRUEBA_TABLE_CREATE = "CREATE TABLE MUNDO_PARTIDA_TIPO_PRUEBA(mundoPartidaId INTEGER, tipoPruebaId INTEGER, numeroTiposPrueba INTEGER, PRIMARY KEY (mundoPartidaId, tipoPruebaId), FOREIGN KEY (mundoPartidaId) REFERENCES MUNDO_PARTIDA(mundoPartidaId), FOREIGN KEY (tipoPruebaId) REFERENCES TIPO_PRUEBA(tipoPruebaId))";
@@ -457,25 +459,25 @@ public class AdminSQLDataBase extends SQLiteOpenHelper {
 
 
         ResultadoPrueba resultadoPrueba = new ResultadoPrueba();
-        resultadoPrueba.insertar(sqLiteDatabase, "A beber se ha dicho","Manda beber 3 chupitos",2,1,1,1);
-        resultadoPrueba.insertar(sqLiteDatabase, "Toca mojarse","¿Quién está borrach@?",1,2,1,2);
-        resultadoPrueba.insertar(sqLiteDatabase, "A beber se ha dicho","Beber todos 1 chupito",1,1,1,2);
-        resultadoPrueba.insertar(sqLiteDatabase, "A beber se ha dicho","Manda beber entre 1 y 3 chupitos a @Jugador",2,1,1,1);
-        resultadoPrueba.insertar(sqLiteDatabase, "A beber se ha dicho"," @Jugador te manda beber entre 1 y 3 chupitos",2,1,2,1);
-        resultadoPrueba.insertar(sqLiteDatabase, "A beber se ha dicho","El último que coja su vaso se lo tiene que terminar",2,1,1,2);
-        resultadoPrueba.insertar(sqLiteDatabase, "Hace un poco de calor ¿no?","Todos los que lleven una prenda/complemento de color rojo deben elegir uno y quitárselo",1,3,1,2);
-        resultadoPrueba.insertar(sqLiteDatabase, "A beber se ha dicho","Los que coincidan mandar beber entre 1 y 3 chupitos",1,1,1,4);
-        resultadoPrueba.insertar(sqLiteDatabase, "Toca mojarse","¿Cuántas veces te has tocado como máximo en un día?",1,2,1,2);
-        resultadoPrueba.insertar(sqLiteDatabase, "¿Eres sociable?","Publica en una red social algún mensaje con el texto \"Quiero que seas mi papi/mami\" y menciona a @Jugador",2,4,2,1);
-        resultadoPrueba.insertar(sqLiteDatabase, "A beber se ha dicho","Los que no coincidan beben 1 chupito",1,1,2,4);
-        resultadoPrueba.insertar(sqLiteDatabase, "Hace un poco de calor ¿no?","La minoría manda quitar una prenda",1,3,1,5);
-        resultadoPrueba.insertar(sqLiteDatabase, "A beber se ha dicho","La mayoría manda beber 1 chupito a alguien de la minoría",1,1,1,6);
-        resultadoPrueba.insertar(sqLiteDatabase, "Toca mojarse","¿Quién quiere pillar esta noche?",1,2,2,2);
-        resultadoPrueba.insertar(sqLiteDatabase, "A beber se ha dicho","Beber todos 1 chupito",1,1,2,2);
-        resultadoPrueba.insertar(sqLiteDatabase, "A beber se ha dicho","Los que coincidan beben 2 chupitos",2,1,2,3);
-        resultadoPrueba.insertar(sqLiteDatabase, "A beber se ha dicho","Los que no coincidan mandan beben 1 chupito",1,1,1,4);
-        resultadoPrueba.insertar(sqLiteDatabase, "Hace un poco de calor ¿no?","La minoría se quita una prenda",1,3,2,5);
-        resultadoPrueba.insertar(sqLiteDatabase, "A beber se ha dicho","La mayoría bebe 1 chupito",1,1,2,6);
+        resultadoPrueba.insertar(sqLiteDatabase, "A beber se ha dicho","Manda beber 3 chupitos",2,1,1,1,calcularImagenResultado(1,2),calcularImagenEntidadResultado(1,1));
+        resultadoPrueba.insertar(sqLiteDatabase, "Toca mojarse","¿Quién está borrach@?",1,2,1,2,calcularImagenResultado(2,1),calcularImagenEntidadResultado(2,1));
+        resultadoPrueba.insertar(sqLiteDatabase, "A beber se ha dicho","Beber todos 1 chupito",1,1,1,2,calcularImagenResultado(1,1),calcularImagenEntidadResultado(2,1));
+        resultadoPrueba.insertar(sqLiteDatabase, "A beber se ha dicho","Manda beber entre 1 y 3 chupitos a @Jugador",2,1,1,1,calcularImagenResultado(1,2),calcularImagenEntidadResultado(1,1));
+        resultadoPrueba.insertar(sqLiteDatabase, "A beber se ha dicho"," @Jugador te manda beber entre 1 y 3 chupitos",2,1,2,1,calcularImagenResultado(1,2),calcularImagenEntidadResultado(1,2));
+        resultadoPrueba.insertar(sqLiteDatabase, "A beber se ha dicho","El último que coja su vaso se lo tiene que terminar",2,1,1,2,calcularImagenResultado(1,2),calcularImagenEntidadResultado(2,1));
+        resultadoPrueba.insertar(sqLiteDatabase, "Hace un poco de calor ¿no?","Todos los que lleven una prenda/complemento de color rojo deben elegir uno y quitárselo",1,3,1,2,calcularImagenResultado(3,1),calcularImagenEntidadResultado(2,1));
+        resultadoPrueba.insertar(sqLiteDatabase, "A beber se ha dicho","Los que coincidan mandar beber entre 1 y 3 chupitos",1,1,1,3,calcularImagenResultado(1,1),calcularImagenEntidadResultado(3,1));
+        resultadoPrueba.insertar(sqLiteDatabase, "Toca mojarse","¿Cuántas veces te has tocado como máximo en un día?",1,2,1,2,calcularImagenResultado(2,1),calcularImagenEntidadResultado(2,1));
+        resultadoPrueba.insertar(sqLiteDatabase, "¿Eres sociable?","Publica en una red social algún mensaje con el texto \"Quiero que seas mi papi/mami\" y menciona a @Jugador",2,4,2,1,calcularImagenResultado(4,2),calcularImagenEntidadResultado(1,2));
+        resultadoPrueba.insertar(sqLiteDatabase, "A beber se ha dicho","Los que no coincidan beben 1 chupito",1,1,2,4,calcularImagenResultado(1,1),calcularImagenEntidadResultado(4,2));
+        resultadoPrueba.insertar(sqLiteDatabase, "Hace un poco de calor ¿no?","La minoría manda quitar una prenda",1,3,1,5,calcularImagenResultado(3,1),calcularImagenEntidadResultado(5,1));
+        resultadoPrueba.insertar(sqLiteDatabase, "A beber se ha dicho","La mayoría manda beber 1 chupito a alguien de la minoría",1,1,1,6,calcularImagenResultado(1,1),calcularImagenEntidadResultado(6,1));
+        resultadoPrueba.insertar(sqLiteDatabase, "Toca mojarse","¿Quién quiere pillar esta noche?",1,2,2,2,calcularImagenResultado(2,1),calcularImagenEntidadResultado(2,2));
+        resultadoPrueba.insertar(sqLiteDatabase, "A beber se ha dicho","Beber todos 1 chupito",1,1,2,2,calcularImagenResultado(1,1),calcularImagenEntidadResultado(2,2));
+        resultadoPrueba.insertar(sqLiteDatabase, "A beber se ha dicho","Los que coincidan beben 2 chupitos",2,1,2,3,calcularImagenResultado(1,2),calcularImagenEntidadResultado(3,2));
+        resultadoPrueba.insertar(sqLiteDatabase, "A beber se ha dicho","Los que no coincidan mandan beben 1 chupito",1,1,1,4,calcularImagenResultado(1,1),calcularImagenEntidadResultado(4,1));
+        resultadoPrueba.insertar(sqLiteDatabase, "Hace un poco de calor ¿no?","La minoría se quita una prenda",1,3,2,5,calcularImagenResultado(3,1),calcularImagenEntidadResultado(5,2));
+        resultadoPrueba.insertar(sqLiteDatabase, "A beber se ha dicho","La mayoría bebe 1 chupito",1,1,2,6,calcularImagenResultado(1,1),calcularImagenEntidadResultado(6,2));
 
 
 
@@ -498,5 +500,69 @@ public class AdminSQLDataBase extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
+    }
+
+    private Integer calcularImagenResultado(Integer tipoResultadoId, Integer nivel) {
+        switch (tipoResultadoId) {
+            case Constantes.TIPO_RESULTADO_BEBER:
+                switch (nivel) {
+                    case 1:
+                        return R.mipmap.chupitos_level1;
+
+                    case 2:
+                        return R.mipmap.chupitos_level2;
+
+                    case 3:
+                        return R.mipmap.chupitos_level3;
+
+                    case 4:
+                        return R.mipmap.chupitos_level4;
+
+                    default:
+                        return R.mipmap.chupitos_level3;
+                }
+            case Constantes.TIPO_RESULTADO_CONFESION:
+                return R.mipmap.secreto;
+            case Constantes.TIPO_RESULTADO_RETO:
+                return R.mipmap.normas;
+            case Constantes.TIPO_RESULTADO_STREAP:
+                Random random = new Random();
+                int aux = random.nextInt(2);
+                if (aux == 1) {
+                    return R.mipmap.ropa_level1;
+                } else {
+                    return R.mipmap.ropa_level1_1;
+                }
+
+            default:
+                return R.mipmap.default_prueba;
+        }
+    }
+
+    private Integer calcularImagenEntidadResultado(Integer entidadResultadoId, Integer estadoResultadoId) {
+        switch (entidadResultadoId) {
+            case Constantes.ENTIDAD_RESULTADO_JUGADOR:
+                if (estadoResultadoId == Constantes.ESTADO_RESULTADO_CORRECTO) {
+                    return R.mipmap.ganador;
+                } else {
+                    return R.mipmap.perdedor;
+                }
+            case Constantes.ENTIDAD_RESULTADO_TODOS:
+                if (estadoResultadoId == Constantes.ESTADO_RESULTADO_CORRECTO) {
+                    return R.mipmap.todos;
+                } else {
+                    return R.mipmap.perdedor;
+                }
+            case Constantes.ENTIDAD_RESULTADO_COINCIDEN:
+                return R.mipmap.coinciden;
+            case Constantes.ENTIDAD_RESULTADO_NO_COINCIDEN:
+                return R.mipmap.no_coinciden;
+            case Constantes.ENTIDAD_RESULTADO_MAYORIA:
+                return R.mipmap.mayoria;
+            case Constantes.ENTIDAD_RESULTADO_MINORIA:
+                return R.mipmap.minoria;
+            default:
+                return R.mipmap.todos;
+        }
     }
 }

@@ -37,6 +37,21 @@ public class Constantes {
             add(TIPO_PRUEBA_PREFERIRIAS);
     }};
 
+    public static final int TIPO_RESULTADO_BEBER = 1;
+    public static final int TIPO_RESULTADO_CONFESION = 2;
+    public static final int TIPO_RESULTADO_STREAP = 3;
+    public static final int TIPO_RESULTADO_RETO = 4;
+
+    public static final int ENTIDAD_RESULTADO_JUGADOR = 1;
+    public static final int ENTIDAD_RESULTADO_TODOS = 2;
+    public static final int ENTIDAD_RESULTADO_COINCIDEN = 3;
+    public static final int ENTIDAD_RESULTADO_NO_COINCIDEN = 4;
+    public static final int ENTIDAD_RESULTADO_MAYORIA = 5;
+    public static final int ENTIDAD_RESULTADO_MINORIA = 6;
+
+    public static final int ESTADO_RESULTADO_CORRECTO = 1;
+    public static final int ESTADO_RESULTADO_INCORRECTO = 2;
+
     public static <T> Predicate<T> distinctByKey(
             Function<? super T, ?> keyExtractor) {
 

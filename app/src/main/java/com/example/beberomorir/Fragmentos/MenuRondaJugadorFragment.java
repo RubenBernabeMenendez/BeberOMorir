@@ -1,18 +1,22 @@
 package com.example.beberomorir.Fragmentos;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -184,6 +188,7 @@ public class MenuRondaJugadorFragment extends AppCompatDialogFragment {
 
         }
 
+
         return view;
     }
 
@@ -194,4 +199,11 @@ public class MenuRondaJugadorFragment extends AppCompatDialogFragment {
     public void setPruebaJugadors(List<PruebaJugador> pruebaJugadors) {
         this.pruebaJugadors = pruebaJugadors;
     }
+
+    @Override
+    public void onCancel(DialogInterface dialog) {
+        super.onCancel(dialog);
+        iComunicaPartida.pausarPartida();
+    }
+
 }

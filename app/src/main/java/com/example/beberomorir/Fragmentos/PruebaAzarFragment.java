@@ -51,6 +51,7 @@ public class PruebaAzarFragment extends Fragment implements Animation.AnimationL
 
     CardView girarRuleta;
     ImageView ruleta;
+    ImageView opcion1, opcion2, opcion3, opcion4, opcion5, opcion6;
     ConstraintLayout ruletaConstraintLayout;
     public float grados;
 
@@ -96,6 +97,20 @@ public class PruebaAzarFragment extends Fragment implements Animation.AnimationL
 
         this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.actividad);
         this.girarRuleta = view.findViewById(R.id.girarRuletaCard);
+        this.opcion1 = view.findViewById(R.id.flecha2);
+        this.opcion2 = view.findViewById(R.id.flecha3);
+        this.opcion3 = view.findViewById(R.id.flecha4);
+        this.opcion4 = view.findViewById(R.id.flecha5);
+        this.opcion5 = view.findViewById(R.id.flecha6);
+        this.opcion6 = view.findViewById(R.id.flecha7);
+
+        this.opcion1.setImageResource(this.resultadoPruebaPartidas.get(0).getResultadoPrueba().getUrlImagen());
+        this.opcion2.setImageResource(this.resultadoPruebaPartidas.get(1).getResultadoPrueba().getUrlImagen());
+        this.opcion3.setImageResource(this.resultadoPruebaPartidas.get(2).getResultadoPrueba().getUrlImagen());
+        this.opcion4.setImageResource(this.resultadoPruebaPartidas.get(3).getResultadoPrueba().getUrlImagen());
+        this.opcion5.setImageResource(this.resultadoPruebaPartidas.get(4).getResultadoPrueba().getUrlImagen());
+        this.opcion6.setImageResource(this.resultadoPruebaPartidas.get(5).getResultadoPrueba().getUrlImagen());
+
         this.girarRuleta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -106,6 +121,7 @@ public class PruebaAzarFragment extends Fragment implements Animation.AnimationL
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
+                // TODO aqui es ver el resultado
                 iComunicaPartida.nextPlayer();
             }
         };
