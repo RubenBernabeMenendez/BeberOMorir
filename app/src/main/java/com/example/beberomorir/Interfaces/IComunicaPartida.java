@@ -28,7 +28,7 @@ public interface IComunicaPartida {
 
     void guardarPartida(MundoPartida mundoPartida);
 
-    void pausarPartida();
+    void pausarPartida(JugadorPartida jugadorPartida, MundoPartida mundoPartida);
 
     void addJugador();
 
@@ -41,6 +41,10 @@ public interface IComunicaPartida {
     void menuRondaJugador(JugadorPartida jugadorPartida, MundoPartida mundoPartida);
 
     void empezarPrueba(PruebaJugador pruebaJugador);
+
+    void elegirMundoPartida(List<MundoPartida> mundoPartidas, MundoPartida mundoPartidaActual);
+
+    void seleccionarMundoPartida(MundoPartida mundoPartida);
 
     void resultadoPrueba(PruebaJugador pruebaJugador, ResultadoPruebaPartida resultadoPruebaPartida);
 }

@@ -29,6 +29,7 @@ import com.example.beberomorir.AdminSQLDataBase;
 import com.example.beberomorir.Constantes;
 import com.example.beberomorir.Fragmentos.ConfigPartidaFragment;
 import com.example.beberomorir.Fragmentos.ElegirJugadoresFragment;
+import com.example.beberomorir.Fragmentos.ElegirMundoPartidaFragment;
 import com.example.beberomorir.Fragmentos.MenuRondaJugadorFragment;
 import com.example.beberomorir.Fragmentos.NuevoJugadorFragment;
 import com.example.beberomorir.Fragmentos.PruebaAzarFragment;
@@ -72,6 +73,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public class PartidaActivity extends AppCompatActivity implements IComunicaPartida {
@@ -89,6 +91,7 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
     PruebaDefaultFragment pruebaDefaultFragment;
     MenuRondaJugadorFragment menuRondaJugadorFragment;
     ResultadoPruebaFragment resultadoPruebaFragment;
+    ElegirMundoPartidaFragment elegirMundoPartidaFragment;
 
 
 
@@ -115,10 +118,12 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
         fragmentConfigPartida = new ConfigPartidaFragment();
         fragmentElegirJugadores = new ElegirJugadoresFragment();
         fragmentTablero = new TableroFragment();
+        fragmentTablero.setElegirMundoPartida(false);
         fragmentPruebaAzar = new PruebaAzarFragment();
         menuRondaJugadorFragment = new MenuRondaJugadorFragment();
         pruebaDefaultFragment = new PruebaDefaultFragment();
         resultadoPruebaFragment = new ResultadoPruebaFragment();
+        elegirMundoPartidaFragment = new ElegirMundoPartidaFragment();
         this.pruebaJugadors = new ArrayList<>();
         this.pruebaPartidas = new ArrayList<>();
         this.resultadoPruebaPartidas = new ArrayList<>();
@@ -150,7 +155,11 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
 
     @Override
     public void nextPlayer() {
-        fragmentTablero.nextJugadorPartida();
+        JugadorPartida jugadorPartida = fragmentTablero.nextJugadorPartida();
+        MundoPartida mundoPartida = fragmentTablero.getMundoPartidaActual();
+        if (mundoTerminado(mundoPartida, jugadorPartida)) {
+            fragmentTablero.setElegirMundoPartida(true);
+        }
         getSupportFragmentManager().beginTransaction().replace(R.id.contenedorPartida, fragmentTablero).commit();
     }
 
@@ -195,6 +204,25 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
     }
 
     @Override
+    public void elegirMundoPartida(List<MundoPartida> mundoPartidas, MundoPartida mundoPartidaActual) {
+        // Finalizar mundoPartidaActual
+        // Mostrar próximas dos opciones de mundos
+        elegirMundoPartidaFragment.setMundoPartidas(mundoPartidas);
+        elegirMundoPartidaFragment.show(getSupportFragmentManager(), "Elegir mundo");
+    }
+
+    @Override
+    public void seleccionarMundoPartida(MundoPartida mundoPartida) {
+        elegirMundoPartidaFragment.onStop();
+        elegirMundoPartidaFragment.onDestroy();
+        elegirMundoPartidaFragment.dismiss();
+        // Crear pruebas para mundo
+        // Crear próximos 4 mundos
+        fragmentTablero.setElegirMundoPartida(false);
+        fragmentTablero.setMundoPartidaActual(mundoPartida, false);
+    }
+
+    @Override
     public void resultadoPrueba(PruebaJugador pruebaJugador, ResultadoPruebaPartida resultadoPruebaPartida) {
         // Actualizar PruebaJugador
         PruebaJugador pruebaJugadorAux = new PruebaJugador();
@@ -218,6 +246,11 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
 
         //Cada vez que se suba de mundo
         this.mundosPartida = crearMundosPartida(bd, 0, Constantes.NUMERO_NIVELES_MUNDO_PANTALLA);
+        Random random = new Random();
+        int aux = random.nextInt(Constantes.NUMERO_MUNDOS_NIVEL);
+        fragmentTablero.setMundoPartidas(this.mundosPartida);
+        MundoPartida mundoPartidaAux = this.mundosPartida.stream().filter(el -> el.getNivelMundo() == 0).collect(Collectors.toList()).get(aux);
+        fragmentTablero.setMundoPartidaActual(mundoPartidaAux, true);
         this.mundoPartidaTipoPruebas = crearMundosPartidaTipoPruebas(bd, this.mundosPartida, this.configPartida);
 
         // Crear las PruebaPartida y ResultadoPruebaPartida del nivel seleccionado o menor en configuracionPartida
@@ -231,7 +264,6 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
         //crearResultadosPartida(bd);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.contenedorPartida, fragmentTablero).commit();
-        fragmentTablero.setMundoPartidas(this.mundosPartida);
     }
 
     @Override
@@ -243,8 +275,8 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
     }
 
     @Override
-    public void pausarPartida() {
-        fragmentTablero.pausarPartida();
+    public void pausarPartida(JugadorPartida jugadorPartida, MundoPartida mundoPartida) {
+        fragmentTablero.pausarPartida(jugadorPartida, mundoPartida);
         getSupportFragmentManager().beginTransaction().replace(R.id.contenedorPartida, fragmentTablero).commit();
     }
 
@@ -499,6 +531,14 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
 
         return p;
 
+    }
+
+    private boolean mundoTerminado(MundoPartida mundoPartida, JugadorPartida jugadorPartida) {
+        List<PruebaJugador> pruebaJugadors = this.pruebaJugadors.stream().filter(el -> el.getJugadorPartidaId().getJugadorPartidaId().equals(jugadorPartida.getJugadorPartidaId())).collect(Collectors.toList());
+        List<PruebaPartida> pruebaPartidas = this.pruebaPartidas.stream().filter(el -> el.getMundoPartidaId().equals(mundoPartida.getMundoPartidaId())).collect(Collectors.toList());
+        List<PruebaJugador> pruebaJugadorsPorMundo = pruebaJugadors.stream().filter(pj -> pruebaPartidas.stream().map(PruebaPartida::getPruebaPartidaId).collect(Collectors.toList()).contains(pj.getPruebaPartidaId().getPruebaPartidaId())).collect(Collectors.toList());
+        List<PruebaJugador> pruebaJugadorsPorMundoLibres = pruebaJugadorsPorMundo.stream().filter(pj -> pj.getResultadoPruebaPartidaId() == null).collect(Collectors.toList());
+        return pruebaJugadorsPorMundoLibres.isEmpty();
     }
 
     private List<MundoPartida> crearMundosPartida(SQLiteDatabase bd, Integer nivel, Integer numeroNiveles) {

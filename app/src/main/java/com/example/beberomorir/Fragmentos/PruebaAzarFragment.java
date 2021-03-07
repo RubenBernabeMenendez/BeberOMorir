@@ -25,6 +25,7 @@ import com.example.beberomorir.Constantes;
 import com.example.beberomorir.Interfaces.IComunicaPartida;
 import com.example.beberomorir.Modelos.Jugador;
 import com.example.beberomorir.Modelos.PruebaJugador;
+import com.example.beberomorir.Modelos.ResultadoPrueba;
 import com.example.beberomorir.Modelos.ResultadoPruebaPartida;
 import com.example.beberomorir.R;
 
@@ -150,8 +151,8 @@ public class PruebaAzarFragment extends Fragment implements Animation.AnimationL
     @Override
     public void onAnimationEnd(Animation animation) {
 
-        Double result = Constantes.NUM_OPCIONES_RULETA - Math.floor((this.grados / (Constantes.GRADOS / Constantes.NUM_OPCIONES_RULETA)));
-        System.out.println(result);
+        Double result = Math.floor((this.grados / (Constantes.GRADOS / Constantes.NUM_OPCIONES_RULETA)));
+        iComunicaPartida.resultadoPrueba(pruebaJugador, this.resultadoPruebaPartidas.get(result.intValue()));
 
     }
 
@@ -161,10 +162,12 @@ public class PruebaAzarFragment extends Fragment implements Animation.AnimationL
     }
 
     public void girarRuleta() {
+        System.out.println(this.resultadoPruebaPartidas.get(0).getDescripcion());
         int ran = new Random().nextInt(360) + 3600;
-        RotateAnimation rotateAnimation = new RotateAnimation(this.grados, this.grados + ran, 1,0.5f,1,0.5f);
+        RotateAnimation rotateAnimation = new RotateAnimation(1, this.grados + ran, 1,0.5f,1,0.5f);
         this.grados = (this.grados + ran) %  (float) Constantes.GRADOS;
-        rotateAnimation.setDuration(ran);
+        System.out.println(this.grados);
+        rotateAnimation.setDuration(3600);
         rotateAnimation.setFillAfter(true);
         rotateAnimation.setInterpolator(new DecelerateInterpolator());
         rotateAnimation.setAnimationListener(this);

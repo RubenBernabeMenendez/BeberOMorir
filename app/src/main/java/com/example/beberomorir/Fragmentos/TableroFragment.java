@@ -34,8 +34,10 @@ import com.example.beberomorir.Modelos.MundoPartida;
 import com.example.beberomorir.R;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,6 +61,7 @@ public class TableroFragment extends Fragment {
     List<MundoPartida> mundoPartidas;
     MundoPartida mundoPartidaActual;
     List<JugadorPartida> jugadorPartidas;
+    Boolean elegirMundoPartida;
 
     // View
     ImageView nivel0, nivel1_1, nivel1_2, nivel2_1, nivel2_2, nivel2_3, nivel2_4;
@@ -130,22 +133,28 @@ public class TableroFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 jugadorPausaVisibility.setVisibility(View.INVISIBLE);
-                iComunicaPartida.menuRondaJugador(jugadoresAux.get(0), mundoPartidaActual);
+                if (elegirMundoPartida) {
+                    List<MundoPartida> mundoPartidasAux = Constantes.getMundoPartidasSiguientes(mundoPartidas, mundoPartidaActual);
+                    iComunicaPartida.elegirMundoPartida(mundoPartidasAux, mundoPartidaActual);
+                } else {
+                    iComunicaPartida.menuRondaJugador(jugadoresAux.get(0), mundoPartidaActual);
+                }
             }
         });
 
 
-        if (this.mundoPartidaActual == null) {
-            crearTablero();
-        } else {
-            actualizarTablero();
-        }
+        actualizarTablero();
         view.post(new Runnable() {
             @Override
             public void run() {
                 final AdaptadorJugadorTablero adaptador = new AdaptadorJugadorTablero(actividadAux, jugadoresAux, Math.min(layoutJugadoresPrincipal.getHeight()/jugadoresAux.size(), 100));
                 lv1.setAdapter(adaptador);
-                iComunicaPartida.menuRondaJugador(jugadoresAux.get(0), mundoPartidaActual);
+                if (elegirMundoPartida) {
+                    List<MundoPartida> mundoPartidasAux = Constantes.getMundoPartidasSiguientes(mundoPartidas, mundoPartidaActual);
+                    iComunicaPartida.elegirMundoPartida(mundoPartidasAux, mundoPartidaActual);
+                } else {
+                    iComunicaPartida.menuRondaJugador(jugadoresAux.get(0), mundoPartidaActual);
+                }
             }
         });
 
@@ -175,8 +184,6 @@ public class TableroFragment extends Fragment {
     }
 
     public void crearTablero() {
-        Random random = new Random();
-        int aux = random.nextInt(Constantes.NUMERO_MUNDOS_NIVEL);
         for (int i = 0; i < Constantes.NUMERO_NIVELES_MUNDO_PANTALLA; i++) {
             List<MundoPartida> mundoPartidasAux = new ArrayList<>();
             for (MundoPartida mundoPartida : this.mundoPartidas) {
@@ -185,9 +192,8 @@ public class TableroFragment extends Fragment {
                 }
             }
             if (i == 0) {
-                this.mundoPartidaActual = mundoPartidasAux.get(aux);
-                this.tNivel0.setText(mundoPartidasAux.get(aux).getMundo().getNombre());
-                this.nivel0.setImageResource(mundoPartidasAux.get(aux).getUrlImagen());
+                this.tNivel0.setText(this.mundoPartidaActual.getMundo().getNombre());
+                this.nivel0.setImageResource(this.mundoPartidaActual.getUrlImagen());
             } else if (i == 1) {
                 if (this.mundoPartidaActual.getOrden() % 2 == 0) {
                     this.tNivel1_1.setText(mundoPartidasAux.get(0).getMundo().getNombre());
@@ -225,26 +231,52 @@ public class TableroFragment extends Fragment {
                 this.tNivel0.setText(this.mundoPartidaActual.getMundo().getNombre());
                 this.nivel0.setImageResource(this.mundoPartidaActual.getUrlImagen());
             } else if (i == 1) {
-                if (this.mundoPartidaActual.getOrden() % 2 == 0) {
-                    this.tNivel1_1.setText(mundoPartidasAux.get(0).getMundo().getNombre());
-                    this.nivel1_1.setImageResource(mundoPartidasAux.get(0).getUrlImagen());
-                    this.tNivel1_2.setText(mundoPartidasAux.get(1).getMundo().getNombre());
-                    this.nivel1_2.setImageResource(mundoPartidasAux.get(1).getUrlImagen());
+                if (mundoPartidasAux.isEmpty()) {
+                    if (this.mundoPartidaActual.getOrden() % 2 == 0) {
+                        this.tNivel1_1.setText("");
+                        this.nivel1_1.setImageResource(0);
+                        this.tNivel1_2.setText("");
+                        this.nivel1_2.setImageResource(0);
+                    } else {
+                        this.tNivel1_1.setText("");
+                        this.nivel1_1.setImageResource(0);
+                        this.tNivel1_2.setText("");
+                        this.nivel1_2.setImageResource(0);
+                    }
                 } else {
-                    this.tNivel1_1.setText(mundoPartidasAux.get(2).getMundo().getNombre());
-                    this.nivel1_1.setImageResource(mundoPartidasAux.get(2).getUrlImagen());
-                    this.tNivel1_2.setText(mundoPartidasAux.get(3).getMundo().getNombre());
-                    this.nivel1_2.setImageResource(mundoPartidasAux.get(3).getUrlImagen());
+                    if (this.mundoPartidaActual.getOrden() % 2 == 0) {
+                        this.tNivel1_1.setText(mundoPartidasAux.get(0).getMundo().getNombre());
+                        this.nivel1_1.setImageResource(mundoPartidasAux.get(0).getUrlImagen());
+                        this.tNivel1_2.setText(mundoPartidasAux.get(1).getMundo().getNombre());
+                        this.nivel1_2.setImageResource(mundoPartidasAux.get(1).getUrlImagen());
+                    } else {
+                        this.tNivel1_1.setText(mundoPartidasAux.get(2).getMundo().getNombre());
+                        this.nivel1_1.setImageResource(mundoPartidasAux.get(2).getUrlImagen());
+                        this.tNivel1_2.setText(mundoPartidasAux.get(3).getMundo().getNombre());
+                        this.nivel1_2.setImageResource(mundoPartidasAux.get(3).getUrlImagen());
+                    }
                 }
             } else if (i == 2) {
-                this.tNivel2_1.setText(mundoPartidasAux.get(0).getMundo().getNombre());
-                this.nivel2_1.setImageResource(mundoPartidasAux.get(0).getUrlImagen());
-                this.tNivel2_2.setText(mundoPartidasAux.get(1).getMundo().getNombre());
-                this.nivel2_2.setImageResource(mundoPartidasAux.get(1).getUrlImagen());
-                this.tNivel2_3.setText(mundoPartidasAux.get(2).getMundo().getNombre());
-                this.nivel2_3.setImageResource(mundoPartidasAux.get(2).getUrlImagen());
-                this.tNivel2_4.setText(mundoPartidasAux.get(3).getMundo().getNombre());
-                this.nivel2_4.setImageResource(mundoPartidasAux.get(3).getUrlImagen());
+                if (mundoPartidasAux.isEmpty()) {
+                    this.tNivel2_1.setText("");
+                    this.nivel2_1.setImageResource(0);
+                    this.tNivel2_2.setText("");
+                    this.nivel2_2.setImageResource(0);
+                    this.tNivel2_3.setText("");
+                    this.nivel2_3.setImageResource(0);
+                    this.tNivel2_4.setText("");
+                    this.nivel2_4.setImageResource(0);
+                } else {
+                    this.tNivel2_1.setText(mundoPartidasAux.get(0).getMundo().getNombre());
+                    this.nivel2_1.setImageResource(mundoPartidasAux.get(0).getUrlImagen());
+                    this.tNivel2_2.setText(mundoPartidasAux.get(1).getMundo().getNombre());
+                    this.nivel2_2.setImageResource(mundoPartidasAux.get(1).getUrlImagen());
+                    this.tNivel2_3.setText(mundoPartidasAux.get(2).getMundo().getNombre());
+                    this.nivel2_3.setImageResource(mundoPartidasAux.get(2).getUrlImagen());
+                    this.tNivel2_4.setText(mundoPartidasAux.get(3).getMundo().getNombre());
+                    this.nivel2_4.setImageResource(mundoPartidasAux.get(3).getUrlImagen());
+                }
+
             }
         }
     }
@@ -284,20 +316,41 @@ public class TableroFragment extends Fragment {
         this.jugadorPartidas = jugadoresPartida;
     }
 
-    public void nextJugadorPartida() {
+    public JugadorPartida nextJugadorPartida() {
         JugadorPartida jugadorPartidaAux = this.jugadorPartidas.get(0);
         this.jugadorPartidas.remove(0);
         this.jugadorPartidas.add(jugadorPartidaAux);
+        return this.jugadorPartidas.get(0);
     }
 
-    public void pausarPartida() {
-        Bitmap bitmap = BitmapFactory.decodeByteArray(this.jugadorPartidas.get(0).getJugador().getUrlImagen(), 0, this.jugadorPartidas.get(0).getJugador().getUrlImagen().length);
-        this.jugadorPausa.setImageBitmap(bitmap);
+    public void pausarPartida(JugadorPartida jugadorPartida, MundoPartida mundoPartida) {
+        if (jugadorPartida != null) {
+            Bitmap bitmap = BitmapFactory.decodeByteArray(this.jugadorPartidas.get(0).getJugador().getUrlImagen(), 0, this.jugadorPartidas.get(0).getJugador().getUrlImagen().length);
+            this.jugadorPausa.setImageBitmap(bitmap);
+        } else {
+            this.jugadorPausa.setImageResource(mundoPartida.getMundo().getUrlImagen());
+        }
         this.jugadorPausaVisibility.setVisibility(View.VISIBLE);
     }
 
     public void setMundoPartidasAndMundoActual(List<MundoPartida> mundoPartidas, MundoPartida mundoPartida) {
         this.mundoPartidaActual = mundoPartida;
         this.mundoPartidas = mundoPartidas;
+    }
+
+    public void setMundoPartidaActual(MundoPartida mundoPartidaActual, Boolean configuracionInicial) {
+        this.mundoPartidaActual = mundoPartidaActual;
+        if (!configuracionInicial) {
+            actualizarTablero();
+            iComunicaPartida.menuRondaJugador(jugadorPartidas.get(0), mundoPartidaActual);
+        }
+    }
+
+    public MundoPartida getMundoPartidaActual() {
+        return mundoPartidaActual;
+    }
+
+    public void setElegirMundoPartida(Boolean elegirMundoPartida) {
+        this.elegirMundoPartida = elegirMundoPartida;
     }
 }

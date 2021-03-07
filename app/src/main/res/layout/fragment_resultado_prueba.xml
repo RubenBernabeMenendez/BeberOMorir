@@ -27,6 +27,8 @@
             android:layout_marginBottom="10dp"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
+            app:cardBackgroundColor="@color/transparentWhite"
+            android:background="@color/transparentWhite"
             android:backgroundTint="@color/transparentWhite"
             app:cardCornerRadius="8dp">
             <androidx.constraintlayout.widget.ConstraintLayout

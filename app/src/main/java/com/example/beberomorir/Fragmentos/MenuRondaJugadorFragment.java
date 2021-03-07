@@ -203,7 +203,7 @@ public class MenuRondaJugadorFragment extends AppCompatDialogFragment {
     @Override
     public void onCancel(DialogInterface dialog) {
         super.onCancel(dialog);
-        iComunicaPartida.pausarPartida();
+        iComunicaPartida.pausarPartida(jugadorPartida, null);
     }
 
 }

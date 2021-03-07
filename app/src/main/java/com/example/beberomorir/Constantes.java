@@ -1,11 +1,15 @@
 package com.example.beberomorir;
 
+import com.example.beberomorir.Modelos.MundoPartida;
+
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class Constantes {
     public static final String YES = "Y";
@@ -68,5 +72,22 @@ public class Constantes {
             return YES;
         else
             return NO;
+    }
+
+    public static List<MundoPartida> getMundoPartidasSiguientes(List<MundoPartida> mundoPartidas, MundoPartida mundoPartidaActual) {
+        Comparator<MundoPartida> c = Comparator.comparing(MundoPartida::getOrden);
+        List<MundoPartida> mundoPartidasAux = mundoPartidas.stream().filter(el -> el.getNivelMundo().equals(mundoPartidaActual.getNivelMundo() + 1)).sorted(c).collect(Collectors.toList());
+        if (mundoPartidasAux.isEmpty()) {
+            return null;
+        } else {
+            if (mundoPartidaActual.getOrden() % 2 == 0) {
+                mundoPartidasAux.add(mundoPartidas.get(0));
+                mundoPartidasAux.add(mundoPartidas.get(1));
+            } else {
+                mundoPartidasAux.add(mundoPartidas.get(2));
+                mundoPartidasAux.add(mundoPartidas.get(3));
+            }
+            return mundoPartidasAux;
+        }
     }
 }
