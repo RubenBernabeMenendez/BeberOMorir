@@ -5,6 +5,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class MundoPartida {
     private Integer mundoPartidaId;
@@ -120,6 +122,13 @@ public class MundoPartida {
             mundoPartidas.add(mundoPartida);
         }
         fila.close();
+        return mundoPartidas;
+    }
+
+    public List<MundoPartida> findByPartidaId(SQLiteDatabase bd, Integer partidaId) {
+        MundoPartida mundoPartidaAux = new MundoPartida();
+        List<MundoPartida> mundoPartidas = mundoPartidaAux.getAll(bd);
+        mundoPartidas = mundoPartidas.stream().filter(mundoPartida -> partidaId.equals(mundoPartida.getPartidaId())).collect(Collectors.toList());
         return mundoPartidas;
     }
 }

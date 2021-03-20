@@ -40,6 +40,19 @@ public class PruebaResultadoRelaci {
         return estadoResultadoTipoPruebas;
     }
 
+    public List<PruebaResultadoRelaci> getAll(SQLiteDatabase bd) {
+        List<PruebaResultadoRelaci> estadoResultadoTipoPruebas = new ArrayList<>();
+        Cursor fila = bd.rawQuery("SELECT resultadoPruebaPartidaId, pruebaPartidaId FROM PRUEBA_RESULTADO_RELACI",null);
+        for (fila.moveToFirst(); !fila.isAfterLast(); fila.moveToNext()) {
+            PruebaResultadoRelaci estadoResultadoTipoPrueba = new PruebaResultadoRelaci();
+            estadoResultadoTipoPrueba.setResultadoPruebaPartidaId(Integer.parseInt(fila.getString(0)));
+            estadoResultadoTipoPrueba.setPruebaPartidaId(Integer.parseInt(fila.getString(1)));
+            estadoResultadoTipoPruebas.add(estadoResultadoTipoPrueba);
+        }
+        fila.close();
+        return estadoResultadoTipoPruebas;
+    }
+
     public PruebaResultadoRelaci insertar(SQLiteDatabase bd, Integer resultadoPruebaPartidaId, Integer pruebaPartidaId){
         PruebaResultadoRelaci pruebaResultadoRelaci = new PruebaResultadoRelaci();
         ContentValues cv = new ContentValues();

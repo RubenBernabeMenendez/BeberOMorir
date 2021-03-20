@@ -112,6 +112,7 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent = getIntent();
         setContentView(R.layout.activity_partida);
         admin = new AdminSQLDataBase(this);
         bd = admin.getWritableDatabase();
@@ -128,7 +129,17 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
         this.pruebaPartidas = new ArrayList<>();
         this.resultadoPruebaPartidas = new ArrayList<>();
         this.pruebaResultadoRelacis = new ArrayList<>();
-        getSupportFragmentManager().beginTransaction().replace(R.id.contenedorPartida, fragmentConfigPartida).commit();
+        Boolean nuevaPartida = Constantes.YES.equals(intent.getStringExtra("nuevaPartida"));
+        if (nuevaPartida) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.contenedorPartida, fragmentConfigPartida).commit();
+        } else {
+            cargarPartida();
+            MundoPartida mundoPartidaActual = this.mundosPartida.stream().filter(mp -> mp.getMundoPartidaId().equals(this.partida.getMundoPartidaActualId())).collect(Collectors.toList()).get(0);
+            fragmentTablero.setJugadoresPartida(this.jugadoresPartida);
+            fragmentTablero.setMundoPartidas(this.mundosPartida);
+            fragmentTablero.setMundoPartidaActual(mundoPartidaActual, true);
+            getSupportFragmentManager().beginTransaction().replace(R.id.contenedorPartida, fragmentTablero).commit();
+        }
     }
 
     @Override
@@ -172,7 +183,7 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
     public void menuRondaJugador(JugadorPartida jugadorPartida, MundoPartida mundoPartida) {
         // Usamos MundoPartida para obtener lista de MundoPartidaTipoPruebas para dibujar el menu de elegir el tipo de prueba
         // Usamos JugadorPartida y MundoPartida para obtener lista de PruebasJugador y así saber cuáles quedan por elegir
-        List<PruebaJugador> pruebaJugadors = this.pruebaJugadors.stream().filter(el -> el.getJugadorPartidaId().getJugadorPartidaId().equals(jugadorPartida.getJugadorPartidaId())).collect(Collectors.toList());
+        List<PruebaJugador> pruebaJugadors = this.pruebaJugadors.stream().filter(el -> el.getJugadorPartidaId().equals(jugadorPartida.getJugadorPartidaId())).collect(Collectors.toList());
         List<PruebaPartida> pruebaPartidas = this.pruebaPartidas.stream().filter(el -> el.getMundoPartidaId().equals(mundoPartida.getMundoPartidaId())).collect(Collectors.toList());
         List<PruebaJugador> pruebaJugadorsPorMundo = pruebaJugadors.stream().filter(pj -> pruebaPartidas.stream().map(PruebaPartida::getPruebaPartidaId).collect(Collectors.toList()).contains(pj.getPruebaPartidaId().getPruebaPartidaId())).collect(Collectors.toList());
         menuRondaJugadorFragment.setJugadorPartida(jugadorPartida);
@@ -266,10 +277,14 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
         getSupportFragmentManager().beginTransaction().replace(R.id.contenedorPartida, fragmentTablero).commit();
     }
 
+
     @Override
     public void guardarPartida(MundoPartida mundoPartida) {
         // Actualizar la partida poniendo el mundoPartida actual
         System.out.println(mundoPartida.getMundoPartidaId());
+        Partida partidaAux = new Partida();
+        this.partida.setMundoPartidaActualId(mundoPartida.getMundoPartidaId());
+        partidaAux.update(this.bd, this.partida);
         admin.close();
         this.finish();
     }
@@ -278,6 +293,32 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
     public void pausarPartida(JugadorPartida jugadorPartida, MundoPartida mundoPartida) {
         fragmentTablero.pausarPartida(jugadorPartida, mundoPartida);
         getSupportFragmentManager().beginTransaction().replace(R.id.contenedorPartida, fragmentTablero).commit();
+    }
+
+    private void cargarPartida() {
+        Partida partidaAux = new Partida();
+        JugadorPartida jugadorPartidaAux = new JugadorPartida();
+        MundoPartida mundoPartidaAux = new MundoPartida();
+        MundoPartidaTipoPrueba mundoPartidaTipoPruebaAux = new MundoPartidaTipoPrueba();
+        PruebaJugador pruebaJugadorAux = new PruebaJugador();
+        PruebaResultadoRelaci pruebaResultadoRelaciAux = new PruebaResultadoRelaci();
+        ResultadoPruebaPartida resultadoPruebaPartidaAux = new ResultadoPruebaPartida();
+        this.partida = partidaAux.getLast(this.bd);
+        this.configPartida = this.partida.getConfigPartida();
+        this.jugadoresPartida = jugadorPartidaAux.findByPartidaId(this.bd, this.partida.getPartidaId());
+        this.mundosPartida = mundoPartidaAux.findByPartidaId(this.bd, this.partida.getPartidaId());
+        List<Integer> mundoPartidasAux = this.mundosPartida.stream().map(MundoPartida::getMundoPartidaId).collect(Collectors.toList());
+        this.mundoPartidaTipoPruebas = mundoPartidaTipoPruebaAux.getAll(this.bd).stream().filter(mundoPartidaTipoPrueba -> mundoPartidasAux.contains(mundoPartidaTipoPrueba.getMundoPartidaId())).collect(Collectors.toList());
+        List<Integer> jugadoresPartidaAux = this.jugadoresPartida.stream().map(JugadorPartida::getJugadorPartidaId).collect(Collectors.toList());
+        List<PruebaJugador> pruebaJugadorsAux = pruebaJugadorAux.getAll(this.bd);
+        this.pruebaJugadors = pruebaJugadorsAux.stream().filter(pruebaJugador -> jugadoresPartidaAux.contains(pruebaJugador.getJugadorPartidaId())).collect(Collectors.toList());
+        this.pruebaPartidas = this.pruebaJugadors.stream().map(PruebaJugador::getPruebaPartidaId).collect(Collectors.toList());
+        List<Integer> pruebasPartidaAux = this.pruebaJugadors.stream().map(PruebaJugador::getPruebaPartidaId).map(PruebaPartida::getPruebaPartidaId).collect(Collectors.toList());
+        List<PruebaResultadoRelaci> pruebaResultadoRelacisAux = pruebaResultadoRelaciAux.getAll(this.bd);
+        this.pruebaResultadoRelacis = pruebaResultadoRelacisAux.stream().filter(pruebaResultadoRelaci -> pruebasPartidaAux.contains(pruebaResultadoRelaci.getPruebaPartidaId())).collect(Collectors.toList());
+        List<Integer> resultadoPruebasPartidaAux = this.pruebaResultadoRelacis.stream().map(PruebaResultadoRelaci::getResultadoPruebaPartidaId).collect(Collectors.toList());
+        List<ResultadoPruebaPartida> resultadoPruebaPartidasAux = resultadoPruebaPartidaAux.getAll(this.bd);
+        this.resultadoPruebaPartidas = resultadoPruebaPartidasAux.stream().filter(resultadoPruebaPartida -> resultadoPruebasPartidaAux.contains(resultadoPruebaPartida.getResultadoPruebaPartidaId())).collect(Collectors.toList());
     }
 
     private void crearResultadosPartida(SQLiteDatabase bd) {
@@ -534,7 +575,7 @@ public class PartidaActivity extends AppCompatActivity implements IComunicaParti
     }
 
     private boolean mundoTerminado(MundoPartida mundoPartida, JugadorPartida jugadorPartida) {
-        List<PruebaJugador> pruebaJugadors = this.pruebaJugadors.stream().filter(el -> el.getJugadorPartidaId().getJugadorPartidaId().equals(jugadorPartida.getJugadorPartidaId())).collect(Collectors.toList());
+        List<PruebaJugador> pruebaJugadors = this.pruebaJugadors.stream().filter(el -> el.getJugadorPartidaId().equals(jugadorPartida.getJugadorPartidaId())).collect(Collectors.toList());
         List<PruebaPartida> pruebaPartidas = this.pruebaPartidas.stream().filter(el -> el.getMundoPartidaId().equals(mundoPartida.getMundoPartidaId())).collect(Collectors.toList());
         List<PruebaJugador> pruebaJugadorsPorMundo = pruebaJugadors.stream().filter(pj -> pruebaPartidas.stream().map(PruebaPartida::getPruebaPartidaId).collect(Collectors.toList()).contains(pj.getPruebaPartidaId().getPruebaPartidaId())).collect(Collectors.toList());
         List<PruebaJugador> pruebaJugadorsPorMundoLibres = pruebaJugadorsPorMundo.stream().filter(pj -> pj.getResultadoPruebaPartidaId() == null).collect(Collectors.toList());

@@ -10,7 +10,7 @@ public class PruebaJugador {
     Integer pruebaJugadorId;
     PruebaPartida pruebaPartidaId;
     ResultadoPruebaPartida resultadoPruebaPartidaId;
-    JugadorPartida jugadorPartidaId;
+    Integer jugadorPartidaId;
     String informacion;
 
     public Integer getPruebaJugadorId() {
@@ -37,11 +37,11 @@ public class PruebaJugador {
         this.resultadoPruebaPartidaId = resultadoPruebaPartidaId;
     }
 
-    public JugadorPartida getJugadorPartidaId() {
+    public Integer getJugadorPartidaId() {
         return jugadorPartidaId;
     }
 
-    public void setJugadorPartidaId(JugadorPartida jugadorPartidaId) {
+    public void setJugadorPartidaId(Integer jugadorPartidaId) {
         this.jugadorPartidaId = jugadorPartidaId;
     }
 
@@ -70,7 +70,7 @@ public class PruebaJugador {
         pruebaPartida = pruebaPartida.updateFinalizado(bd, pruebaJugador.getPruebaPartidaId().getPruebaPartidaId());
         cv.put("pruebaPartidaId", pruebaJugador.getPruebaPartidaId().getPruebaPartidaId());
         cv.put("resultadoPruebaPartidaId", pruebaJugador.getResultadoPruebaPartidaId().getResultadoPruebaPartidaId());
-        cv.put("jugadorPartidaId", pruebaJugador.getJugadorPartidaId().getJugadorPartidaId());
+        cv.put("jugadorPartidaId", pruebaJugador.getJugadorPartidaId());
         cv.put("informacion", "HECHA");
         bd.update("PRUEBA_JUGADOR", cv, "pruebaJugadorId=" + pruebaJugador.getPruebaJugadorId(), null);
         pruebaJugador.setInformacion("HECHA");
@@ -90,7 +90,7 @@ public class PruebaJugador {
             if (fila.getString(2) != null) {
                 pruebaJugador.setResultadoPruebaPartidaId(resultadoPruebaPartida.findById(bd, Integer.parseInt(fila.getString(2))));
             }
-            pruebaJugador.setJugadorPartidaId(jugadorPartida.findById(bd, Integer.parseInt(fila.getString(3))));
+            pruebaJugador.setJugadorPartidaId(Integer.parseInt(fila.getString(3)));
             pruebaJugador.setInformacion(fila.getString(4));
             fila.close();
             return pruebaJugador;
@@ -113,7 +113,7 @@ public class PruebaJugador {
             if (fila.getString(2) != null) {
                 pruebaJugador.setResultadoPruebaPartidaId(resultadoPruebaPartida.findById(bd, Integer.parseInt(fila.getString(2))));
             }
-            pruebaJugador.setJugadorPartidaId(jugadorPartida.findById(bd, Integer.parseInt(fila.getString(3))));
+            pruebaJugador.setJugadorPartidaId(Integer.parseInt(fila.getString(3)));
             pruebaJugador.setInformacion(fila.getString(4));
             pruebaJugadors.add(pruebaJugador);
         }
@@ -131,8 +131,8 @@ public class PruebaJugador {
             ResultadoPruebaPartida resultadoPruebaPartida = new ResultadoPruebaPartida();
             pruebaJugador.setPruebaJugadorId(Integer.parseInt(fila.getString(0)));
             pruebaJugador.setPruebaPartidaId(pruebaPartida.findById(bd, fila.getInt(1)));
-            pruebaJugador.setResultadoPruebaPartidaId(resultadoPruebaPartida.findById(bd, Integer.parseInt(fila.getString(2))));
-            pruebaJugador.setJugadorPartidaId(jugadorPartida.findById(bd, Integer.parseInt(fila.getString(3))));
+            pruebaJugador.setResultadoPruebaPartidaId(fila.getString(2) != null ? resultadoPruebaPartida.findById(bd, Integer.parseInt(fila.getString(2))) : null);
+            pruebaJugador.setJugadorPartidaId(Integer.parseInt(fila.getString(3)));
             pruebaJugador.setInformacion(fila.getString(4));
             pruebaJugadors.add(pruebaJugador);
         }

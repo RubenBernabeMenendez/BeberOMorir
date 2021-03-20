@@ -9,7 +9,10 @@ import com.example.beberomorir.Constantes;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Partida {
     Integer partidaId;
@@ -79,6 +82,19 @@ public class Partida {
         return  findById(bd, (int) id);
     }
 
+    public Partida update(SQLiteDatabase bd, Partida partida){
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        ContentValues cv = new ContentValues();
+        cv.put("partidaId", partida.getPartidaId());
+        cv.put("configPartidaId", partida.getConfigPartida().getConfigPartidaId());
+        cv.put("nombre", partida.getNombre());
+        cv.put("fecha", sdf.format(partida.getFecha()));
+        cv.put("finalizada", partida.getFinalizada());
+        cv.put("mundoPartidaActualId", partida.getMundoPartidaActualId());
+        bd.update("PARTIDA", cv, "partidaId=" + partida.getPartidaId(), null);
+        return  partida;
+    }
+
     public Partida findById(SQLiteDatabase bd, Integer partidaId) {
         Cursor fila = bd.rawQuery("SELECT partidaId, configPartidaId, fecha, finalizada, mundoPartidaActualId FROM PARTIDA WHERE partidaId=" + partidaId,null);
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
@@ -103,7 +119,7 @@ public class Partida {
     }
 
     public ArrayList<Partida> getAll(SQLiteDatabase bd) throws ParseException {
-        Cursor fila = bd.rawQuery("SELECT partidaId, configPartidaId, fecha, finalizada, mundoPartidaActual FROM PARTIDA",null);
+        Cursor fila = bd.rawQuery("SELECT partidaId, configPartidaId, fecha, finalizada, mundoPartidaActualId FROM PARTIDA",null);
         ArrayList<Partida> partidas = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         for (fila.moveToFirst(); !fila.isAfterLast(); fila.moveToNext()) {
@@ -114,9 +130,22 @@ public class Partida {
             partida.setConfigPartida(configPartida);
             partida.setFecha(sdf.parse(fila.getString(2)));
             partida.setFinalizada(fila.getString(3));
+            partida.setMundoPartidaActualId(fila.getInt(4));
             partidas.add(partida);
         }
         fila.close();
         return partidas;
+    }
+
+    public Partida getLast(SQLiteDatabase bd) {
+        Partida partida = new Partida();
+        try {
+            List<Partida> partidas = partida.getAll(bd);
+            Comparator<Partida> c = Comparator.comparing(Partida::getPartidaId);
+            partidas = partidas.stream().sorted(c.reversed()).collect(Collectors.toList());
+            return partidas.isEmpty() ? null : partidas.get(0);
+        } catch (ParseException e) {
+            return null;
+        }
     }
 }

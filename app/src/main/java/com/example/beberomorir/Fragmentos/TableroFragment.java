@@ -341,7 +341,7 @@ public class TableroFragment extends Fragment {
     public void setMundoPartidaActual(MundoPartida mundoPartidaActual, Boolean configuracionInicial) {
         this.mundoPartidaActual = mundoPartidaActual;
         if (!configuracionInicial) {
-            actualizarTablero();
+            //actualizarTablero();
             iComunicaPartida.menuRondaJugador(jugadorPartidas.get(0), mundoPartidaActual);
         }
     }

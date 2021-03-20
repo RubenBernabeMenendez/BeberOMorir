@@ -35,12 +35,15 @@ public class MainActivity extends AppCompatActivity implements IComunicaFragment
     @Override
     public void continuarPartida() {
         Intent i = new Intent(this, PartidaActivity.class );
+        i.putExtra("nuevaPartida", Constantes.NO);
         startActivity(i);
     }
 
     @Override
     public void nuevaPartida() {
-
+        Intent i = new Intent(this, PartidaActivity.class );
+        i.putExtra("nuevaPartida", Constantes.YES);
+        startActivity(i);
     }
 
     @Override

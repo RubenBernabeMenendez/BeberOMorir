@@ -50,6 +50,20 @@ public class MundoPartidaTipoPrueba {
         return mundoPartidaTipoPruebas;
     }
 
+    public List<MundoPartidaTipoPrueba> getAll(SQLiteDatabase bd) {
+        List<MundoPartidaTipoPrueba> mundoPartidaTipoPruebas = new ArrayList<>();
+        Cursor fila = bd.rawQuery("SELECT mundoPartidaId, tipoPruebaId, numeroTiposPrueba FROM MUNDO_PARTIDA_TIPO_PRUEBA",null);
+        for (fila.moveToFirst(); !fila.isAfterLast(); fila.moveToNext()) {
+            MundoPartidaTipoPrueba mundoPartidaTipoPrueba = new MundoPartidaTipoPrueba();
+            mundoPartidaTipoPrueba.setMundoPartidaId(Integer.parseInt(fila.getString(0)));
+            mundoPartidaTipoPrueba.setTipoPruebaId(Integer.parseInt(fila.getString(1)));
+            mundoPartidaTipoPrueba.setNumeroTiposPrueba(Integer.parseInt(fila.getString(2)));
+            mundoPartidaTipoPruebas.add(mundoPartidaTipoPrueba);
+        }
+        fila.close();
+        return mundoPartidaTipoPruebas;
+    }
+
     public void insertar(SQLiteDatabase bd, Integer mundoPartidaId, Integer tipoPruebaId, Integer numeroTiposPrueba){
         ContentValues cv = new ContentValues();
         cv.put("mundoPartidaId", mundoPartidaId);

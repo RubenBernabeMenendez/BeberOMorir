@@ -5,6 +5,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class JugadorPartida {
     private Integer jugadorPartidaId;
@@ -85,5 +87,12 @@ public class JugadorPartida {
         }
         fila.close();
         return Jugadors;
+    }
+
+    public List<JugadorPartida> findByPartidaId(SQLiteDatabase bd, Integer partidaId) {
+        JugadorPartida jugadorPartidaAux = new JugadorPartida();
+        List<JugadorPartida> jugadorPartidaList = jugadorPartidaAux.getAll(bd);
+        jugadorPartidaList = jugadorPartidaList.stream().filter(jugadorPartida -> partidaId.equals(jugadorPartida.getPartidaId())).collect(Collectors.toList());
+        return jugadorPartidaList;
     }
 }

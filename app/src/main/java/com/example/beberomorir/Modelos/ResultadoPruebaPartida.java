@@ -83,7 +83,7 @@ public class ResultadoPruebaPartida {
     }
 
     public ArrayList<ResultadoPruebaPartida> getAll(SQLiteDatabase bd) {
-        Cursor fila = bd.rawQuery("SELECT resultadoPruebaPartidaId, resultadoPruebaId, mundoPartidaId, nombre, descripcion, finalizado FROM RESULTADO_PRUEBA_PARTIDA",null);
+        Cursor fila = bd.rawQuery("SELECT resultadoPruebaPartidaId, resultadoPruebaId, mundoPartidaId, nombre, descripcion FROM RESULTADO_PRUEBA_PARTIDA",null);
         ArrayList<ResultadoPruebaPartida> resultadoPruebaPartidas = new ArrayList<>();
         for (fila.moveToFirst(); !fila.isAfterLast(); fila.moveToNext()) {
             ResultadoPruebaPartida resultadoPruebaPartida = new ResultadoPruebaPartida();
